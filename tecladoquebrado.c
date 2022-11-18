@@ -43,43 +43,55 @@ Lista* append(Lista *L, char info){
 Lista* append_lastmod(Lista *L, char info){
 	Item *n = (Item*) malloc(sizeof(Item));
 	n->info = info;
-	if(L->last == NULL){
+	if(L->ini == NULL){
 		L->ini = n;
 		L->last = n;
 		L->fim = n;
 
 		return L;
 	}
-
+	
+	if(L->last->prox == NULL){
+		L->fim = n;
+	}
+	
 	n->prox = L->last->prox;
 	L->last->prox = n;
 	L->last = n;
-	
+
 	return L;
 }
 
+Lista* insert_beginning(Lista *L, char info){
+	Item *n = (Item*) malloc(sizeof(Item));
+	n->info = info;
+	if(L->ini == NULL){
+		L->ini = n;
+		L->last = n;
+		L->fim = n;
+
+		return L;
+	}
+	
+	n->prox = L->ini;
+	L->ini = n;
+	L->last = n;
+
+	return L;
+}
 
 void print_posordem(Item* ini){
 	if(ini != NULL){
-		print_posordem(ini->prox);
 		printf("%c ", ini->info);
+		print_posordem(ini->prox);
 	}
 }
 
 int main(){
 	Lista* L = cria_lista();
-	append_lastmod(L, '1');
-	append_lastmod(L, '2');
-	append_lastmod(L, '3');
-	append_lastmod(L, '4');
-	append_lastmod(L, '5');
-	append_lastmod(L, '6');
-	append_lastmod(L, '7');
 	
-	print_posordem(L->ini);
-	
-
-//	while(scanf("%c",&leitura)!=EOF){
-//		// do something
-//	}
+	while(scanf("%c",&leitura)!=EOF){
+		// TODO read the text, toggling between lastmod, last element or beginning
+		// List is ready for it!
+	}
 }
