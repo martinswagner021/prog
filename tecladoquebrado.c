@@ -20,38 +20,63 @@ Lista* cria_lista(){
 	return p;
 }
 
-void insere_fim_lista(Lista **L, char info){
+Lista* append(Lista *L, char info){
 	Item *n = (Item*) malloc(sizeof(Item));
 	n->info = info;
 	n->prox = NULL;
 
-	if((*L)->ini == NULL){
-		(*L)->ini = n;
+	if(L->ini == NULL){
+		L->ini = n;
+		L->last = n;
+		L->fim = n;
+
+		return L;
 	}
 
-	(*L)->fim->prox = n;
-	(*L)->fim = n;
-	(*L)->last = n;
+	L->fim->prox = n;
+	L->fim = n;
+	L->last = n;
+
+	return L;
 }
+
+Lista* append_lastmod(Lista *L, char info){
+	Item *n = (Item*) malloc(sizeof(Item));
+	n->info = info;
+	if(L->last == NULL){
+		L->ini = n;
+		L->last = n;
+		L->fim = n;
+
+		return L;
+	}
+
+	n->prox = L->last->prox;
+	L->last->prox = n;
+	L->last = n;
+	
+	return L;
+}
+
 
 void print_posordem(Item* ini){
 	if(ini != NULL){
 		print_posordem(ini->prox);
-		printf("%c\n", ini->info);
+		printf("%c ", ini->info);
 	}
 }
+
 int main(){
 	Lista* L = cria_lista();
-	insere_fim_lista(&L, '1');
-	insere_fim_lista(&L, '2');
-	insere_fim_lista(&L, '3');
-	insere_fim_lista(&L, '4');
-	insere_fim_lista(&L, '5');
-	insere_fim_lista(&L, '6');
-	insere_fim_lista(&L, '7');
-	insere_fim_lista(&L, '8');
+	append_lastmod(L, '1');
+	append_lastmod(L, '2');
+	append_lastmod(L, '3');
+	append_lastmod(L, '4');
+	append_lastmod(L, '5');
+	append_lastmod(L, '6');
+	append_lastmod(L, '7');
 	
-	//print_posordem(L->ini);
+	print_posordem(L->ini);
 	
 
 //	while(scanf("%c",&leitura)!=EOF){
