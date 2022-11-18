@@ -6,3 +6,6 @@ input.txt
 
 # output files
 output.txt
+
+# executable files
+.out
