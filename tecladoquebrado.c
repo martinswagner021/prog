@@ -82,16 +82,52 @@ Lista* insert_beginning(Lista *L, char info){
 
 void print_posordem(Item* ini){
 	if(ini != NULL){
-		printf("%c ", ini->info);
+		printf("%c", ini->info);
 		print_posordem(ini->prox);
 	}
 }
 
+void libera_lista(Lista* L){
+	Item *n = L->ini;
+	while(n!=NULL){
+		Item *t = n;
+		n=t->prox;
+		free(t);
+	}
+	L->ini = NULL;
+	L->last = NULL;
+	L->fim = NULL;
+}
+
 int main(){
 	Lista* L = cria_lista();
+
+	char leitura;
+	
+	int toggletext=0;
 	
 	while(scanf("%c",&leitura)!=EOF){
-		// TODO read the text, toggling between lastmod, last element or beginning
-		// List is ready for it!
+		switch(leitura){
+			case '[':
+				toggletext = 1;
+				break;
+			case '\n':
+				print_posordem(L->ini);
+				printf("\n");
+				toggletext = 0;
+				libera_lista(L);
+				break;
+
+			case']':
+				toggletext = 2;
+				break;
+			default:
+				if(toggletext==1) insert_beginning(L, leitura);
+				if(toggletext==2) append(L, leitura);
+				if(toggletext==0) append_lastmod(L, leitura);
+
+				toggletext = 0;
+				break;
+		}
 	}
 }
