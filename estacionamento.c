@@ -34,8 +34,12 @@ Item pop_pilha(Pilha* p){
 
 	n.chegada=t->chegada;
 	n.saida=t->saida;
+	
+	if(t->prox != NULL){
+		p->topo = t->prox;
+	}
+	else p->topo = NULL;
 
-	p->topo = t->prox;
 	free(t);
 
 	return n;
@@ -60,21 +64,17 @@ void libera_pilha(Pilha* p){
 	p->topo = NULL;
 }
 
-int verifica(Pilha* p){
+void verifica(Pilha* p){
 	Item *n = (Item*) malloc(sizeof(Item));
 	n = p->topo;
+	int temp = n->saida;
 
-	while(n!=NULL){
-		Item *prox = n->prox;
-		if(prox==NULL){
-			return 1;
-		}
-		if(prox->saida < n->saida && prox->saida > n->chegada){
-			return 0;
-		}
-		n = prox;
+	while(n->prox!=NULL){
+		if(n->prox->saida > n->saida) pop_pilha(p);
+		
+		if(n==p->topo) return;
+		n = p->topo;
 	}
-	return 1;
 }
 
 int main(){
@@ -102,9 +102,10 @@ int main(){
 			}
 		}
 		
-		v = verifica(L);
-		if(v) printf("Sim\n");
+		verifica(L);
+		if(L->topo->prox == NULL) printf("Sim\n");
 		else printf("Nao\n");
+
 		// next case testing loop
 		libera_pilha(L);
 		scanf("%d %d",&n, &k);

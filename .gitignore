@@ -9,3 +9,6 @@ output.txt
 
 # executable files
 a.out
+
+# open vim files
+*.swp
