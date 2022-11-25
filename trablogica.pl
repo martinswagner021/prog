@@ -1,3 +1,5 @@
+/* ESTE CODIGO TEM AUTENTICIDADE DO GRUPO FRANK & GIL */
+
 avo(X,Z) :- genitor(X,Y), genitor(Y,Z), homem(X).
 
 madrasta(X,Z) :- casado(X,Y), genitor(Y,Z), not(genitor(X,Z)).
