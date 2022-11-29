@@ -2,8 +2,7 @@
 #include<stdlib.h>
 
 typedef struct item{
-	int chegada;
-	int saida;
+	char info;
 	struct item *prox;
 } Item;
 
@@ -18,23 +17,22 @@ Pilha* cria_pilha(){
 	return p;
 }
 
-void push_pilha(Pilha* p, int chegada, int saida){
+void push_pilha(Pilha* p, char info){
 	Item* n = (Item*) malloc(sizeof(Item));
-	n->chegada = chegada;
-	n->saida = saida;
+	n->info = info;
 	n->prox = p->topo;
 	p->topo = n;
 }
 
-Item pop_pilha(Pilha* p){
-	Item n; 
+char pop_pilha(Pilha* p){
+	char n; 
 	Item *t = (Item*) malloc(sizeof(Item));
 
 	t = p->topo;
-
-	n.chegada=t->chegada;
-	n.saida=t->saida;
-
+	if(t==NULL){
+		return '\0';
+	}
+	n = t->info;
 	p->topo = t->prox;
 	free(t);
 
@@ -44,7 +42,7 @@ Item pop_pilha(Pilha* p){
 void print_pilha(Pilha* p){
 	Item* n = p->topo;
 	while(n != NULL){
-		printf("chegada: %d, saida: %d\n", n->chegada, n->saida);
+		printf("info: %c\n", n->info);
 		n=n->prox;
 	}
 }
@@ -60,53 +58,63 @@ void libera_pilha(Pilha* p){
 	p->topo = NULL;
 }
 
-int verifica(Pilha* p){
-	Item *n = (Item*) malloc(sizeof(Item));
-	n = p->topo;
-
-	while(n!=NULL){
-		Item *prox = n->prox;
-		if(prox==NULL){
-			return 1;
-		}
-		if(prox->saida < n->saida && prox->saida > n->chegada){
-			return 0;
-		}
-		n = prox;
-	}
-	return 1;
-}
-
 int main(){
 
 	Pilha* L = cria_pilha();
+	char leitura;
+	int count = 0;
 
-	int n, k, c, s, v;
-
-	scanf("%d %d\n",&n, &k);
-	
-	while(n!=0&&k!=0){
-		for(int i=0; i<n; i++){
-			scanf("%d %d\n",&c, &s);
-			if(L->topo==NULL){
-			       push_pilha(L,c,s);
-			       k--;
+	while(scanf("%c", &leitura)!=EOF){
+		if(leitura=='\n'){
+			printf("%d\n", count);
+			libera_pilha(L);
+			count = 0;
+		}
+		else{
+			if(L->topo == NULL){
+				push_pilha(L, leitura);
 			}
 			else{
-				if(L->topo->saida < c){
-					pop_pilha(L);
-					k++;
+				switch(leitura){
+					case 'B':
+						if(L->topo->info == 'S'){
+							pop_pilha(L);
+							count++;
+						}
+						else{
+							push_pilha(L, leitura);
+						}
+						break;
+					case 'C':
+						if(L->topo->info == 'F'){
+							pop_pilha(L);
+							count++;
+						}
+						else{
+							push_pilha(L, leitura);
+						}
+						break;
+					case 'F':
+						if(L->topo->info == 'C'){
+							pop_pilha(L);
+							count++;
+						}
+						else{
+							push_pilha(L, leitura);
+						}
+						break;
+					case 'S':
+						if(L->topo->info == 'B'){
+							pop_pilha(L);
+							count++;
+						}
+						else{
+							push_pilha(L, leitura);
+						}
+						break;
 				}
-				push_pilha(L,c,s);
-				k--;
 			}
 		}
-		
-		v = verifica(L);
-		if(v) printf("Sim\n");
-		else printf("Nao\n");
-		// next case testing loop
-		libera_pilha(L);
-		scanf("%d %d",&n, &k);
+
 	}
 }
