@@ -79,6 +79,7 @@ int main(){
 
 			//prepara proximo loop
 			scanf(" %d", &s);
+			libera_pilha(P);
 		}
 		//prepara proximo loop
 		scanf("%d", &n);
