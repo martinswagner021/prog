@@ -64,27 +64,8 @@ void libera_pilha(Pilha* p){
 	p->topo = NULL;
 }
 
-int verifica(Pilha* L, int c, int s, int *k){
-	Item *n = (Item*) malloc(sizeof(Item));
-	n = L->topo;
-	
-	if(L->topo != NULL){
-		if(L->topo->saida < c){
-			pop_pilha(L);
-			(*k)++;
-		}
-		if((*k)>0){
-		       push_pilha(L,c,s);
-		       (*k)--;
-		}
-		else{
-			return 0;
-		}
-	}
-	else{
-		push_pilha(L,c,s);
-		(*k)--;
-	}
+int vazia_pilha(Pilha* p){
+    return p->topo == NULL;
 }
 
 int main(){
@@ -93,30 +74,49 @@ int main(){
 	
 	int n, k, c, s, v;
 
-	scanf("%d %d\n",&n, &k);
 
-	while(n!=0&&k!=0){
-		for(int i=0; i<n; i++){
-			scanf("%d %d\n",&c, &s);
-			v = verifica(L, c, s, &k);
-			printf("%d\n", k);
-		}
-		if(v){
-			while(L->topo!=NULL && L->topo->prox!=NULL){
-				if(L->topo->prox->saida > L->topo->saida){
-				       	pop_pilha(L);
+	while(1){
+
+		scanf("%d %d\n",&n, &k);
+		if(n==0 && k==0) break;
+
+		Pilha* p = cria_pilha();
+
+		v = 1;
+
+		for(int i=0;i<n;i++){
+			scanf("%d %d", &c, &s);
+				if(v){
+					if(vazia_pilha(p) && k>0){
+					       push_pilha(p, c, s);
+					       k--;
+					}
+
+					else{
+						while(c >= p->topo->saida){
+							pop_pilha(p);
+							k++;
+							if(vazia_pilha(p)) break;
+						}
+
+						if(k<=0) v=0;
+						else{
+							push_pilha(p, c, s);
+							k--;
+							if(p->topo->prox != NULL){
+								if(p->topo->chegada > p->topo->prox->chegada && p->topo->saida < p->topo->prox->saida) continue;
+								else{
+									v = 0;
+								}
+							}
+						}
+					}
 				}
-				else{
-					v = 0;
-				}
-			}
-			v ? printf("Sim\n") : printf("Nao\n");
 		}
-		else{
-			printf("Nao\n");
-		}
-		// next case loop testing
-		libera_pilha(L);
-		scanf("%d %d",&n, &k);
-	}
+
+		if(v) printf("Sim\n");
+		else printf("Nao\n");
+
+		libera_pilha(p);
+    }	
 }
