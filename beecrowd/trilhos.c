@@ -8,6 +8,7 @@ typedef struct item{
 
 typedef struct pilha{
 	Item *topo;
+	Item *fim;
 } Pilha;
 
 Pilha* cria_pilha(){
@@ -58,32 +59,85 @@ void libera_pilha(Pilha* p){
 	p->topo = NULL;
 }
 
+//serve para obter a ordem correta desejada pelo chefe, um append de fila
+Pilha* emenda_pilha(Pilha *L, int info){
+        Item *n = (Item*) malloc(sizeof(Item));
+        n->info = info;
+        n->prox = NULL;
+
+        if(L->topo == NULL){
+                L->topo = n;
+                L->fim = n;
+
+                return L;
+        }
+
+        L->fim->prox = n;
+        L->fim = n;
+
+        return L;
+}
+
+int vazia_pilha(Pilha *p){
+	return (p->topo == NULL);
+}
+
 int main(){
 
-	int n, s;
-	Pilha *L = cria_pilha();
+	int n, temp, stop=0;
+	
+	Pilha *chegando = cria_pilha();
+	Pilha *estacao = cria_pilha();
+	Pilha *saindo = cria_pilha();
+	
+	//leitura e preenchimento da pilha para o caso teste
 	scanf("%d", &n);
-	while(n!=0){
-		Pilha *P = cria_pilha();
-		for(int i=n; i>0; i--) push_pilha(L, i);
 
-		scanf("%d", &s);
-		while(s!=0){
-			for(int i=0; i<n; i++){
-				int temp;
+	while(n!=0){
+		while(!stop){
+
+			for(int i=n; i>0; i--) push_pilha(chegando, i);
+			//le a ordem desejada pelo chefe
+			for(int i=0; i<n && !stop; i++){
+
+				//le elemento
 				scanf("%d", &temp);
-				push_pilha(P, temp);
+
+				//verifica se deve ser interrompida a leitura
+				if(!temp) stop = 1;
+				if(!stop) emenda_pilha(saindo, temp);
 			}
 
-			print_pilha(P);
+			int pos=1;
+			//processa possibilidade yes or no
+			while(!vazia_pilha(saindo) && pos && !stop){
+				if(vazia_pilha(estacao)) push_pilha(estacao, pop_pilha(chegando));
+				else{
+					if(estacao->topo->info == saindo->topo->info){
+						pop_pilha(estacao);
+						pop_pilha(saindo);
+					}
+					else{
+						if(!vazia_pilha(chegando)) push_pilha(estacao, pop_pilha(chegando));
+						else pos = 0;
+					}
+				}
+				
+			}
+			pos = (vazia_pilha(chegando) && vazia_pilha(estacao) && vazia_pilha(saindo));
+			if(!stop){
+				(pos ? printf("Yes") : printf("No"));
+			}
+			printf("\n");
 
-			//prepara proximo loop
-			scanf(" %d", &s);
-			libera_pilha(P);
+			//prepara para proxima ordem desejada
+			libera_pilha(saindo);
+			libera_pilha(estacao);
+			libera_pilha(chegando);
 		}
-		//prepara proximo loop
+
+		//prepara para proximo caso teste
 		scanf("%d", &n);
-		libera_pilha(L);
+		if(n) stop=0;
 	}
-	
 }
