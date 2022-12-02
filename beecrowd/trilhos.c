@@ -33,6 +33,9 @@ int pop_pilha(Pilha* p){
 	if(t==NULL){
 		return 0;
 	}
+	if(t->prox==NULL){
+		p->fim = NULL;
+	}
 	n = t->info;
 	p->topo = t->prox;
 	free(t);
@@ -57,6 +60,7 @@ void libera_pilha(Pilha* p){
 		free(t);
 	}
 	p->topo = NULL;
+	p->fim = NULL;
 }
 
 //serve para obter a ordem correta desejada pelo chefe, um append de fila
@@ -84,7 +88,7 @@ int vazia_pilha(Pilha *p){
 
 int main(){
 
-	int n, temp, stop=0;
+	int n, temp, stop=0, i;
 	
 	Pilha *chegando = cria_pilha();
 	Pilha *estacao = cria_pilha();
@@ -96,19 +100,19 @@ int main(){
 	while(n!=0){
 		while(!stop){
 
-			for(int i=n; i>0; i--) push_pilha(chegando, i);
+			for(i=n; i>0; i--) push_pilha(chegando, i);
 			//le a ordem desejada pelo chefe
-			for(int i=0; i<n && !stop; i++){
+			for(i=0; i<n && !stop; i++){
 
 				//le elemento
-				scanf("%d", &temp);
+				scanf(" %d", &temp);
 
 				//verifica se deve ser interrompida a leitura
 				if(!temp) stop = 1;
 				if(!stop) emenda_pilha(saindo, temp);
 			}
 
-			int pos=1;
+			int pos = 1;
 			//processa possibilidade yes or no
 			while(!vazia_pilha(saindo) && pos && !stop){
 				if(vazia_pilha(estacao)) push_pilha(estacao, pop_pilha(chegando));
@@ -119,12 +123,25 @@ int main(){
 					}
 					else{
 						if(!vazia_pilha(chegando)) push_pilha(estacao, pop_pilha(chegando));
-						else pos = 0;
+						else {
+							pos = 0;
+							//debugging
+							//printf("chegando: ");
+							//print_pilha(chegando);
+							//printf("\n");
+							//printf("saindo: ");
+							//print_pilha(saindo);
+							//printf("\n");
+							//printf("estacao: ");
+							//print_pilha(estacao);
+							//printf("\n");
+							//printf("\n");
+						}
 					}
+					
 				}
 				
 			}
-			pos = (vazia_pilha(chegando) && vazia_pilha(estacao) && vazia_pilha(saindo));
 			if(!stop){
 				(pos ? printf("Yes") : printf("No"));
 			}
@@ -137,7 +154,8 @@ int main(){
 		}
 
 		//prepara para proximo caso teste
-		scanf("%d", &n);
+		scanf(" %d", &n);
 		if(n) stop=0;
 	}
+	printf("\n");
 }
