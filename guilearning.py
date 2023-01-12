@@ -7,12 +7,12 @@ pag.press("d")
 pag.keyUp("win")
 pag.write("google",def_interval)
 pag.press("enter")
-pag.write("Eu gosto de tu luizita, so finjo mesmo que nao",def_interval)
+pag.write("Random text",def_interval)
 pag.keyDown("ctrl")
 pag.press("a")
 pag.keyUp("ctrl")
 pag.press("delete")
-pag.write("Olha se voce nao me ama",def_interval)
+pag.write("hehe",def_interval)
 
 
 
