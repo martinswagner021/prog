@@ -1,3 +1,8 @@
+/*
+Autor: Wagner Martins
+Atividade 1 - Grafos
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -105,13 +110,28 @@ void printTodosCaminhos(lista** g, int d, int* aux, int pos){
     }
 }
 
+void printMenorCaminho(lista** g, int d, int* aux, int pos, int* Mcaminho){
+    if(aux[pos-1] == d){
+        if(pos < Mcaminho[1]){
+            Mcaminho[1] = pos;
+            for(int i=0; i<pos; i++) Mcaminho[i+2] = aux[i];
+        }
+    }
+    else{
+        lista* p = g[aux[pos-1]];
+        while(p != NULL){
+            aux[pos] = p->destino;
+            printMenorCaminho(g, d, aux, pos+1, Mcaminho);
+            p = p->prox;
+        }
+    }
+}
+
 void printMenorCusto(lista** g, int d, int* aux, int pos, int custo, int* Mcaminho){
     if(aux[pos-1] == d){
         if(custo < Mcaminho[0]){
-            printf("Novo vetor menor que antigo!\n");
-            printf("Custo: %d\n", custo);
             Mcaminho[1] = pos;
-            printf("Tamanho do novo vetor: %d\n", Mcaminho[1]);
+            Mcaminho[0] = custo;
             for(int i=0; i<pos; i++) Mcaminho[i+2] = aux[i];
         }
     }
@@ -202,7 +222,10 @@ int main(){
             printf("Insira o destino: ");
             scanf("%d", &d);
             aux[0] = o;
-            printTodosCaminhos(g, d, aux, 1);
+            Mcaminho[1] = 10000;
+            printMenorCaminho(g, d, aux, 1, Mcaminho);
+            for(int i=2; i<Mcaminho[1]+2; i++) printf("%d ", Mcaminho[i]);
+            printf("\n");
 
             printOpcoes();
             scanf("%d", &escolha);
