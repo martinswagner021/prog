@@ -1,0 +1,42 @@
+[
+	{
+		"Curso": "Python",
+		"Alunos": [
+			{
+				"nome": "João",
+				"idade": 34,
+				"sexo": "m"
+			},
+			{
+				"nome": "Maria",
+				"idade": 25,
+				"sexo": "f"
+			},
+			{
+				"nome": "Ana",
+				"idade": 55,
+				"sexo": "f"
+			}
+		]
+	},
+	{
+		"Curso": "Java",
+		"Alunos": [
+			{
+				"nome": "Ana",
+				"idade": 55,
+				"sexo": "f"
+			},
+			{
+				"nome": "José",
+				"idade": 52,
+				"sexo": "m"
+			},
+			{
+				"nome": "Júlia",
+				"idade": 15,
+				"sexo": "f"
+			}
+		]
+	}
+]	
