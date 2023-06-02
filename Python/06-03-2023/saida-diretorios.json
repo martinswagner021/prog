@@ -1,1 +1,34 @@
-{}
+{
+   ".": {
+      "nome_do_diretorio": ".",
+      "arquivos": [
+         "trab.py",
+         "saida-diretorios.json",
+         "trabcopy.py"
+      ],
+      "diretorios": {
+         "dir2": {
+            "nome_do_diretorio": "dir2",
+            "arquivos": [
+               "test2.py"
+            ],
+            "diretorios": {}
+         },
+         "dir1": {
+            "nome_do_diretorio": "dir1",
+            "arquivos": [
+               "test.py"
+            ],
+            "diretorios": {
+               "dir3": {
+                  "nome_do_diretorio": "dir3",
+                  "arquivos": [
+                     "outro.txt"
+                  ],
+                  "diretorios": {}
+               }
+            }
+         }
+      }
+   }
+}
