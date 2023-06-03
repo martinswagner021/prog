@@ -1,29 +1,33 @@
 {
    ".": {
       "nome_do_diretorio": ".",
-      "arquivos": [
-         "trab.py",
-         "saida-diretorios.json",
-         "trabcopy.py"
-      ],
+      "arquivos": [],
       "diretorios": {
-         "dir2": {
-            "nome_do_diretorio": "dir2",
+         "Trab1": {
+            "nome_do_diretorio": "Trab1",
             "arquivos": [
-               "test2.py"
-            ],
-            "diretorios": {}
-         },
-         "dir1": {
-            "nome_do_diretorio": "dir1",
-            "arquivos": [
-               "test.py"
+               "teste3.xlsx",
+               "teste1.txt",
+               "teste2.xlsx"
             ],
             "diretorios": {
-               "dir3": {
-                  "nome_do_diretorio": "dir3",
+               "P2": {
+                  "nome_do_diretorio": "P2",
+                  "arquivos": [],
+                  "diretorios": {
+                     "P3": {
+                        "nome_do_diretorio": "P3",
+                        "arquivos": [
+                           "teste5.bmp"
+                        ],
+                        "diretorios": {}
+                     }
+                  }
+               },
+               "P1": {
+                  "nome_do_diretorio": "P1",
                   "arquivos": [
-                     "outro.txt"
+                     "teste4.docx"
                   ],
                   "diretorios": {}
                }
