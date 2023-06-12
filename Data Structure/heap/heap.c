@@ -1,3 +1,8 @@
+/*
+Autor: Wagner Martins
+Atividade 1 - Heap
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -13,22 +18,64 @@ Heap* create_heap(int heap_size) {
     return h;
 }
 
+int indicePai(Heap* h, int ind) {
+    int indice = (int)(ind - 1) / 2;
+    if (ind <= 0 || ind >= h->last_elem) {
+        return -1;
+    }
+    return indice;
+}
+
+int indiceFilhoEsq(Heap* h, int ind) {
+    int indice = (ind * 2) + 1;
+    if (indice <= 0 || indice >= h->last_elem) {
+        return -1;
+    }
+    return indice;
+}
+
+int indiceFilhoDir(Heap* h, int ind) {
+    int indice = (ind * 2) + 2;
+    if (indice <= 0 || indice >= h->last_elem) {
+        return -1;
+    }
+    return indice;
+}
+
+void ajustarSubindo(Heap* h, int pos) {
+    if (pos != -1 && indicePai(h, pos) != -1) {
+        if (h->h[pos] < h->h[indicePai(h, pos)]) {
+            int aux = h->h[pos];
+            h->h[pos] = h->h[indicePai(h, pos)];
+            h->h[indicePai(h, pos)] = aux;
+            ajustarSubindo(h, indicePai(h, pos));
+        }
+    }
+}
+
+void ajustarDescendo(Heap* h, int pos) {
+    if (pos != -1 && indiceFilhoEsq(h, pos) != -1) {
+        int indiceMenor = indiceFilhoEsq(h, pos);
+        if (indiceFilhoDir(h, pos) != -1 && h->h[indiceFilhoDir(h, pos)] < h->h[indiceMenor]) {
+            indiceMenor = indiceFilhoDir(h, pos);
+        }
+
+        printf("%d\n", indiceMenor);
+
+        if (h->h[indiceMenor] < h->h[pos]) {
+            int aux = h->h[pos];
+            h->h[pos] = h->h[indiceMenor];
+            h->h[indiceMenor] = aux;
+            ajustarDescendo(h, indiceMenor);
+        }
+    }
+}
+
 void inserir_elem(Heap* h, int obj) {
     h->h[h->last_elem] = obj;
     h->last_elem++;
 
     ajustarSubindo(h, h->last_elem - 1);
-}
-
-void ajustarSubindo(Heap* h, int pos) {
-    if (pos != -1 && indicePai(pos) != -1) {
-        if (h->h[pos] < h->h[indicePai(pos)]) {
-            int aux = h->h[pos];
-            h->h[pos] = h->h[indicePai(pos)];
-            h->h[indicePai(pos)] = aux;
-            ajustarSubindo(h, indicePai(pos));
-        }
-    }
 }
 
 int remover_elem(Heap* h) {
@@ -43,21 +90,6 @@ int remover_elem(Heap* h) {
     }
 }
 
-void ajustarDescendo(Heap* h, int pos) {
-    if (pos != -1 && indiceFilhoEsq(pos) != -1) {
-        int indiceMenor = indiceFilhoEsq(pos);
-        if (indiceFilhoDir(pos) != -1 && h->h[indiceFilhoDir(pos)] < h->h[indiceMenor]) {
-            indiceMenor = indiceFilhoDir(pos);
-        }
-
-        if (h->h[indiceMenor] < h->h[pos]) {
-            int aux = h->h[pos];
-            h->h[pos] = h->h[indiceMenor];
-            h->h[indiceMenor] = aux;
-            ajustarDescendo(h, indiceMenor);
-        }
-    }
-}
 
 void print_heap(Heap* h) {
     printf("[");
@@ -71,29 +103,6 @@ void print_heap(Heap* h) {
     printf("]\n");
 }
 
-int indicePai(int ind) {
-    int indice = (int)(ind - 1) / 2;
-    if (ind <= 0 || ind >= this->last_elem) {
-        return -1;
-    }
-    return indice;
-}
-
-int indiceFilhoEsq(int ind) {
-    int indice = (ind * 2) + 1;
-    if (ind <= 0 || ind >= this->last_elem) {
-        return -1;
-    }
-    return indice;
-}
-
-int indiceFilhoDir(int ind) {
-    int indice = (ind * 2) + 2;
-    if (ind <= 0 || ind >= this->last_elem) {
-        return -1;
-    }
-    return indice;
-}
 
 int main() {
     int heap_size;

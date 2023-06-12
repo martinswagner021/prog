@@ -71,14 +71,14 @@ public class Heap{
     }
     private int indiceFilhoEsq(int ind){
         int indice = (ind*2)+1;
-        if (ind <= 0 || ind >= this.last_elem){
+        if (indice <= 0 || indice >= this.last_elem){
             return -1;
         }
         return indice;
     }
     private int indiceFilhoDir(int ind){
         int indice = (ind*2)+2;
-        if (ind <= 0 || ind >= this.last_elem){
+        if (indice <= 0 || indice >= this.last_elem){
             return -1;
         }
         return indice;
