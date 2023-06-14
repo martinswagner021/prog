@@ -7,7 +7,3 @@ In this repository you may find some random personal projects in many different 
 
 
 My purpose is to keep track of my progress and also access in multiple devices with my portable Linux Distro in an USB Stick (I'm still thinking whether or not I publish these configs I've done to my personal use in the USB stick).
-
-
-## Author
-Wagner Martins
