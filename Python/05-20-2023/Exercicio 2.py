@@ -21,9 +21,8 @@ for row in r:
     if(int(row[11]) > 20):
         i = 0
         temp = {}
-        for topic in row:
-            temp[header[i]] = topic
-            i += 1
+        temp.setdefault("Authors", row[0])
+        temp.setdefault("Cited by", row[11])
         scopus_data.append(temp)
         continue
 
