@@ -2,71 +2,49 @@
 #include "stdlib.h"
 #include "fila.h"
 
-typedef struct elementoFila{
-    int info;
-    struct elementoFila *prox;
-}lista;
-
-struct fila{
-    lista *ini;
-    lista *fim;
+struct Fila{
+    int ini;
+    int fim;
+    int v[100];
 };
 
+fila filaInicializar(){
+    fila p = (fila) malloc(sizeof(struct Fila));
+    p->ini = 0;
+    p->fim = 0;
+    return p;
+}
 
 void filaInserir(fila p, int info){
-    lista* n = (lista*) malloc(sizeof(lista));
-    n->info = info;
-    n->prox = NULL;
-
-    if(filaIsVazia(p)){
-        p->ini = n;
-    }
-    else{
-        p->fim->prox = n;
-    }
-    p->fim = n;
+    p->v[p->fim] = info;
+    p->fim = (p->fim+1)%100;
 }
 
 int filaRemover(fila p){
-    if(filaIsVazia(p)){
+    if (!filaIsVazia(p)){
+        int info = p->v[p->ini];
+        p->ini = (p->ini+1)%100;
+        return info;
+    }
+    else{
         return -1;
     }
-    lista* aux = p->ini;
-    int info = aux->info;
-    p->ini = aux->prox;
-
-    if(filaIsVazia(p)){
-        p->fim = NULL;
-    }
-
-    free(aux);
-    return info;
 }
 
 int filaIsVazia(fila p){
-    return (p->ini == NULL);
+    return (p->ini == p->fim);
 }
 
 void filaImprimir(fila p){
-    printf("[");
-    for(lista* t = p->ini; t!=NULL; t = t->prox) (t->prox == NULL) ? printf("%d", t->info) : printf("%d ", t->info);
+    printf("[ ");
+    int i = p->ini;
+    while(i!=p->fim){
+        printf("%d ", p->v[i]);
+        i = (i+1)%100;
+    }
     printf("]\n");
 }
 
 void filaDestruir(fila p){
-    lista* t = p->ini;
-    lista* aux;
-    while(t != NULL){
-        aux = t;
-        t = t->prox;
-        free(aux);
-    }
     free(p);
-}
-
-fila filaInicializar(){
-    fila p = (fila) malloc(sizeof(struct fila));
-    p->ini = NULL;
-    p->fim = NULL;
-    return p;
 }

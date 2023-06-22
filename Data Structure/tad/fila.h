@@ -1,8 +1,8 @@
 #ifndef FILA_H
 #define FILA_H
 
-typedef struct fila *fila;
-// Inicializa e retorna a fila nula
+typedef struct Fila *fila;
+// Inicializa e retorna uma fila vazia com espaco para 100 inteiros
 fila filaInicializar(void);
 // Insere um elemento no final da fila
 void filaInserir(fila p, int info);

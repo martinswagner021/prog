@@ -1,19 +1,42 @@
 #include "stdio.h"
 #include "fila.h"
 
+void printOpcoes(){
+    printf("1- Inserir um elemento na fila\n");
+    printf("2- Remover um elemento da fila (imprimir o elemento removido)\n");
+    printf("3- Imprimir a fila\n");
+    printf("4- Sair\n");
+}
+
 int main(){
     fila p = filaInicializar();
-    filaInserir(p, 3);
-    filaInserir(p, 2);
-    filaInserir(p, 5);
-    filaInserir(p, 23);
-    filaImprimir(p);
-    filaRemover(p);
-    filaRemover(p);
-    filaRemover(p);
-    filaRemover(p);
-
-    filaIsVazia(p) ? printf("Fila vazia.\n") : printf("Fila preenchida.\n");
-    filaImprimir(p);
-    filaDestruir(p);
+    int choice;
+    while(1){
+        printOpcoes();
+        scanf("%d", &choice);
+        switch (choice){
+            case 1:{
+                printf("Digite o numero a ser inserido:\n");
+                int insert;
+                scanf("%d", &insert);
+                filaInserir(p, insert);
+                break;
+            }
+            case 2:{
+                int elem = filaRemover(p);
+                (elem == -1) ? printf("Impossivel remover de uma fila vazia\n") : printf("O elemento removido foi: %d\n", elem);
+                break;
+            }
+            case 3:{
+                filaImprimir(p);
+                break;
+            }
+            case 4:{
+                filaDestruir(p);
+                return(0);
+            }
+            default:
+                break;
+        }
+    }
 }
