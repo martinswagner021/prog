@@ -1,27 +1,28 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "avl.h"
 
-typedef struct avl{
+struct avl{
+    void* obj;
     int info;
     int FB;
-    struct avl *esq;
-    struct avl *dir;
-}avl;
+    struct avl* esq;
+    struct avl* dir;
+};
 
 // Funcoes matematicas para calculo de altura e balanceamento
 int max(int a,int b){
-    if(a>=b) return a;
-    return b;
+    (a>=b) ? a : b;
 }
 
-int alturaArv(avl* a){
+int alturaArv(avl a){
     if(a!=NULL){
         return 1+max(alturaArv(a->esq), alturaArv(a->dir));
     }
     return 0;
 }
 
-void ajustarFB(avl* a){
+void ajustarFB(avl a){
     if(a!=NULL){
         int he = alturaArv(a->esq);
         int hd = alturaArv(a->dir);
@@ -32,7 +33,7 @@ void ajustarFB(avl* a){
     }
 }
 
-avl* findElem(avl* a, int x){
+avl findElem(avl a, int x){
     if(a!=NULL){
         if(x == a->info) return a;
         if(x < a->info) return findElem(a->esq, x);
@@ -41,14 +42,14 @@ avl* findElem(avl* a, int x){
     return NULL;
 }
 
-int existeX(avl* a, int x){
-    avl* y = findElem(a, x);
+int existe(avl a, int chave){
+    avl y = findElem(a, chave);
     if(y==NULL) return 0;
     return 1;
 }
 
 // Ao chamar a funcao, certifique-se de que nivel = 0
-int nivelNoX(avl* a, int x, int nivel){
+int nivelNoX(avl a, int x, int nivel){
     if(a!=NULL){
         if(a->info==x) return nivel;
         if(x<a->info) return nivelNoX(a->esq, x, nivel+1);
@@ -59,21 +60,21 @@ int nivelNoX(avl* a, int x, int nivel){
 
 
 // Metodos de print
-void printArvPreOrdem(avl* a){
+void printArvPreOrdem(avl a){
     if(a!=NULL){
         printf("%d\n", a->info);
         printArvPreOrdem(a->esq);
         printArvPreOrdem(a->dir);
     }
 }
-void printArvEmOrdem(avl* a){
+void printArvEmOrdem(avl a){
     if(a!=NULL){
         printArvEmOrdem(a->esq);
         printf("%d\n", a->info);
         printArvEmOrdem(a->dir);
     }
 }
-void printArvPosOrdem(avl* a){
+void printArvPosOrdem(avl a){
     if(a!=NULL){
         printArvPosOrdem(a->esq);
         printArvPosOrdem(a->dir);
@@ -83,7 +84,7 @@ void printArvPosOrdem(avl* a){
 
 // Estrutura de fila pra impressao em largura
 typedef struct lista{
-    avl* info;
+    avl info;
     struct lista* prox;
 }lista;
 
@@ -99,7 +100,7 @@ fila* criaFila(){
     return p;
 }
 
-void insereFila(fila* p, avl *x){
+void insereFila(fila* p, avl x){
     lista* t = (lista*) malloc(sizeof(lista));
     t->info = x;
     t->prox = NULL;
@@ -114,7 +115,7 @@ int removeFila(fila* p){
     if(p->ini==NULL) return -1;
 
     lista* t = p->ini;
-    avl* v = t->info;
+    avl v = t->info;
 
     p->ini = t->prox;
     if(p->ini == NULL) p->fim = NULL;
@@ -132,7 +133,7 @@ void liberaFila(fila* p){
     free(p);
 }
 
-void printArvEmLargura(avl* a){
+void imprimir(avl a){
     if(a!=NULL){
         fila* f = criaFila();
         insereFila(f, a);
@@ -146,7 +147,7 @@ void printArvEmLargura(avl* a){
     }
 }
 
-void printFolha(avl* a){
+void printFolha(avl a){
     if(a!=NULL){
         printFolha(a->esq);
         printFolha(a->dir);
@@ -154,24 +155,24 @@ void printFolha(avl* a){
     }
 }
 
-avl* rot_dir_simples(avl* x){
-    avl* y = x->esq;
+avl rot_dir_simples(avl x){
+    avl y = x->esq;
     x->esq = y->dir;
     y->dir = x;
     
     return y;
 }
 
-avl* rot_esq_simples(avl* x){
-    avl* y = x->dir;
+avl rot_esq_simples(avl x){
+    avl y = x->dir;
     x->dir = y->esq;
     y->esq = x;
     
     return y;
 }
 
-avl* rot_dir(avl* x){
-    avl *y = x->esq;
+avl rot_dir(avl x){
+    avl y = x->esq;
     if(alturaArv(y->dir) > alturaArv(y->esq)){
         x->esq = rot_esq_simples(y);
         return rot_dir_simples(x);
@@ -181,8 +182,8 @@ avl* rot_dir(avl* x){
     }
 }
 
-avl* rot_esq(avl* x){
-    avl *y = x->dir;
+avl rot_esq(avl x){
+    avl y = x->dir;
     if(alturaArv(y->esq) > alturaArv(y->dir)){
         x->dir = rot_dir_simples(y);
         return rot_esq_simples(x);
@@ -192,16 +193,17 @@ avl* rot_esq(avl* x){
     }
 }
 
-avl* inserirArv(avl* a, int x){
+avl inserir(avl a, int chave, void* obj){
     if(a==NULL){
-        a = (avl*) malloc(sizeof(avl));
-        a->info = x;
+        a = (avl) malloc(sizeof(struct avl));
+        a->obj = obj;
+        a->info = chave;
         a->FB = 0;
         a->esq = NULL;
         a->dir = NULL;
     }
-    if(x < a->info) a->esq = inserirArv(a->esq, x);
-    if(x > a->info) a->dir = inserirArv(a->dir, x);
+    if(chave < a->info) a->esq = inserir(a->esq, chave, obj);
+    if(chave > a->info) a->dir = inserir(a->dir, chave, obj);
 
     ajustarFB(a);
     if(!(a->FB >= -1 && a->FB<=1)){
@@ -220,30 +222,30 @@ avl* inserirArv(avl* a, int x){
 }
 
 // Retorna a avlore com o elemento removido
-avl* removerArv(avl* a, int x){
+avl remover(avl a, int chave){
     if(a!=NULL){
-        if(a->info==x){
+        if(a->info==chave){
             if(a->esq==NULL && a->dir==NULL){
                 free(a);
                 return NULL;
             }
             if(a->esq==NULL){
-                avl* aux = a->dir;
+                avl aux = a->dir;
                 free(a);
                 return aux;
             }
             if(a->dir==NULL){
-                avl* aux = a->esq;
+                avl aux = a->esq;
                 free(a);
                 return aux;
             }
-            avl* aux = a->esq;
+            avl aux = a->esq;
             while(aux->dir!=NULL) aux = aux->dir;
             a->info = aux->info;
-            a->esq = removerArv(a->esq, aux->info);
+            a->esq = remover(a->esq, aux->info);
         }
-        if(x<a->info) a->esq = removerArv(a->esq, x);
-        if(x>a->info) a->dir = removerArv(a->dir, x);
+        if(chave<a->info) a->esq = remover(a->esq, chave);
+        if(chave>a->info) a->dir = remover(a->dir, chave);
 
         ajustarFB(a);
         if(!(a->FB >= -1 && a->FB<=1)){
@@ -262,11 +264,14 @@ avl* removerArv(avl* a, int x){
     return a;
 }
 
-avl* liberaArv(avl* a){
+avl avl_inicializar(){
+    return NULL;
+}
+
+avl avl_destruir(avl a){
     if(a!=NULL){
-        liberaArv(a->esq);
-        liberaArv(a->dir);
+        avl_destruir(a->esq);
+        avl_destruir(a->dir);
         free(a);
     }
-    return NULL;
 }
