@@ -1,6 +1,7 @@
+#include "avl.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "avl.h"
+#include "string.h"
 
 struct avl{
     void* obj;
@@ -33,17 +34,17 @@ void ajustarFB(avl a){
     }
 }
 
-avl findElem(avl a, int x){
+avl buscar(avl a, int x){
     if(a!=NULL){
         if(x == a->info) return a;
-        if(x < a->info) return findElem(a->esq, x);
-        if(x > a->info) return findElem(a->dir, x);
+        if(x < a->info) return buscar(a->esq, x);
+        if(x > a->info) return buscar(a->dir, x);
     }
     return NULL;
 }
 
 int existe(avl a, int chave){
-    avl y = findElem(a, chave);
+    avl y = buscar(a, chave);
     if(y==NULL) return 0;
     return 1;
 }
@@ -58,27 +59,12 @@ int nivelNoX(avl a, int x, int nivel){
     return -1;
 }
 
-
 // Metodos de print
-void printArvPreOrdem(avl a){
-    if(a!=NULL){
-        printf("%d\n", a->info);
-        printArvPreOrdem(a->esq);
-        printArvPreOrdem(a->dir);
-    }
-}
 void printArvEmOrdem(avl a){
     if(a!=NULL){
         printArvEmOrdem(a->esq);
         printf("%d\n", a->info);
         printArvEmOrdem(a->dir);
-    }
-}
-void printArvPosOrdem(avl a){
-    if(a!=NULL){
-        printArvPosOrdem(a->esq);
-        printArvPosOrdem(a->dir);
-        printf("%d\n", a->info);
     }
 }
 
@@ -139,19 +125,12 @@ void imprimir(avl a){
         insereFila(f, a);
         while(f->ini!=NULL){
             a = f->ini->info;
-            printf("%d\n", removeFila(f));
+            printf("%d ", removeFila(f));
             if(a->esq!=NULL) insereFila(f, a->esq);
             if(a->dir!=NULL) insereFila(f, a->dir);
         }
+        printf("\n");
         liberaFila(f);
-    }
-}
-
-void printFolha(avl a){
-    if(a!=NULL){
-        printFolha(a->esq);
-        printFolha(a->dir);
-        if(a->dir == NULL && a->esq == NULL) printf("%d\n", a->info);
     }
 }
 
@@ -193,17 +172,18 @@ avl rot_esq(avl x){
     }
 }
 
-avl inserir(avl a, int chave, void* obj){
+avl inserir(avl a, int chave, void* obj, int tamObj){
     if(a==NULL){
         a = (avl) malloc(sizeof(struct avl));
-        a->obj = obj;
+        a->obj = malloc(tamObj);
+        memcpy(a->obj, obj, tamObj);
         a->info = chave;
         a->FB = 0;
         a->esq = NULL;
         a->dir = NULL;
     }
-    if(chave < a->info) a->esq = inserir(a->esq, chave, obj);
-    if(chave > a->info) a->dir = inserir(a->dir, chave, obj);
+    if(chave < a->info) a->esq = inserir(a->esq, chave, obj, tamObj);
+    if(chave > a->info) a->dir = inserir(a->dir, chave, obj, tamObj);
 
     ajustarFB(a);
     if(!(a->FB >= -1 && a->FB<=1)){
@@ -270,6 +250,7 @@ avl avl_inicializar(){
 
 avl avl_destruir(avl a){
     if(a!=NULL){
+        free(a->obj);
         avl_destruir(a->esq);
         avl_destruir(a->dir);
         free(a);
