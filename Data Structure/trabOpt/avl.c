@@ -12,8 +12,8 @@ struct avl{
 };
 
 // Funcoes matematicas para calculo de altura e balanceamento
-int max(int a,int b){
-    (a>=b) ? a : b;
+int max(int a, int b){
+    return (a >= b) ? a : b;
 }
 
 int alturaArv(avl a){
@@ -34,38 +34,26 @@ void ajustarFB(avl a){
     }
 }
 
-avl buscar(avl a, int x){
+avl findElem(avl a, int x){
     if(a!=NULL){
         if(x == a->info) return a;
-        if(x < a->info) return buscar(a->esq, x);
-        if(x > a->info) return buscar(a->dir, x);
+        if(x < a->info) return findElem(a->esq, x);
+        if(x > a->info) return findElem(a->dir, x);
     }
     return NULL;
 }
 
+int buscar(avl a, int chave, void* obj, int tamObj){
+    avl elem = findElem(a, chave);
+    if(elem == NULL) return 0;
+    memcpy(obj, elem->obj, tamObj);
+    return elem->info;
+}
+
 int existe(avl a, int chave){
-    avl y = buscar(a, chave);
+    avl y = findElem(a, chave);
     if(y==NULL) return 0;
     return 1;
-}
-
-// Ao chamar a funcao, certifique-se de que nivel = 0
-int nivelNoX(avl a, int x, int nivel){
-    if(a!=NULL){
-        if(a->info==x) return nivel;
-        if(x<a->info) return nivelNoX(a->esq, x, nivel+1);
-        if(x>a->info) return nivelNoX(a->dir, x, nivel+1);
-    }
-    return -1;
-}
-
-// Metodos de print
-void printArvEmOrdem(avl a){
-    if(a!=NULL){
-        printArvEmOrdem(a->esq);
-        printf("%d\n", a->info);
-        printArvEmOrdem(a->dir);
-    }
 }
 
 // Estrutura de fila pra impressao em largura
@@ -201,7 +189,6 @@ avl inserir(avl a, int chave, void* obj, int tamObj){
     return a;
 }
 
-// Retorna a avlore com o elemento removido
 avl remover(avl a, int chave){
     if(a!=NULL){
         if(a->info==chave){
@@ -222,6 +209,7 @@ avl remover(avl a, int chave){
             avl aux = a->esq;
             while(aux->dir!=NULL) aux = aux->dir;
             a->info = aux->info;
+            a->obj = aux->obj;
             a->esq = remover(a->esq, aux->info);
         }
         if(chave<a->info) a->esq = remover(a->esq, chave);
@@ -250,9 +238,11 @@ avl avl_inicializar(){
 
 avl avl_destruir(avl a){
     if(a!=NULL){
-        free(a->obj);
         avl_destruir(a->esq);
         avl_destruir(a->dir);
+        free(a->obj);
         free(a);
     }
+
+    return NULL;
 }
