@@ -1,0 +1,227 @@
+---
+title: 'R e visualização'
+subtitle: 'Lista avaliativa 1 -- Probabilidade e Estatística'
+author: 'Wagner Martins de Lima Filho'
+email: 'martinswagner021@gmail.com'
+date: 22/09/2023
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+# Leitura e limpeza dos dados
+Primeiramente, utilizaremos a função `head()` para ter uma noção das informações contidas no arquivo `.tsv` escolhido.
+
+```{r}
+df <- read_tsv('2004-2021.tsv')
+df %>% head(3)
+```
+
+Pode-se obserar algumas informações importantes quanto ao formato:
+
+* As colunas estão bem comportadas quanto ao formato _tibble_, pois não há informações sendo apresentadas nas colunas.
+
+```{r}
+df <- df %>% tibble()
+```
+
+* As colunas e algumas informações encontram-se em caixa alta e acentuadas, logo uma boa prática seria utilizar o `janitor::clean_names()` para renomear as colunas em um formato melhor em termos de código, além disso usaremos o `mutate()` para deixar as informações em caixa baixa.
+
+```{r}
+df <- janitor::clean_names(df)
+df <- df %>% mutate(
+  regiao = str_to_title(regiao),
+  estado = str_to_title(estado),
+  produto = str_to_sentence(produto)
+)
+```
+
+* Algumas colunas que deveriam ser do tipo `<dbl>` estão no formato `<chr>`, logo utilizando novamente a função `mutate`, podemos ajustar as informações para o formato correto.
+
+```{r warning=FALSE}
+df <- df %>% mutate(
+  margem_media_revenda = as.double(margem_media_revenda),
+  preco_medio_distribuicao = as.double(preco_medio_distribuicao),
+  desvio_padrao_distribuicao = as.double(desvio_padrao_distribuicao),
+  preco_minimo_distribuicao = as.double(preco_minimo_distribuicao),
+  preco_maximo_distribuicao = as.double(preco_maximo_distribuicao),
+  coef_de_variacao_distribuicao = as.double(coef_de_variacao_distribuicao)
+  )
+```
+
+Portanto, após as primeiras impressões, obtemos o seguinte tibble:
+
+```{r echo=FALSE}
+df
+```
+
+# Análise Exploratória
+
+É importante verificar a quantidade de `NA's` em algumas colunas importantes como preço médio de revenda, datas iniciais de análise e localidade.
+
+```{r}
+df %>% count(
+  is.na(preco_medio_revenda),
+  is.na(data_inicial),
+  is.na(regiao),
+  is.na(estado)
+  )
+```
+
+* A coluna produtos apresenta mais de um tipo para o mesmo produto, logo deveríamos agrupar valores que deveriam pertencer à mesma classificação.
+
+```{r warning=FALSE}
+df %>% group_by(produto) %>% summarize()
+```
+
+  Entao, realizamos algumas manobras para mudar estes valores:
+```{r}
+df <- df %>% mutate(
+  produto = ifelse(produto == 'Óleo diesel', 'Oleo diesel', produto),
+  produto = ifelse(produto == 'Óleo diesel s10', 'Oleo diesel s10', produto)
+)
+```
+
+Tendo em vista que não foram encontrados casos de `NA` e agora os dados encontram-se bem comportados, partiremos para a análise visual e inferências de alguns comportamentos a fim de responder à algumas questões, como: quais regiões, ou estados possuem os combustíveis históricamente mais caros, mais baratos e existiria algum padrão para isso?
+
+# Visualização
+
+A fim de responder as perguntas anteriores, trabalharemos na visualização e tentaremos traçar alguns padrões de comportamento.
+
+## _Scatter plots_
+
+Primeiramente, tentaremos visualizar a distribuição geral das informações contidas na amostra.
+
+```{r}
+df %>% ggplot(
+  aes(
+    x = data_inicial,
+    y = preco_medio_revenda,
+    color = produto
+  )) +
+  geom_point() + 
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo ao longo do tempo',
+    x = "Data",
+    y = "Preco medio de revenda (R$)",
+    color = "Produto"
+  )
+```
+
+Pode-se perceber que o **glp** no geral apresenta um preço mais elevado, por conta da venda ser realizada em uma unidade de medida diferente, dificultando a comparação com outros produtos. Portanto, vamos ignorá-lo por um momento.
+
+```{r}
+df_sem_glp <- df %>% filter((!produto=='Glp'))
+df_sem_glp %>% ggplot(
+  aes(
+    x = data_inicial,
+    y = preco_medio_revenda,
+    color = regiao,
+  )) +
+  geom_point() + 
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo ao longo do tempo',
+    x = "Data",
+    y = "Preco medio de revenda (R$)",
+    color = "Regiao"
+  )
+```
+
+Agora, podemos ver que embora desorganizado, os dados estão distribuídos de forma mais uniforme e podemos utilizar o `geom_smooth()` para evitar sobrecarga de informações apresentadas.
+
+```{r, warning=FALSE}
+df_sem_glp %>% ggplot(
+  aes(
+    x = data_inicial,
+    y = preco_medio_revenda,
+    color = regiao
+  )) +
+  geom_smooth() + 
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo ao longo do tempo',
+    x = "Data",
+    y = "Preco medio de revenda (R$)",
+    color = "Regiao"
+  )
+```
+
+Pode-se observar que a região norte possui a maior média de preço de combustíveis, enquanto o sudeste que concentra a produção e refino dos produtos, possui a média mais baixa. Desta forma, pode-se inferir que o fator geográfico envolvido no custo de transporte desses produtos possui uma forte influência no valor de revenda.
+
+Também iremos nos aproximar do sudeste para poder entender um pouco mais da dinâmica de preços em nossa região.
+
+```{r}
+df_sem_glp %>% filter(regiao == 'Sudeste') %>% ggplot(aes(
+  x = data_inicial,
+  y = preco_medio_revenda,
+  color = estado
+)) +
+  geom_smooth() + 
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo ao longo do tempo',
+    x = "Data",
+    y = "Preco medio de revenda (R$)",
+    color = "Regiao"
+  )
+```
+
+Percebe-se que apesar da média da região sudeste ter o menor preço diante de outras, o Rio de Janeiro em especial está bem acima da média da região, fugindo o padrão e se comportando como alguns pontos da região norte e centro oeste.
+
+```{r}
+df_sem_glp %>% filter(regiao != 'Sudeste' | estado == 'Rio De Janeiro') %>% mutate(
+  regiao = ifelse(regiao != 'Sudeste', regiao, 'Rio de Janeiro')
+) %>% ggplot(aes(
+  x = data_inicial,
+  y = preco_medio_revenda,
+  color = regiao
+)) +
+  geom_smooth() + 
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo ao longo do tempo',
+    x = "Data",
+    y = "Preco medio de revenda (R$)",
+    color = "Regiao, ou estado"
+  )
+```
+
+## Histogramas
+
+# Referências
+* [Como são formados os preços, Petrobras](https://precos.petrobras.com.br/web/precos-dos-combustiveis/w/gasolina/br)
+* [Preços de Revenda e de Distribuição de Combustíveis, Governo Federal](https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/precos-revenda-e-de-distribuicao-combustiveis)
