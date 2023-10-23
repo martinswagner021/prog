@@ -5,7 +5,7 @@
 
 struct avl{
     void* obj;
-    int info;
+    int chave;
     int FB;
     struct avl* esq;
     struct avl* dir;
@@ -36,9 +36,9 @@ void ajustarFB(avl a){
 
 avl findElem(avl a, int x){
     if(a!=NULL){
-        if(x == a->info) return a;
-        if(x < a->info) return findElem(a->esq, x);
-        if(x > a->info) return findElem(a->dir, x);
+        if(x == a->chave) return a;
+        if(x < a->chave) return findElem(a->esq, x);
+        if(x > a->chave) return findElem(a->dir, x);
     }
     return NULL;
 }
@@ -47,7 +47,7 @@ int buscar(avl a, int chave, void* obj, int tamObj){
     avl elem = findElem(a, chave);
     if(elem == NULL) return 0;
     memcpy(obj, elem->obj, tamObj);
-    return elem->info;
+    return elem->chave;
 }
 
 int existe(avl a, int chave){
@@ -58,7 +58,7 @@ int existe(avl a, int chave){
 
 // Estrutura de fila pra impressao em largura
 typedef struct lista{
-    avl info;
+    avl chave;
     struct lista* prox;
 }lista;
 
@@ -76,7 +76,7 @@ fila* criaFila(){
 
 void insereFila(fila* p, avl x){
     lista* t = (lista*) malloc(sizeof(lista));
-    t->info = x;
+    t->chave = x;
     t->prox = NULL;
 
     if(p->fim!=NULL) p->fim->prox = t;
@@ -89,12 +89,12 @@ int removeFila(fila* p){
     if(p->ini==NULL) return -1;
 
     lista* t = p->ini;
-    avl v = t->info;
+    avl v = t->chave;
 
     p->ini = t->prox;
     if(p->ini == NULL) p->fim = NULL;
     free(t);
-    return v->info;
+    return v->chave;
 }
 
 void liberaFila(fila* p){
@@ -112,7 +112,7 @@ void imprimir(avl a){
         fila* f = criaFila();
         insereFila(f, a);
         while(f->ini!=NULL){
-            a = f->ini->info;
+            a = f->ini->chave;
             printf("%d ", removeFila(f));
             if(a->esq!=NULL) insereFila(f, a->esq);
             if(a->dir!=NULL) insereFila(f, a->dir);
@@ -165,13 +165,13 @@ avl inserir(avl a, int chave, void* obj, int tamObj){
         a = (avl) malloc(sizeof(struct avl));
         a->obj = malloc(tamObj);
         memcpy(a->obj, obj, tamObj);
-        a->info = chave;
+        a->chave = chave;
         a->FB = 0;
         a->esq = NULL;
         a->dir = NULL;
     }
-    if(chave < a->info) a->esq = inserir(a->esq, chave, obj, tamObj);
-    if(chave > a->info) a->dir = inserir(a->dir, chave, obj, tamObj);
+    if(chave < a->chave) a->esq = inserir(a->esq, chave, obj, tamObj);
+    if(chave > a->chave) a->dir = inserir(a->dir, chave, obj, tamObj);
 
     ajustarFB(a);
     if(!(a->FB >= -1 && a->FB<=1)){
@@ -191,7 +191,7 @@ avl inserir(avl a, int chave, void* obj, int tamObj){
 
 avl remover(avl a, int chave){
     if(a!=NULL){
-        if(a->info==chave){
+        if(a->chave==chave){
             if(a->esq==NULL && a->dir==NULL){
                 free(a);
                 return NULL;
@@ -208,12 +208,12 @@ avl remover(avl a, int chave){
             }
             avl aux = a->esq;
             while(aux->dir!=NULL) aux = aux->dir;
-            a->info = aux->info;
+            a->chave = aux->chave;
             a->obj = aux->obj;
-            a->esq = remover(a->esq, aux->info);
+            a->esq = remover(a->esq, aux->chave);
         }
-        if(chave<a->info) a->esq = remover(a->esq, chave);
-        if(chave>a->info) a->dir = remover(a->dir, chave);
+        if(chave<a->chave) a->esq = remover(a->esq, chave);
+        if(chave>a->chave) a->dir = remover(a->dir, chave);
 
         ajustarFB(a);
         if(!(a->FB >= -1 && a->FB<=1)){
