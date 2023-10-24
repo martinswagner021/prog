@@ -45,7 +45,6 @@ invisible(sapply(pacotes, instalar_se_preciso))
 
 conflicts_prefer(dplyr::filter)
 ```
-
 # Leitura e limpeza dos dados
 Primeiramente, utilizaremos a função `head()` para ter uma noção das informações contidas no arquivo `.tsv` escolhido.
 
@@ -221,7 +220,77 @@ df_sem_glp %>% filter(regiao != 'Sudeste' | estado == 'Rio De Janeiro') %>% muta
 ```
 
 ## Histogramas
+Utilizaremos os histogramas para analisar mais de perto a distribuicao de preco entre a regiao e o estado analisado.
+```{r}
+df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
+  mutate(
+    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
+  ) %>% ggplot(aes(
+    x = preco_medio_revenda,
+    fill = regiao
+  )) + geom_histogram() +
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
+    x = "Preco medio de revenda (R$)",
+    y = "Quantidade de postos com o preco",
+    fill = "Regiao, ou estado"
+  )
+```
+
+## _Box plots_
+```{r}
+df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
+  mutate(
+    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
+  ) %>% ggplot(aes(
+    x = regiao,
+    y = preco_medio_revenda,
+    fill = regiao
+  )) + geom_boxplot() +
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
+    x = "Preco medio de revenda (R$)",
+    y = "Quantidade de postos com o preco",
+    fill = "Regiao, ou estado"
+  )
+```
+
+## Barras e Colunas
+```{r}
+df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
+  mutate(
+    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
+  ) %>% ggplot(aes(
+    x = regiao,
+    fill = regiao
+  )) + geom_bar() +
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
+    x = "Preco medio de revenda (R$)",
+    y = "Quantidade de postos com o preco",
+    fill = "Regiao, ou estado"
+  )
+```
+
+## Barras e Colunas
+```{r}
+df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte') %>% 
+  mutate(
+    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
+  ) %>% ggplot(aes(
+    x = regiao,
+    y = 
+    color = regiao
+  )) + geom_line() +
+  labs(
+    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
+    x = "Ano",
+    y = "Preco medio de revenda (R$)",
+    color = "Regiao, ou estado"
+  )
+```
 
 # Referências
 * [Como são formados os preços, Petrobras](https://precos.petrobras.com.br/web/precos-dos-combustiveis/w/gasolina/br)
 * [Preços de Revenda e de Distribuição de Combustíveis, Governo Federal](https://www.gov.br/anp/pt-br/assuntos/precos-e-defesa-da-concorrencia/precos/precos-revenda-e-de-distribuicao-combustiveis)
+
