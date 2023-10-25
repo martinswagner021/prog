@@ -110,7 +110,7 @@ df %>% count(
 df %>% group_by(produto) %>% summarize()
 ```
 
-  Entao, realizamos algumas manobras para mudar estes valores:
+  Então, realizamos algumas manobras para mudar estes valores:
 ```{r}
 df <- df %>% mutate(
   produto = ifelse(produto == 'Óleo diesel', 'Oleo diesel', produto),
@@ -123,6 +123,10 @@ Tendo em vista que não foram encontrados casos de `NA` e agora os dados encontr
 # Visualização
 
 A fim de responder as perguntas anteriores, trabalharemos na visualização e tentaremos traçar alguns padrões de comportamento.
+
+:::{.rmdimportant}
+Não foi possível apresentar os gráficos com caracteres especiais do português nos gráficos. 
+:::
 
 ## _Scatter plots_
 
@@ -220,10 +224,13 @@ df_sem_glp %>% filter(regiao != 'Sudeste' | estado == 'Rio De Janeiro') %>% muta
 ```
 
 ## Histogramas
-Utilizaremos os histogramas para analisar mais de perto a distribuicao de preco entre a regiao e o estado analisado.
+
+Utilizaremos o histograma para analisar mais de perto a distribuicao de preco entre a regiao e o estado analisado.
+
 ```{r}
-df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
-  mutate(
+df_sem_glp_2019 <- df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') 
+
+df_sem_glp_2019 %>% mutate(
     regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
   ) %>% ggplot(aes(
     x = preco_medio_revenda,
@@ -232,63 +239,77 @@ df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2
   labs(
     title = 'Preco medio de revenda dos derivados do petroleo de 2019',
     x = "Preco medio de revenda (R$)",
-    y = "Quantidade de postos com o preco",
+    y = "Quantidade de postos com determinado preco",
     fill = "Regiao, ou estado"
   )
 ```
+Pode-se perceber que a distribuição de preços no Rio de Janeiro apresentam mais valores acima dos R$4,00 o quê eleva a média do sudeste e o faz ter uma curva mais similar à região Norte.
 
 ## _Box plots_
+
+Com os _Box plots_, é possível perceber alguns _outliers_ que podem ser traduzidos como pontos isolados no ano em que uma determinada política de preço, ou alteração inesperada gerou algum impacto no mercado dos derivados de petróleo.
+
 ```{r}
-df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
-  mutate(
+df_sem_glp_2019 %>% mutate(
     regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
   ) %>% ggplot(aes(
     x = regiao,
     y = preco_medio_revenda,
-    fill = regiao
+    fill = estado
   )) + geom_boxplot() +
   labs(
     title = 'Preco medio de revenda dos derivados do petroleo de 2019',
     x = "Preco medio de revenda (R$)",
     y = "Quantidade de postos com o preco",
-    fill = "Regiao, ou estado"
+    fill = "Estado"
   )
 ```
 
-## Barras e Colunas
-```{r}
-df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte', data_inicial > '2019-01-01' & data_inicial < '2020-01-01') %>% 
-  mutate(
-    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
-  ) %>% ggplot(aes(
-    x = regiao,
-    fill = regiao
-  )) + geom_bar() +
-  labs(
-    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
-    x = "Preco medio de revenda (R$)",
-    y = "Quantidade de postos com o preco",
-    fill = "Regiao, ou estado"
-  )
-```
+Além disso é possível ver a semelhança dos valores, principalmente quanto a média, no Rio de Janeiro com alguns estados da região norte um pouco mais nitidamente, além da discrepância quanto aos preços serem mais altos comparados à região norte.
 
-## Barras e Colunas
+
+:::{.rmdimportant}
+Por conta do dataset ser empregado de preços e valores temporais, não houve uma relação para uma visualização justa e compreensível que requeira um gráfico de barras, mas que em oposição, pôde ser muito bem representado em linhas, tendo em vista uma evolução dos preços e indicação de comportamentos futuros.
+:::
+
+## Gráficos de linha
+
+Aqui pode-se ver o avanço do preço dos derivados do petróleo para o estado do Rio de Janeiro e como se tem um avanço próximo a exponencial.
+
 ```{r}
-df_sem_glp %>% filter(regiao == 'Sudeste' | regiao == 'Norte') %>% 
-  mutate(
-    regiao = ifelse(estado == 'Rio De Janeiro', 'Rio De Janeiro', regiao)
+df_sem_glp %>% filter(
+  estado == "Rio De Janeiro"
   ) %>% ggplot(aes(
-    x = regiao,
-    y = 
-    color = regiao
-  )) + geom_line() +
+    x = data_inicial,
+    y = preco_medio_revenda,
+    color = produto,
+  )) + geom_line() + scale_y_log10() +
   labs(
-    title = 'Preco medio de revenda dos derivados do petroleo de 2019',
+    title = 'Historico do preco medio de revenda dos derivados do petroleo no Rio de Janeiro',
     x = "Ano",
-    y = "Preco medio de revenda (R$)",
-    color = "Regiao, ou estado"
+    y = "Preco medio (R$)",
+    color = "Produto"
   )
 ```
+
+Agora vemos como a evolução dos preços do Rio de Janeiro (maior valor no Sudeste) possui comportamento muito similar à evolução dos preços em São Paulo (menor valor no Sudeste), o quê indica que apesar da discrepância nos valores de revenda, a sua taxa de crescimento tem caminhado junto.
+
+```{r}
+df_sem_glp %>% filter(
+  estado == "Rio De Janeiro" | estado == "Sao Paulo"
+  ) %>% ggplot(aes(
+    x = data_inicial,
+    y = preco_medio_revenda,
+    color = produto,
+  )) + geom_line() + facet_wrap(~estado) +
+  labs(
+    title = "Valor medio de revenda dos derivados do petroleo no Rio de Janeiro e Sao Paulo.",
+    x = "Ano",
+    y = "Preco medio (R$)",
+    color = "Produto"
+  )
+```
+
 
 # Referências
 * [Como são formados os preços, Petrobras](https://precos.petrobras.com.br/web/precos-dos-combustiveis/w/gasolina/br)
