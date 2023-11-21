@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: 'R e visualização'
 subtitle: 'Lista avaliativa 2a -- Probabilidade e Estatística'
@@ -54,3 +55,193 @@ $$
 $$
 
 return sqrt(((n-1)/n)) * var(x)^2
+=======
+---
+title: 'Medidas e probabilidades'
+subtitle: 'Lista avaliativa 2a -- Probabilidade e Estatística -- 2023.2'
+author: 'Wagner Martins de Lima Filho'
+email: 'wagnerm@gmail.com'
+date: '`r format(Sys.Date(), "%d/%m/%Y")`'
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse',
+  'RcppAlgos'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+# Denominador $n-1$ na variância amostral
+Sabe-se que a variância amostral é dada por:
+$$
+\sigma^2 = \frac{\sum_i (x_i - \bar x)^2}{n-1}
+$$
+Desta forma faremos a função `varpop` que irá calcular, com base na fórmula acima, exceto quanto ao denominador que será $n$, a variância da população passada através de um vetor numérico
+
+```{r}
+varpop <- function(pop) {
+  sqrt((var(pop)*(length(pop)-1))/length(pop))
+}
+```
+Testaremos o valor com a população pequena do enunciado:
+```{r}
+populacao <- c(1,4,10,15)
+varn <- varpop(populacao)
+varn
+```
+Criando todas as permutações, iremos calcular os respectivos itens para os denominadores $n-1$ e $n$.
+```{r}
+pop <- permuteGeneral(populacao, 3,repetition=TRUE)
+
+vet1 <- apply(pop, 1, varpop)
+
+raiz_sigma <- function(x) {
+  sqrt(var(x))
+}
+vet2 <- apply(pop, 1, raiz_sigma)
+```
+## Usando $n$ como denominador na variância amostral:
+
+* Verifique quantas destas variâncias são [menores ou iguais]{.hl} à variância populacional.
+```{r}
+length(vet1[vet1<=varn])
+```
+* Verifique quantas são maiores.
+```{r}
+length(vet1[vet1>varn])
+```
+* Calcule a média das variâncias obtidas.
+```{r}
+mean(vet1)
+```
+  
+* O resultado é maior ou menor do que a variância populacional?
+  
+  Menor, o quê é esperado por conta de ter um denominador de maior valor.
+    
+* Conclusão: Usar n no denominador da variância amostral superestima ou subestima a variância da população?
+  
+  Subestima, pois em relação à variância populacional a grande maioria de vezes tem-se um valor inferior ao original e que representaria um comportamento diferente do esperado.
+    
+## Usando $n−1$ como denominador na variância amostral:
+
+  * Verifique quantas destas variâncias são [menores ou iguais]{.hl} à variância populacional.
+```{r}
+length(vet2[vet2<=varn])
+```
+  * Verifique quantas são maiores.
+```{r}
+length(vet2[vet2>varn])
+```
+  * Calcule a média das variâncias obtidas.
+```{r}
+mean(vet2)
+```
+  
+  * O resultado é maior ou menor do que a variância populacional?
+  
+    Menor.
+    
+  * Conclusão:
+  
+    Apesar de obter um valor inferior à variância populacional, este apresentou um comportamento mais próximo da realidade, o quê também pode ser explicado pela forma em que foram realizadas as permutações com apenas 3 itens, o quê dependendo do caso, poderia trazer alguma instabilidade.
+  
+  
+# Pessoas Canhotas
+
+Em relação ao grupo de pessoas escolhidas:
+
+**1. Qual é a probabilidade de nem todas as pessoas do grupo serem canhotas?**
+  
+  Pode-se calcular pensando no inverso da probabilidade de serem todas canhotas.
+  
+$$P(C_t) = 0.12^{100}$$
+
+$$P(\lnot C_t) = 1-P(C_t)$$
+
+$$P(\lnot C_t) = 1-0.12^{100} \approx 1$$
+  O quê pode ser verificado através da grande simulação:
+```{r prob}
+testar <- function() {
+  test <- sample(c('d', 'c'),100,TRUE, c(88,12))
+  
+  length(test[test=='d']) > 0
+}
+
+
+res <- replicate(100000, testar())
+mean(res)
+```
+**2. Qual é a probabilidade de haver no máximo 75 pessoas destras no grupo?**
+```{r}
+sum(dbinom(0:75, 100, 0.88))
+```
+ O quê pode ser verificado através do exemplo:
+```{r}
+
+testar <- function() {
+  test <- sample(c('d', 'c'),100,TRUE, c(88,12))
+  
+  length(test[test=='d']) <= 75
+}
+
+
+res <- replicate(100000, testar())
+mean(res)
+
+```
+
+**3. Qual é a probabilidade de a maioria (pelo menos metade mais uma) das pessoas do grupo serem destras?**
+```{r}
+sum(dbinom(51:100, size = 100, prob = 0.88))
+```
+  O quê pode ser verificado pelo exemplo:
+```{r}
+
+testar <- function() {
+  test <- sample(c('d', 'c'),100,TRUE, c(88,12))
+  
+  length(test[test=='d']) > 50
+}
+
+
+res <- replicate(100000, testar())
+mean(res)
+
+
+```
+>>>>>>> 0e44f8d84736c8963915c049e56c88f55f2edc39
