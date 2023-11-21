@@ -1,0 +1,56 @@
+---
+title: 'R e visualização'
+subtitle: 'Lista avaliativa 2a -- Probabilidade e Estatística'
+author: 'Wagner Martins de Lima Filho'
+email: 'martinswagner021@gmail.com'
+date: 13/10/2023
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+# Denominador $n-1$ na variancia amostral
+
+Como a variancia e dada por:
+$$
+  \sigma^2 = \frac{\sum_i (x_i - \bar x)^2}{n-1}
+$$
+
+return sqrt(((n-1)/n)) * var(x)^2

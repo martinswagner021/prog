@@ -1,0 +1,126 @@
+---
+title: 'Medidas e probabilidades'
+subtitle: 'Lista avaliativa 2a -- Probabilidade e Estatística -- 2023.2'
+author: 'fnaufel'
+email: 'https://fnaufel.github.io/'
+date: '`r format(Sys.Date(), "%d/%m/%Y")`'
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, include=FALSE}
+# The next command configures MANY things and loads quite a few packages.
+# 
+# If you want to see what's being done, execute 
+# 
+#   cat(
+#     system.file(
+#       "rmarkdown/resources/R/_common_report.R", 
+#       package = "fnaufelRmd"
+#     )
+#   )
+# 
+# to find out the location of the file. Then open the file.
+# 
+# If you want to change the configuration, copy the file, edit it, and
+# source it instead of the package file. 
+# 
+# Or simply write your commands here in this code chunk.
+
+source(
+  system.file(
+    "rmarkdown/resources/R/_common_report.R",
+    package = "fnaufelRmd"
+  )
+)
+```
+
+# Denominador $n - 1$ na variância amostral
+
+* Lembre-se de que a [variância amostral]{.hl} é dada por
+
+  $$
+  \sigma^2 = \frac{\sum_i (x_i - \bar x)^2}{n-1}
+  $$
+
+  onde $n$ é o número de elementos (o tamanho) da amostra.
+  
+* Nesta questão, você vai se convencer, [examinando todas as amostras possíveis]{.hl} de uma população, de que este denominador é o correto, se você quiser que a variância amostral seja um estimador fiel da variância populacional.
+
+* [Escreva uma função `varpop`]{.hl} que recebe um vetor numérico e calcula a variância [populacional]{.hl} (usando a fórmula com $N$ no denominador). 
+
+  Dica: chame a função `var` do R (que calcula a variância com $n-1$ no denominador) e modifique o resultado retornado por ela.
+  
+* Vamos trabalhar com uma população bem pequena:
+
+    ```{r pop}
+    populacao <- c(1, 4, 10, 15)
+    ```
+
+* [Calcule a variância populacional]{.hl}, usando a sua função `varpop`.
+
+* [Carregue o pacote `RcppAlgos`]{.hl}. Instale-o se necessário.
+
+* [Gere todos os arranjos]{.hl} possíveis de $3$ elementos desta população, [com reposição]{.hl}. Use a função `permuteGeneral`. 
+
+  O resultado vai ser uma matriz com $64$ linhas. Cada linha corresponde a uma amostra possível de tamanho $3$. 
+  
+* Fingindo que $n$ é o denominador correto na variância amostral:
+
+  * Para cada amostra, [calcule a variância usando a sua função `varpop`]{.hl}, guardando os resultados em um vetor. Use a função `apply`, do R base.
+
+  * [Verifique quantas]{.hl} destas variâncias são [menores ou iguais]{.hl} à variância [populacional]{.hl}.
+  
+  * [Verifique quantas]{.hl} são [maiores]{.hl}.
+
+  * [Calcule a média das variâncias obtidas]{.hl}. 
+  
+  * [O resultado é maior ou menor]{.hl} do que a variância [populacional]{.hl}? 
+  
+  * [Conclusão:]{.hl} Usar $n$ no denominador da variância amostral [superestima ou subestima]{.hl} a variância da população?
+
+* Usando $n-1$ como denominador na variância amostral:
+
+  * Agora, para cada amostra, [calcule a variância amostral]{.hl} (com $n-1$ no denominador), guardando os resultados em outro vetor. Use a função `apply`, do R base.
+
+  * [Verifique quantas]{.hl} destas variâncias são [menores ou iguais]{.hl} à variância [populacional]{.hl}.
+  
+  * [Verifique quantas]{.hl} são [maiores]{.hl}.
+
+  * [Calcule a média das variâncias obtidas]{.hl}. 
+  
+  * [O resultado é maior ou menor]{.hl} do que a variância [populacional]{.hl}? 
+
+* [Escreva suas conclusões]{.hl}.
+
+* [Comente]{.hl} o modo como as amostras foram construídas (arranjos com reposição). [Isto corresponde a que suposições?]{.hl}
+
+
+# Pessoas canhotas
+
+* Na população, [$12\%$ das pessoas são canhotas]{.hl}.
+
+* Você escolhe [$100$ pessoas ao acaso]{.hl}.
+
+* Em relação ao grupo de pessoas escolhidas:
+
+  1. Qual é a probabilidade de [nem todas as pessoas do grupo serem canhotas]{.hl}?
+  
+  1. Qual é a probabilidade de [haver no máximo $75$ pessoas destras no grupo]{.hl}?
+  
+  1. Qual é a probabilidade de [a maioria (pelo menos metade mais uma) das pessoas do grupo serem destras]{.hl}?
+
+* Dica: use combinações: existem $\binom{n}{k}$ maneiras de escolher $k$ elementos distintos dentre um total de $n$ elementos, sem considerar a ordem, onde
+
+  $$
+  \binom n k = \frac{n!}{k!\,(n-k)!}
+  $$
+
+<div style='height: 100px'></div>
+
