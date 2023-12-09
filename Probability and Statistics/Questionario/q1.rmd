@@ -1,0 +1,74 @@
+---
+title: 'Questão 1'
+author: 'Wagner Martins de Lima Filho'
+email: 'martinswagner021@gmail.com'
+date: 07/11/2023
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+Partindo da expressão para a variância:
+
+$$ \sigma^2(X) = E[(X - \mu)^2] $$
+
+Podemos expandir o quadrado notável:
+
+$$ \sigma^2(X) = E[X^2 - 2X\mu + \mu^2] $$
+
+Sabendo que o valor esperado se comporta de maneira linear, temos que:
+
+$$ \sigma^2(X) = E[X^2] - 2\mu E[X] + \mu^2 $$
+
+Como \(E[\mu^2]\) é uma constante, podemos reescrevê-lo como \(\mu^2\)
+
+$$ \sigma^2(X) = E[X^2] - 2\mu E[X] + \mu^2 $$
+
+Sabendo que \(E[X] = \mu\), logo obtemos:
+
+$$ \sigma^2(X) = E[X^2] - 2\mu^2 + \mu^2 $$
+
+$$ \sigma^2(X) = E[X^2] - \mu^2 $$
+
+$$ \sigma^2(X) + \mu^2 = E[X^2] $$
+
+E então concluímos que:
+
+$$ E[X^2] = \sigma^2(X) + \mu^2 $$

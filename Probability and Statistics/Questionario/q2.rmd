@@ -1,0 +1,90 @@
+---
+title: 'Questão 2'
+author: 'Wagner Martins de Lima Filho'
+email: 'martinswagner021@gmail.com'
+date: 09/11/2023
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+Primeiramente vamos definir nossos valores iniciais importantes
+```{r}
+media <- 4
+amostra <- rpois(60, media)
+```
+
+Agora que já obtemos a amostra da distribuição de Poisson, podemos criar a função para manipular nossas informações
+```{r}
+testar <- function(amostra, atendidos) {
+  fila <- numeric(length = length(amostra))
+  clientes <- 0
+
+  for (i in seq_along(amostra)) {
+    clientes <- clientes + amostra[i] - atendidos
+    clientes <- max(0, clientes)
+    fila[i] <- clientes
+  }
+  
+  return(fila)
+}
+```
+Desta forma poderemos gerar com a distribuição de Poisson e simular a saída constante média de 4 clientes por minuto, conseguindo assim monitorar a fila que se encontra no caixa.
+
+
+Daí obtemos o primeiro gráfico:
+```{r}
+fila <- testar(amostra, 4)
+
+plot(1:60, fila, 'l', xlab = 'Minuto', ylab = 'Clientes',
+     main = 'Simulação com Média de 4 Clientes por Minuto')
+```
+
+E o segundo para a opção de 5 clientes por minuto, porém com a capacidade de 4 por minuto:
+```{r}
+amostra <- rpois(60, 5)
+
+fila <- testar(amostra, 4)
+
+plot(1:60, fila, 'l', xlab = 'Minuto', ylab = 'Clientes',
+     main = 'Simulação com Média de 5 Clientes por Minuto')
+```
+Desta forma podemos concluir que o caixa estará sempre acumulando clientes na fila e essa simulação nos permite analisar como lidar com a situação. Possivelmente incrementando a quantidade de clientes atendidos por minuto a fim de amenizar a sobrecarga causada.
+

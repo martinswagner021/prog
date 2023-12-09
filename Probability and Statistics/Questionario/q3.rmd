@@ -1,0 +1,113 @@
+---
+title: 'Questão 3'
+author: 'Wagner Martins de Lima Filho'
+email: 'martinswagner021@gmail.com'
+date: 23/11/2023
+lang: 'pt-br'
+
+output: 
+  # To install these output formats, run
+  #   install.packages("devtools")
+  #   devtools::install_github("fnaufel/fnaufelRmd")
+  fnaufelRmd::html_report:
+    []
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(message=FALSE)
+
+if (!require('devtools'))
+  install.packages('devtools', repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+if (!require('fnaufelRmd'))
+  devtools::install_github("fnaufel/fnaufelRmd")
+
+pacotes <- c(
+  'conflicted',
+  'janitor',
+  'kableExtra',
+  'knitr',
+  'latex2exp',
+  'sessioninfo',
+  'summarytools',
+  'tidyverse'
+)
+
+instalar_se_preciso <- function(x) {
+
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos = "http://cran.us.r-project.org", verbose=FALSE)
+
+}
+
+invisible(sapply(pacotes, instalar_se_preciso))
+
+conflicts_prefer(dplyr::filter)
+```
+
+
+
+
+Iniciamos com os parâmetros que obtivemos no enunciado sobre a distribuição normal para o Brasil:
+
+$$
+ \mu_B=1,73 \text{ e } \sigma_B=0,07
+$$
+Assim como para a Holanda:
+$$
+ \mu_H=1,84 \text{ e } \sigma_H=0,08
+$$
+Desta forma:
+$$
+E(B) = 1,73 \text{ e } E(H) = 1,84
+$$
+$$
+\because D = H - B \therefore E(D) = E(H) - E(B) = 0,11
+$$
+
+Calculando a variância de D que é dado pela soma das variâncias de $B$ e $H$:
+
+$$
+\sigma^2(D) = \sigma^2(D) + \sigma^2(H) = 0,0049 + 0,0064 = 0,0113
+$$
+
+Agora, calculamos o desvio padrão:
+
+$$
+\sigma = \sqrt{0,0113} = 0,106301
+$$
+
+Agora, encontraremos o fator exponencial para substituir na função de densidade:
+
+$$
+\frac{x-\mu}{\sigma} = \frac{E(H)-E(B)}{\sigma} = \frac{0,11}{0,106301} = 1,0348
+$$
+
+Desta forma determinamos a probabilidade através do complemento da probabilidade dada pela área debaixo da curva de densidade de probabilidade, ou seja:
+$$
+1 - P(H-B) = 
+1 - \int_{1,0347}^0\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}dx = 0,15038177
+$$
+
+O quê por sua vez pode ser verificado através da seguinte simulação:
+
+```{r}
+mu_br <- 1.73
+sigma_br <- .07
+
+mu_hl <- 1.84
+sigma_hl <- .08
+```
+
+Então, criaremos os dois vetores $B$ e $H$ que representarão uma amostra tomada de acordo com a distribuição normal de $\mu_B=1,73$ e $\sigma_B=0,07$, assim como $\mu_H=1,84$ e $\sigma_H=0,08$ respectivamente.
+
+```{r}
+N = 1e7
+B = rnorm(N, mu_br, sigma_br)
+H = rnorm(N, mu_hl, sigma_hl)
+D = H-B
+```
+Sabe-se que $D$ representa a diferença de altura entre elementos de $H$ e $B$. Portanto, contabilizaremos os elementos em que a altura seja $x<y \mid x \in H, y \in B$, ou seja $x \in D \mid x<0$. Tendo isso em mente efetuamos a divisão pelo tamanho do conjunto que foi denominado `N` e obteremos proporção de Brasileiros maiores que Holandeses.
+```{r}
+length(D[D<0])/N
+```
