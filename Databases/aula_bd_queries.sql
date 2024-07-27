@@ -44,9 +44,30 @@ select f.codigo from fornecedor as f where not exists (
 );
 
 -- 3)
-select max(peso) from peca where  (
-	
+select nome from peca where peso = (
+	select max(peso) from peca
+) union
+select nome from peca where peso = (
+	select max(peso) from peca where codigo in (
+		select codigo from peca where peso < (
+			select max(peso) from peca
+		)
+	)
+) union
+select nome from peca where peso = (
+	select max(peso) from peca where codigo in (
+		select codigo from peca where peso < (
+			select max(peso) from peca where codigo in (
+				select codigo from peca where peso < (
+					select max(peso) from peca
+				)
+			)
+		)
+	)
 );
+
+-- 3) order by + limit
+select nome from peca order by peso desc limit 3;
 
 -- 4) IN
 select f.nome from fornecedor as f where f.codigo in (
