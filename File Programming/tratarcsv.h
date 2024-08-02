@@ -1,16 +1,8 @@
 #include <iomanip>
-#include <algorithm>
-#include <cstdio>
 #include <iostream>
 #include <fstream>
-#include <iterator>
-#include <locale>
-#include <sstream>
-#include <utility>
 #include <vector> 
-#include <string>
 #include <map>
-#include <ctime>
 
 using namespace std;
 

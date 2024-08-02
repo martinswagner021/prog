@@ -71,8 +71,4 @@ int main(){
             break;
         }
     }
-
-    consultarMovimentação(5,2022);
-    // filtrarMovimentacao(9, 2022, 2000, 1000, 1);
-
 }
