@@ -27,9 +27,16 @@ class movimentacao_consolidada {
         double subtotal_transacoes_eletronicas;
         int total_transacoes;
 
-        movimentacao_consolidada(int agencia_origem, int conta_origem){
-            this->agencia = agencia_origem;
-            this->conta = conta_origem;
+        movimentacao_consolidada(){
+            this->agencia = agencia;
+            this->conta = conta;
+            this->subtotal_dinheiro_vivo = 0.0;
+            this->subtotal_transacoes_eletronicas = 0.0;
+            this->total_transacoes = 0;
+        }
+        movimentacao_consolidada(int agencia, int conta){
+            this->agencia = agencia;
+            this->conta = conta;
             this->subtotal_dinheiro_vivo = 0.0;
             this->subtotal_transacoes_eletronicas = 0.0;
             this->total_transacoes = 0;
@@ -75,8 +82,8 @@ então se inicia uma nova movimentação consolidada depois add a transação pa
 eletronicas OU se a agencia conta/destino for = 0 então é só add o valor para subtotal dinheiro vivo
 add total de transações e retorna o map consolidados */
 
-map<pair<int, int>, movimentacao_consolidada*> consolidarTransacoes(const vector<Transacao> &transacoes, int mes, int ano){
-    map<pair<int, int>, movimentacao_consolidada*> consolidados;
+map<pair<int, int>, movimentacao_consolidada> consolidarTransacoes(const vector<Transacao> &transacoes, int mes, int ano){
+    map<pair<int, int>, movimentacao_consolidada> consolidados;
 
     for(const auto &transacao : transacoes){
         if (transacao.mes == mes && transacao.ano == ano) {
@@ -85,20 +92,22 @@ map<pair<int, int>, movimentacao_consolidada*> consolidarTransacoes(const vector
             
             // se nao houver movimentacao na conta, inicializa uma nova
             if (consolidados.find(chave_origem) == consolidados.end())
-                consolidados[chave_origem] = &movimentacao_consolidada(transacao.agencia_origem, transacao.conta_origem);
+                consolidados.emplace(chave_origem, movimentacao_consolidada(transacao.agencia_origem, transacao.conta_origem));
 
             // movimentacao digital
             if (transacao.agencia_destino != 0 || transacao.conta_destino != 0) {
                 // se destino nao existir inicializa uma nova tambem
                 if (consolidados.find(chave_destino) == consolidados.end())
-                    consolidados[chave_destino] = &movimentacao_consolidada(transacao.agencia_destino, transacao.conta_destino);
+                    consolidados.emplace(chave_destino, movimentacao_consolidada(transacao.agencia_destino, transacao.conta_destino));
 
-                consolidados[chave_destino]->subtotal_transacoes_eletronicas += transacao.valor;
+                consolidados[chave_destino].subtotal_transacoes_eletronicas += transacao.valor;
+                consolidados[chave_destino].total_transacoes++;
+                consolidados[chave_origem].subtotal_transacoes_eletronicas += transacao.valor;
             }
             // movimentacao em dinheiro vivo
-            else consolidados[chave_origem]->subtotal_dinheiro_vivo += transacao.valor;
+            else consolidados[chave_origem].subtotal_dinheiro_vivo += transacao.valor;
 
-            consolidados[chave_origem]->total_transacoes++;
+            consolidados[chave_origem].total_transacoes++;
         }
     }
 
@@ -108,7 +117,7 @@ map<pair<int, int>, movimentacao_consolidada*> consolidarTransacoes(const vector
 void salvarConsolidadoBinario(const string& nome_arquivo, const map<pair<int, int>, movimentacao_consolidada>& consolidados){
     ofstream arquivo(nome_arquivo, ios::binary);
     if(!arquivo.is_open()){
-        cerr << "Erro ao abrir o arquivo binário para escrita." << endl;
+        cout << "Erro ao abrir o arquivo binário para escrita." << endl;
         return;
     }
 
@@ -118,34 +127,43 @@ void salvarConsolidadoBinario(const string& nome_arquivo, const map<pair<int, in
     arquivo.close();
 }
 
-// map<pair<int, int>, movimentacao_consolidada> carregarConsolidadoBinario(const string& nome_arquivo){
-//     map<pair<int, int>, movimentacao_consolidada> consolidados;
-//     ifstream arquivo(nome_arquivo, ios::binary);
+map<pair<int, int>, movimentacao_consolidada> carregarConsolidadoBinario(const string& nome_arquivo){
+    map<pair<int, int>, movimentacao_consolidada> consolidados;
+    ifstream arquivo(nome_arquivo, ios::binary);
 
-//     if(!arquivo.is_open()){
-//         cerr << "Erro ao abrir o arquivo binário para carregar." << endl;
-//         return consolidados;
-//     }
-//     movimentacao_consolidada consolidado;
-//     while(arquivo.read(reinterpret_cast<char*>(&consolidado), sizeof(movimentacao_consolidada))){
-//         pair<int, int> chave  = {consolidado.agencia, consolidado.conta};
-//         consolidados[chave] = consolidado;
-//     }
+    if(!arquivo.is_open()){
+        cout << "Erro ao abrir o arquivo binário para carregar." << endl;
+        return consolidados;
+    }
+    movimentacao_consolidada consolidado;
+    while(arquivo.read(reinterpret_cast<char*>(&consolidado), sizeof(movimentacao_consolidada))){
+        pair<int, int> chave  = {consolidado.agencia, consolidado.conta};
+        consolidados[chave] = consolidado;
+    }
 
-//     arquivo.close();
-//     return consolidados;
-// }
+    arquivo.close();
+    return consolidados;
+}
 
 
 
 int main(){
     vector<Transacao> t = ler_transacoesCSV("transacoes.csv");
 
+    // Teste ler_transacoesCSV()
     // int N = 3;
     // Transacao p = t[N];
     // cout << p.dia << " " << p.mes << " " << p.ano << " " << p.agencia_origem << " " << p.conta_origem << " " << p.valor << " " << p.agencia_destino << " " << p.conta_destino << " " << endl;
 
-    map<pair<int,int>, movimentacao_consolidada*> consolidados_fev_2005 = consolidarTransacoes(t, 2, 2005);
+    // Teste consolidarTransacoes()
+    map<pair<int,int>, movimentacao_consolidada> consolidados_fev_2005 = consolidarTransacoes(t, 11, 2014);
 
+    // Teste carregarConsolidadoBinario
+    // map<pair<int,int>, movimentacao_consolidada> consolidados_fev_2005 = carregarConsolidadoBinario("consolidadas022014.bin");
+
+    for(auto it: consolidados_fev_2005){
+        movimentacao_consolidada p = it.second;
+        cout << p.agencia << " " << p.conta << " " << p.total_transacoes << " " << p.subtotal_dinheiro_vivo << " " << p.subtotal_transacoes_eletronicas << endl;
+    }
 
 }
