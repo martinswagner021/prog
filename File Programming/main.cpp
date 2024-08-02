@@ -1,169 +1,78 @@
-#include <algorithm>
-#include <cstdio>
-#include <iostream>
-#include <fstream>
-#include <iterator>
-#include <locale>
-#include <sstream>
-#include <utility>
-#include <vector> 
-#include <string>
-#include <map>
-#include <ctime>
+#include "tratarcsv.h"
 
-using namespace std;
-
-struct Transacao {
-    int dia, mes, ano;
-    int agencia_origem, conta_origem;
-    double valor;
-    int agencia_destino, conta_destino;
-};
-
-class movimentacao_consolidada {
-    public:
-        int agencia, conta;
-        double subtotal_dinheiro_vivo;
-        double subtotal_transacoes_eletronicas;
-        int total_transacoes;
-
-        movimentacao_consolidada(){
-            this->agencia = agencia;
-            this->conta = conta;
-            this->subtotal_dinheiro_vivo = 0.0;
-            this->subtotal_transacoes_eletronicas = 0.0;
-            this->total_transacoes = 0;
-        }
-        movimentacao_consolidada(int agencia, int conta){
-            this->agencia = agencia;
-            this->conta = conta;
-            this->subtotal_dinheiro_vivo = 0.0;
-            this->subtotal_transacoes_eletronicas = 0.0;
-            this->total_transacoes = 0;
-        }
-};
-
-vector<Transacao> ler_transacoesCSV(const string &nome_arquivo) {
-    vector<Transacao> transacoes;
-    ifstream arquivo(nome_arquivo);
-    string linha;
-
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo CSV." << endl;
-        return transacoes;
-    }
-
-    while (getline(arquivo, linha)) {
-        stringstream ss(linha);
-        string campo;
-        Transacao transacao;
-        
-        getline(ss, campo, ','); transacao.dia = stoi(campo);
-        getline(ss, campo, ','); transacao.mes= stoi(campo);
-        getline(ss, campo, ','); transacao.ano = stoi(campo);
-        getline(ss, campo, ','); transacao.agencia_origem = stoi(campo);
-        getline(ss, campo, ','); transacao.conta_origem = stoi(campo);
-        getline(ss, campo, ','); transacao.valor = stod(campo);
-        getline(ss, campo, ','); transacao.agencia_destino = campo.empty() ? 0 : stoi(campo);
-        getline(ss, campo, ','); transacao.conta_destino = campo.length() <= 1 ? 0 : stoi(campo);
-        
-        transacoes.push_back(transacao);
-    }
-
-    arquivo.close();
-    return transacoes;
+void printOpcoes(){
+    cout << "1- Realizar consulta" << endl;
+    cout << "2- Filtrar resultados" << endl;
+    cout << "3- Sair" << endl;
 }
-
-/*função recebe o vetor de transaçoes lidas na função anterior, mes & ano, um map de chaves agencia, conta guarda as movimentações consolidadas
-checka-se se mes e ano de cada transação é o mes e ano passado no parâmetro, crias-se dois pair para 
-chave origem e chave destino, se não acharmos a chave origem no map de consolidados inicia-se uma nova
-movimentação consolidada, se a agencia/conta destino for != 0 a conta teve movimentação digital
-então se inicia uma nova movimentação consolidada depois add a transação para o subtotal de transaçoes 
-eletronicas OU se a agencia conta/destino for = 0 então é só add o valor para subtotal dinheiro vivo
-add total de transações e retorna o map consolidados */
-
-map<pair<int, int>, movimentacao_consolidada> consolidarTransacoes(const vector<Transacao> &transacoes, int mes, int ano){
-    map<pair<int, int>, movimentacao_consolidada> consolidados;
-
-    for(const auto &transacao : transacoes){
-        if (transacao.mes == mes && transacao.ano == ano) {
-            pair<int, int> chave_origem(transacao.agencia_origem, transacao.conta_origem);
-            pair<int, int> chave_destino(transacao.agencia_destino, transacao.conta_destino);
-            
-            // se nao houver movimentacao na conta, inicializa uma nova
-            if (consolidados.find(chave_origem) == consolidados.end())
-                consolidados.emplace(chave_origem, movimentacao_consolidada(transacao.agencia_origem, transacao.conta_origem));
-
-            // movimentacao digital
-            if (transacao.agencia_destino != 0 || transacao.conta_destino != 0) {
-                // se destino nao existir inicializa uma nova tambem
-                if (consolidados.find(chave_destino) == consolidados.end())
-                    consolidados.emplace(chave_destino, movimentacao_consolidada(transacao.agencia_destino, transacao.conta_destino));
-
-                consolidados[chave_destino].subtotal_transacoes_eletronicas += transacao.valor;
-                consolidados[chave_destino].total_transacoes++;
-                consolidados[chave_origem].subtotal_transacoes_eletronicas += transacao.valor;
-            }
-            // movimentacao em dinheiro vivo
-            else consolidados[chave_origem].subtotal_dinheiro_vivo += transacao.valor;
-
-            consolidados[chave_origem].total_transacoes++;
-        }
-    }
-
-    return consolidados;
-}
-
-void salvarConsolidadoBinario(const string& nome_arquivo, const map<pair<int, int>, movimentacao_consolidada>& consolidados){
-    ofstream arquivo(nome_arquivo, ios::binary);
-    if(!arquivo.is_open()){
-        cout << "Erro ao abrir o arquivo binário para escrita." << endl;
-        return;
-    }
-
-    for(const auto& [chave, consolidado] : consolidados){
-        arquivo.write(reinterpret_cast<const char*>(&consolidado), sizeof(movimentacao_consolidada));
-    }
-    arquivo.close();
-}
-
-map<pair<int, int>, movimentacao_consolidada> carregarConsolidadoBinario(const string& nome_arquivo){
-    map<pair<int, int>, movimentacao_consolidada> consolidados;
-    ifstream arquivo(nome_arquivo, ios::binary);
-
-    if(!arquivo.is_open()){
-        cout << "Erro ao abrir o arquivo binário para carregar." << endl;
-        return consolidados;
-    }
-    movimentacao_consolidada consolidado;
-    while(arquivo.read(reinterpret_cast<char*>(&consolidado), sizeof(movimentacao_consolidada))){
-        pair<int, int> chave  = {consolidado.agencia, consolidado.conta};
-        consolidados[chave] = consolidado;
-    }
-
-    arquivo.close();
-    return consolidados;
-}
-
-
 
 int main(){
-    vector<Transacao> t = ler_transacoesCSV("transacoes.csv");
 
-    // Teste ler_transacoesCSV()
-    // int N = 3;
-    // Transacao p = t[N];
-    // cout << p.dia << " " << p.mes << " " << p.ano << " " << p.agencia_origem << " " << p.conta_origem << " " << p.valor << " " << p.agencia_destino << " " << p.conta_destino << " " << endl;
+    int selection;
+    printOpcoes();
+    cin >> selection;
+    int mes, ano, x, y, tipoE;
 
-    // Teste consolidarTransacoes()
-    map<pair<int,int>, movimentacao_consolidada> consolidados_fev_2005 = consolidarTransacoes(t, 11, 2014);
+    while(1){
+        switch (selection)
+        {
+        case 1:
+            cout << "Digite um mês: ";
+            cin >> mes;
+            cout << "Digite um ano: ";
+            cin >> ano;
+            consultarMovimentação(mes, ano);
 
-    // Teste carregarConsolidadoBinario
-    // map<pair<int,int>, movimentacao_consolidada> consolidados_fev_2005 = carregarConsolidadoBinario("consolidadas022014.bin");
+            printOpcoes();
+            cin >> selection;
+            break;
 
-    for(auto it: consolidados_fev_2005){
-        movimentacao_consolidada p = it.second;
-        cout << p.agencia << " " << p.conta << " " << p.total_transacoes << " " << p.subtotal_dinheiro_vivo << " " << p.subtotal_transacoes_eletronicas << endl;
+        case 2:
+            cout << "Digite um mês: ";
+            cin >> mes;
+            cout << "Digite um ano: ";
+            cin >> ano;
+            cout << "As movimentações em espécie devem ser pelo menos: ";
+            cin >> x;
+            cout << "As movimentações em eletrônicas devem ser pelo menos: ";
+            cin >> y;
+            cout << "As movimentações em espécie devem ser pelo menos" << x << " E/Ou " << "pelo menos " << y << endl;
+            cout << "1- Ou" << endl;
+            cout << "2- E" << endl;
+            cin >> tipoE;
+            switch (tipoE)
+            {
+            case 1:
+                tipoE = 0;
+                break;
+            case 2:
+                tipoE = 1;
+                break;
+            default:
+                cout << "Digite um valor válido." << endl;
+                break;
+            }
+            filtrarMovimentacao(mes, ano, x, y, tipoE);
+
+            printOpcoes();
+            cin >> selection;
+            break;
+
+        case 3:
+            
+            return 0;
+            break;
+
+        default:
+            cout << selection << " não é uma opção válida." << endl;
+
+            printOpcoes();
+            cin >> selection;
+            break;
+        }
     }
+
+    consultarMovimentação(5,2022);
+    // filtrarMovimentacao(9, 2022, 2000, 1000, 1);
 
 }
