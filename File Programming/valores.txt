@@ -1,0 +1,41 @@
+String: 00101011101011010001111
+1. Lê '0', adiciona ao dicionário e à string: 
+
+{1:'0'}, "1"
+
+2. Lê '0', encontra '0' no dicionário, prossegue a leitura.
+3. Lê '1', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01'}, "12"
+
+4. Lê '0', encontra '0' no dicionário, prossegue a leitura.
+5. Lê '1', encontra '01' no dicionário, prossegue a leitura.
+6. Lê '0', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01', 3: '010'}, "123"
+
+7. Lê '1', encontra '1' no dicionário, prossegue a leitura.
+8. Lê '0', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01', 3: '010', 4: '10'}, "1234"
+
+9. Lê '1', encontra '1' no dicionário, prossegue a leitura.
+10. Lê '1', encontra '11' no dicionário, prossegue a leitura.
+11. Lê '0', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01', 3: '010', 4: '10', 5: '110'}, "12345"
+
+12. Lê '1', encontra '1' no dicionário, prossegue a leitura.
+13. Lê '0', encontra '10' no dicionário, prossegue a leitura.
+14. Lê '0', encontra '100' no dicionário, prossegue a leitura.
+15. Lê '0', encontra '1000' no dicionário, prossegue a leitura.
+16. Lê '1', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01', 3: '010', 4: '10', 5: '110', 6: '1000'}, "123456"
+
+17. Lê '1', encontra '1' no dicionário, prossegue a leitura.
+18. Lê '1', encontra '11' no dicionário, prossegue a leitura.
+19. Lê '1', adiciona ao dicionário e à string: 
+
+{1: '0', 2: '01', 3: '010', 4: '10', 5: '110', 6: '1000', 7: '111'}, "1234567"
+String comprimida: 1234567

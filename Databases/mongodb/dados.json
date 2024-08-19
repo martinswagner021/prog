@@ -1,0 +1,202 @@
+{
+	"obras": [
+		{
+			"ID_codigo": 1,
+			"titulo": "A Boba",
+			"ano": 1915,
+			"pintura": {
+				"tecnica": "Óleo sobre tela"
+			},
+			"escultura": {
+			},
+			"autoria": {
+				"nome": "Lu Dias Carvalho",
+				"nacionalidade": "Brasileira"
+			},
+			"salao_REF": 2
+		},
+		{
+			"ID_codigo": 2,
+			"titulo": "SAMBA",
+			"ano": 1925,
+			"pintura": {
+				"tecnica": "Óleo sobre tela"
+			},
+			"escultura": {
+			},
+			"autoria": {
+				"nome": "Emiliano di Cavalcanti",
+				"nacionalidade": "Brasileira"
+			},
+			"salao_REF": 1
+		},
+		{
+			"ID_codigo": 3,
+			"titulo": "ABAPORU",
+			"ano": 1928,
+			"pintura": {
+				"tecnica": "Pintura com cores vivas e de tinta a óleo"
+			},
+			"escultura": {
+			},
+			"autoria": {
+				"nome": "Tarsila do Amaral",
+				"nacionalidade": "Brasileira"
+			},
+			"salao_REF": 1
+		},
+		{
+			"ID_codigo": 4,
+			"titulo": "Criança Morta",
+			"ano": 1944,
+			"pintura": {
+				"tecnica": "Óleo sobre tela"
+			},
+			"escultura": {
+			},
+			"autoria": {
+				"nome": "Candido Portinari",
+				"nacionalidade": "Brasileira"
+			},
+			"salao_REF": 2
+		},
+		{
+			"ID_codigo": 5,
+			"titulo": "David",
+			"ano": 1501,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": 4.10,
+				"peso": 5000
+			},
+			"autoria": {
+				"nome": "Michelangelo",
+				"nacionalidade": "Italiana"
+			},
+			"salao_REF": 3
+		},
+		{
+			"ID_codigo": 6,
+			"titulo": "Pietà",
+			"ano": 1499,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": 1.40,
+				"peso": 1100
+			},
+			"autoria": {
+				"nome": "Michelangelo",
+				"nacionalidade": "Italiana"
+			},
+			"salao_REF": 3
+		},
+		{
+			"ID_codigo": 7,
+			"titulo": "Vênus de Milo",
+			"ano": -130,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": 2.00,
+				"peso": 900
+			},
+			"autoria": {
+				"nome": "Alezandros de Antioquia",
+				"nacionalidade": "Grego"
+			},
+			"salao_REF": 3
+		},
+		{
+			"ID_codigo": 8,
+			"titulo": "Exército de Terracota",
+			"ano": -210,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": -1,
+				"peso": -1
+			},
+			"autoria": {
+			},
+			"salao_REF": 4
+		},
+		{
+			"ID_codigo": 9,
+			"titulo": "O Pensador",
+			"ano": 1904,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": 4.00,
+				"peso": 800
+			},
+			"autoria": {
+				"nome": "Auguste Rodin",
+				"nacionalidade": "Francesa"
+			},
+			"salao_REF": 4
+		},
+		{
+			"ID_codigo": 10,
+			"titulo": "Lincoln",
+			"ano": 1922,
+			"pintura": {
+			},
+			"escultura": {
+				"altura": 6.00,
+				"peso": 175000
+			},
+			"autoria": {
+				"nome": "Daniel Chester",
+				"nacionalidade": "Ameriacana"
+			},
+			"salao_REF": 4
+		}
+	],
+	"saloes": [
+		{
+			"ID_numero": 1,
+			"andar": 1,
+			"horarios": [
+				{
+					"horario": "08:00 - 12:00"
+				},
+				{
+					"horario": "14:00 - 17:00"
+				}
+			]
+		},
+		{
+			"ID_numero": 2,
+			"andar": 1,
+			"horarios": [
+				{
+					"horario": "08:00 - 12:00"
+				}
+			]
+		},
+		{
+			"ID_numero": 3,
+			"andar": 2,
+			"horarios": [
+				{
+					"horario": "14:00 - 17:00"
+				}
+			]
+		},
+		{
+			"ID_numero": 4,
+			"andar": 2,
+			"horarios": [
+				{
+					"horario": "08:00 - 12:00"
+				},
+				{
+					"horario": "14:00 - 17:00"
+				}
+			]
+		}
+	]
+}
