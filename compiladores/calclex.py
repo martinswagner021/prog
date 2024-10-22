@@ -9,62 +9,27 @@ import sys
 
 # List of token names.   This is always required
 tokens = (
-    'PROGRAMA',
-    'BLOCO',
-    'DECLARACOES',
-    'DEF_CONST',
-    'DEF_TIPO',
-    'DEF_VAR',
-    'DEF_ROTINA',
-    'ID',
-    'NUMERO',
-    'CONSTANTE',
-    'CONST_VALOR',
-    'TIPO',
-    'VARIAVEL',
-    'LISTA_ID',
-    'CAMPOS',
-    'CAMPO',
-    'LISTA_CAMPOS',
-    'TIPO_DADO',
-    'ROTINA',
-    'PARAM_ROTINA',
-    'BLOCO_ROTINA',
-    'LISTA_COM',
-    'BLOCO_COM',
-    'COMANDO',
-    'FOR',
-    'ELSE',
-    'ATRIBUICAO',
-    'LISTA_PARAM',
-    'EXP',
-    'EXP_LOGICA',
-    'PARAM_LOGICO',
-    'EXP_MAT',
-    'PARAMETRO',
-    'OP_LOGICO',
-    'OP_COMP',
-    'OP_MAT',
-    'NOME'
+    'NUMBER',
+    'PLUS',
+    'MINUS',
+    'TIMES',
+    'DIVIDE',
+    'LPAREN',
+    'RPAREN',
 )
 
 # Regular expression rules for simple tokens
-# t_PLUS    = r'\+'
-# t_MINUS   = r'-'
-# t_TIMES   = r'\*'
-# t_DIVIDE  = r'/'
-# t_LPAREN  = r'\('
-# t_RPAREN  = r'\)'
+t_PLUS    = r'\+'
+t_MINUS   = r'-'
+t_TIMES   = r'\*'
+t_DIVIDE  = r'/'
+t_LPAREN  = r'\('
+t_RPAREN  = r'\)'
 
 # A regular expression rule with some action code
-def t_NUMERO(t):
+def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)    
-    return t
-
-def t_ID(t):
-    r'\S+'
-    t.value = str(t.value)
     return t
 
 # Define a rule so we can track line numbers
