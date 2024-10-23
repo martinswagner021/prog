@@ -4,6 +4,7 @@ select * from peca;
 
 update peca set peso = peso * 2 where cidade like "R%";
 
+
 update peca set peso = peso / 2 where cidade like "R%";
 
 -- 2)
