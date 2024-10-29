@@ -112,7 +112,7 @@ analisados = list()
 while True:
     tok = lexer.token()
     if not tok: 
-        break      # No more input
+        break
     analisados.append(Token(tok))
 
 for i in analisados:
