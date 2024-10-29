@@ -7,7 +7,7 @@ import sys
 
 # Palavras reservadas
 reservados = {
-    'const': 'CONSTANTE',
+    'const': 'CONST',
     'begin': 'BEGIN',
     'end': 'END',
     'type': 'TYPE',
@@ -16,6 +16,7 @@ reservados = {
     'real': 'REAL',
     'char': 'CHAR',
     'boolean': 'BOOLEAN',
+    'array': 'ARRAY',
     'of': 'OF',
     'record': 'RECORD',
     'function': 'FUNCTION',
@@ -35,14 +36,31 @@ reservados = {
     'or': 'OR',
 }
 
-literals = ['+','-','*','/','=',',',';',':','.','[',']','(',')','>','<']
+# Tokens literais, possuem como nome o mesmo simbolo que os define
+literals = ['+','-','*','/','=',',',';',':','.','[',']','(',')']
 
+# Definicao dos tokens + uniao das palavras reservadas
 tokens = [
     'ID',
     'NUMERO',
     'PALAVRA',
-    'ATRIBUICAO'
+    'ATRIBUICAO',
+    'LT',
+    'GT',
+    'EQUALS',
+    'DIFF',
+    'LE',
+    'GE'
 ] + list(reservados.values())
+
+# Expressoes regulares dos tokens simples
+t_ATRIBUICAO = ':='
+t_LT = '<'
+t_GT = '>'
+t_EQUALS = '=='
+t_DIFF = '!='
+t_LE = '<='
+t_GE = '>='
 
 def t_NUMERO(t):
     r'\d+(\.\d+)?'
@@ -60,20 +78,21 @@ def t_PALAVRA(t):
     t.value = str(t.value)
     return t
 
-# Define a rule so we can track line numbers
+# Regra para determinar posicao da linha do codigo
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# A string containing ignored characters (spaces and tabs)
+# Caracteres ignorados pelo analisador lexico, espacos e tabulacoes
 t_ignore  = ' \t'
 
-# Error handling rule
+# Tratamento de erro quando um caracter nao e identificado pelo analisador
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print(f"Caracter {t.value[0]} nao identificado.")
+    # Pula o elemento para que identifique outros possiveis erros na mesma analise
     t.lexer.skip(1)
 
-# Build the lexer
+# Compila as regras definidas para o lexer
 lexer = lex.lex()
 
 # Abre e entrega o arquivo a ser analisado
@@ -81,16 +100,20 @@ file_name = sys.argv[1]
 data = open(file_name, 'r').read()
 lexer.input(data)
 
-# Tokenize
-# while True:
-#     tok = lexer.token()
-#     if not tok: 
-#         break      # No more input
-#     print(tok)
+# Define uma classe para armazenar os tokens
+class Token():
+    def __init__(self, token):
+        self.tipo = tok.type
+        self.valor = tok.value
+        self.linha = tok.lineno
+analisados = list()
 
-# Tokenize
+# Analisa os tokens do arquivo
 while True:
     tok = lexer.token()
     if not tok: 
         break      # No more input
-    print(tok.type, tok.value, tok.lineno)
+    analisados.append(Token(tok))
+
+for i in analisados:
+    print("Tipo:", i.tipo, "Valor:", i.valor, "Linha:", i.linha)
