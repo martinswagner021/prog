@@ -1,69 +1,62 @@
-# ------------------------------------------------------------
-# calclex.py
-#
-# tokenizer for a simple expression evaluator for
-# numbers and +,-,*,/
-# ------------------------------------------------------------
+# ---------------------------------------
+# Aluno: Wagner Martins
+# Analisador lexico para simplepascal criado nas aulas
+# ---------------------------------------
 import ply.lex as lex
 import sys
 
-# List of token names.   This is always required
-tokens = (
-    'PROGRAMA',
-    'BLOCO',
-    'DECLARACOES',
-    'DEF_CONST',
-    'DEF_TIPO',
-    'DEF_VAR',
-    'DEF_ROTINA',
+# Palavras reservadas
+reservados = {
+    'const': 'CONSTANTE',
+    'begin': 'BEGIN',
+    'end': 'END',
+    'type': 'TYPE',
+    'var': 'VAR',
+    'integer': 'INTEGER',
+    'real': 'REAL',
+    'char': 'CHAR',
+    'boolean': 'BOOLEAN',
+    'of': 'OF',
+    'record': 'RECORD',
+    'function': 'FUNCTION',
+    'procedure': 'PROCEDURE',
+    'while': 'WHILE',
+    'do': 'DO',
+    'if': 'IF',
+    'then': 'THEN',
+    'for': 'FOR',
+    'write': 'WRITE',
+    'read': 'READ',
+    'to': 'TO',
+    'else': 'ELSE',
+    'false': 'FALSE',
+    'true': 'TRUE',
+    'and': 'AND',
+    'or': 'OR',
+}
+
+literals = ['+','-','*','/','=',',',';',':','.','[',']','(',')','>','<']
+
+tokens = [
     'ID',
     'NUMERO',
-    'CONSTANTE',
-    'CONST_VALOR',
-    'TIPO',
-    'VARIAVEL',
-    'LISTA_ID',
-    'CAMPOS',
-    'CAMPO',
-    'LISTA_CAMPOS',
-    'TIPO_DADO',
-    'ROTINA',
-    'PARAM_ROTINA',
-    'BLOCO_ROTINA',
-    'LISTA_COM',
-    'BLOCO_COM',
-    'COMANDO',
-    'FOR',
-    'ELSE',
-    'ATRIBUICAO',
-    'LISTA_PARAM',
-    'EXP',
-    'EXP_LOGICA',
-    'PARAM_LOGICO',
-    'EXP_MAT',
-    'PARAMETRO',
-    'OP_LOGICO',
-    'OP_COMP',
-    'OP_MAT',
-    'NOME'
-)
+    'PALAVRA',
+    'ATRIBUICAO'
+] + list(reservados.values())
 
-# Regular expression rules for simple tokens
-# t_PLUS    = r'\+'
-# t_MINUS   = r'-'
-# t_TIMES   = r'\*'
-# t_DIVIDE  = r'/'
-# t_LPAREN  = r'\('
-# t_RPAREN  = r'\)'
-
-# A regular expression rule with some action code
 def t_NUMERO(t):
-    r'\d+'
-    t.value = int(t.value)    
+    r'\d+(\.\d+)?'
+    t.value = float(t.value) if '.' in t.value else int(t.value)
     return t
 
 def t_ID(t):
-    r'\S+'
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reservados.get(t.value,'ID')
+    t.value = str(t.value)
+    return t
+
+def t_PALAVRA(t):
+    r'"[A-Za-z0-9\s]*"'
     t.value = str(t.value)
     return t
 
@@ -83,25 +76,21 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-# To use the lexer, you first need to feed it some input text using its input() method. After that, repeated calls to token() produce tokens. The following code shows how this works:
-
+# Abre e entrega o arquivo a ser analisado
 file_name = sys.argv[1]
-# Test it out
-
 data = open(file_name, 'r').read()
-# Give the lexer some input
 lexer.input(data)
 
 # Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break      # No more input
-    print(tok)
+# while True:
+#     tok = lexer.token()
+#     if not tok: 
+#         break      # No more input
+#     print(tok)
 
 # Tokenize
 while True:
     tok = lexer.token()
     if not tok: 
         break      # No more input
-    print(tok.type, tok.value, tok.lineno, tok.lexpos)
+    print(tok.type, tok.value, tok.lineno)
