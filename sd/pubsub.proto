@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package pubsub;
+
+// Define the messages
+message PublishRequest {
+    string message = 1;
+}
+
+message SubscribeRequest {
+    string client_id = 1;
+}
+
+message Message {
+    string client_id = 1;
+    string message = 2;
+}
+
+// Define the service
+service PubSubService {
+    // Server streaming for subscribers
+    rpc Subscribe(SubscribeRequest) returns (stream Message);
+
+    // Unary for publishing messages
+    rpc Publish(PublishRequest) returns (Message);
+}
