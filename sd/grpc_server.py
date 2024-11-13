@@ -8,7 +8,6 @@ class PubSubService(pubsub_pb2_grpc.PubSubServiceServicer):
         self.subscribers = []
 
     async def Subscribe(self, request, context):
-        # Add the subscriber to the list
         client_id = request.client_id
         subscriber_queue = asyncio.Queue()
         self.subscribers.append(subscriber_queue)
@@ -17,7 +16,6 @@ class PubSubService(pubsub_pb2_grpc.PubSubServiceServicer):
                 message = await subscriber_queue.get()
                 yield pubsub_pb2.Message(client_id=client_id, message=message)
         finally:
-            # Remove the subscriber when done
             self.subscribers.remove(subscriber_queue)
 
     async def Publish(self, request, context):

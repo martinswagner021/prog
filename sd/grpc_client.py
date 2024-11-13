@@ -17,15 +17,13 @@ async def main():
     async with grpc.aio.insecure_channel("localhost:50051") as channel:
         stub = pubsub_pb2_grpc.PubSubServiceStub(channel)
         
-        # Start the subscriber
         client_id = "client1"
         asyncio.create_task(subscribe(stub, client_id))
 
-        # Publish some messages
-        await asyncio.sleep(1)  # Delay to allow subscribe task to start
+        await asyncio.sleep(1)
         await publish(stub, "Hello, world!")
         await publish(stub, "Another message")
-        await asyncio.sleep(3)  # Delay to keep the program running
+        await asyncio.sleep(3)
 
 if __name__ == "__main__":
     asyncio.run(main())
