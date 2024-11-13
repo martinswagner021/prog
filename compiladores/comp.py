@@ -45,22 +45,12 @@ tokens = [
     'NUMERO',
     'PALAVRA',
     'ATRIBUICAO',
-    'LT',
-    'GT',
-    'EQUALS',
-    'DIFF',
-    'LE',
-    'GE'
+    'COMPARACAO'
 ] + list(reservados.values())
 
 # Expressoes regulares dos tokens simples
 t_ATRIBUICAO = ':='
-t_LT = '<'
-t_GT = '>'
-t_EQUALS = '=='
-t_DIFF = '!='
-t_LE = '<='
-t_GE = '>='
+t_COMPARACAO = r'<=|>=|==|!=|<|>'
 
 def t_NUMERO(t):
     r'\d+(\.\d+)?'

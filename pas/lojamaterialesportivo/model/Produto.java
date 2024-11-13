@@ -8,12 +8,15 @@ package pas.lojamaterialesportivo.model;
  *
  * @author edumo
  */
-public class Produto {
-    public enum Tamanho { P, M, G }
+public abstract class Produto {
+    public enum Tamanho { DESCONHECIDO, P, M, G }
+    private final String codigo;
+    private String descricao;
     private final Tamanho tam;
     private float preco;
 
-    public Produto(Tamanho tam) {
+    public Produto(String codigo,Tamanho tam) {
+        this.codigo = codigo;
         this.tam = tam;
     }
 
@@ -27,6 +30,18 @@ public class Produto {
 
     public Tamanho getTam() {
         return tam;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
     
 }

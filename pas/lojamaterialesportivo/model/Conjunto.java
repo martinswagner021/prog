@@ -4,26 +4,37 @@
  */
 package pas.lojamaterialesportivo.model;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author edumo
  */
 public class Conjunto {
-    private ArrayList<Produto>  produtos;
+    private HashMap<String,Produto>  produtos = new HashMap();
 
-    public Produto getProduto(int posicao) {
-        return produtos.get(posicao);
+//    public Produto getProduto(int posicao) {
+//        if (posicao > produtos.size()) return null;
+//        return produtos.get(posicao);
+//    }
+//    public Produto getProduto(String codigo) {
+//        for(Produto p : produtos)
+//            if(codigo.equals(p.getCodigo()))
+//                return p;
+//        return null;
+//    }
+    public Produto getProduto(String codigo) {
+          return produtos.get(codigo);
     }
-
-    public void setProduto(int posicao,Produto produto) {
-        this.produtos.set(posicao, produto);
-    }
+//    public void setProduto(int posicao,Produto produto) {
+//        this.produtos.set(posicao, produto);
+//    }
     
     public void addProduto(Produto produto){
-        this.produtos.add(produto);
+        this.produtos.put(produto.getCodigo(),produto);
     }
     
-    
+    public int tamanho(){
+        return this.produtos.size();
+    }
 }

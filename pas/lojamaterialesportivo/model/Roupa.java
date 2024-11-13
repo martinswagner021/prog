@@ -8,14 +8,14 @@ package pas.lojamaterialesportivo.model;
  *
  * @author edumo
  */
-public class Roupa extends Produto{
+public class Roupa extends ProdutoComTime{
     public enum Tipo { Camisa, shorts, saia, agasalho }
     private final Tipo tipo;
     private final String estilo;
     private final String time;
 
-    public Roupa(String estilo, String time,Tipo tipo, Tamanho tam) {
-        super(tam);
+    public Roupa(String codigo, Tamanho tam,String estilo, String time,Tipo tipo) {
+        super(codigo,tam);
         this.tipo = tipo;
         this.estilo = estilo;
         this.time = time;
@@ -29,6 +29,7 @@ public class Roupa extends Produto{
         return estilo;
     }
 
+    @Override
     public String getTime() {
         return time;
     }
