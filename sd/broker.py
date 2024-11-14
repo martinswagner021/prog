@@ -1,6 +1,4 @@
 import grpc
-from concurrent import futures
-import time
 import asyncio
 
 import pubsub_pb2
