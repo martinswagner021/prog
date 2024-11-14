@@ -3,15 +3,16 @@ syntax = "proto3";
 package pubsub;
 
 message PublishRequest {
-    string message = 1;
+    string torcida = 1;
+    string message = 2;
 }
 
 message SubscribeRequest {
-    string topic = 1;
+    string torcida = 1;
 }
 
 message Message {
-    string topic = 1;
+    string torcida = 1;
     string message = 2;
 }
 

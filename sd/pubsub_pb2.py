@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cpubsub.proto\x12\x06pubsub\"!\n\x0ePublishRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"%\n\x10SubscribeRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"-\n\x07Message\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2}\n\rPubSubService\x12\x38\n\tSubscribe\x12\x18.pubsub.SubscribeRequest\x1a\x0f.pubsub.Message0\x01\x12\x32\n\x07Publish\x12\x16.pubsub.PublishRequest\x1a\x0f.pubsub.Messageb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0cpubsub.proto\x12\x06pubsub\"2\n\x0ePublishRequest\x12\x0f\n\x07torcida\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t\"#\n\x10SubscribeRequest\x12\x0f\n\x07torcida\x18\x01 \x01(\t\"+\n\x07Message\x12\x0f\n\x07torcida\x18\x01 \x01(\t\x12\x0f\n\x07message\x18\x02 \x01(\t2}\n\rPubSubService\x12\x38\n\tSubscribe\x12\x18.pubsub.SubscribeRequest\x1a\x0f.pubsub.Message0\x01\x12\x32\n\x07Publish\x12\x16.pubsub.PublishRequest\x1a\x0f.pubsub.Messageb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,11 +32,11 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'pubsub_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_PUBLISHREQUEST']._serialized_start=24
-  _globals['_PUBLISHREQUEST']._serialized_end=57
-  _globals['_SUBSCRIBEREQUEST']._serialized_start=59
-  _globals['_SUBSCRIBEREQUEST']._serialized_end=96
-  _globals['_MESSAGE']._serialized_start=98
-  _globals['_MESSAGE']._serialized_end=143
-  _globals['_PUBSUBSERVICE']._serialized_start=145
-  _globals['_PUBSUBSERVICE']._serialized_end=270
+  _globals['_PUBLISHREQUEST']._serialized_end=74
+  _globals['_SUBSCRIBEREQUEST']._serialized_start=76
+  _globals['_SUBSCRIBEREQUEST']._serialized_end=111
+  _globals['_MESSAGE']._serialized_start=113
+  _globals['_MESSAGE']._serialized_end=156
+  _globals['_PUBSUBSERVICE']._serialized_start=158
+  _globals['_PUBSUBSERVICE']._serialized_end=283
 # @@protoc_insertion_point(module_scope)

@@ -26,8 +26,7 @@ if _version_not_supported:
 
 
 class PubSubServiceStub(object):
-    """Define the service
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -48,19 +47,16 @@ class PubSubServiceStub(object):
 
 
 class PubSubServiceServicer(object):
-    """Define the service
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def Subscribe(self, request, context):
-        """Server streaming for subscribers
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def Publish(self, request, context):
-        """Unary for publishing messages
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -87,8 +83,7 @@ def add_PubSubServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class PubSubService(object):
-    """Define the service
-    """
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def Subscribe(request,
