@@ -24,7 +24,7 @@ public class Viagem {
     }
 
     public float getCusto(){
-        return ((this.rota.getDuracaoTotalHoras()/24)*this.motorista.getvalorDiaria()) + this.onibus.getCusto() + this.rota.getCustoTotal();
+        return ((this.rota.getDuracaoTotalHoras()/24)*this.motorista.getValorDiaria()) + this.onibus.getCusto() + this.rota.getCustoTotal();
     }
     public Motorista getMotorista() {
         return motorista;

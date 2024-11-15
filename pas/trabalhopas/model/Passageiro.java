@@ -3,8 +3,8 @@ package trabalhopas.model;
 public class Passageiro extends Pessoa{
     private String email;
 
-    public Passageiro(String cpf, String nome, int idade, String email){
-        super(cpf, nome, idade);
+    public Passageiro(String cpf, String nome, String email){
+        super(cpf, nome);
         this.setEmail(email);
     }
 

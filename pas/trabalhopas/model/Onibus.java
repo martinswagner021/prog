@@ -3,9 +3,9 @@ package trabalhopas.model;
 public class Onibus {
     public enum classeOnibus {ECONOMICA, EXECUTIVA, LUXO};
     private final String placa;
-    private final int lugares;
-    private final classeOnibus classe;
-    private final float custo;
+    private int lugares;
+    private classeOnibus classe;
+    private float custo;
 
     public Onibus(String placa, int lugares, classeOnibus classe, float custo){
         this.classe = classe;
@@ -25,6 +25,16 @@ public class Onibus {
     }
     public float getCusto() {
         return custo;
+    }
+
+    public void setCusto(float custo) {
+        this.custo = custo;
+    }
+    public void setClasse(classeOnibus classe) {
+        this.classe = classe;
+    }
+    public void setLugares(int lugares) {
+        this.lugares = lugares;
     }
 
 }

@@ -4,7 +4,7 @@ public class Pessoa {
     private final String cpf;
     private String nome;
 
-    public Pessoa(String cpf, String nome, int idade){
+    public Pessoa(String cpf, String nome){
         this.cpf = cpf;
         this.setNome(nome);
     }

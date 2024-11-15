@@ -5,19 +5,19 @@ public class Motorista extends Pessoa {
     private float valorDiaria;
 
     public Motorista(String cpf, String nome, int idade, float valorDiaria){
-        super(cpf, nome, idade);
+        super(cpf, nome);
         this.setIdade(idade);
-        this.setvalorDiaria(valorDiaria);
+        this.setValorDiaria(valorDiaria);
     }
 
-    public float getvalorDiaria() {
+    public float getValorDiaria() {
         return valorDiaria;
     }
     public int getIdade() {
         return idade;
     }
 
-    public void setvalorDiaria(float valorDiaria) {
+    public void setValorDiaria(float valorDiaria) {
         this.valorDiaria = valorDiaria;
     }
     public void setIdade(int idade) {

@@ -6,10 +6,11 @@ public class Trecho {
     private Duracao duracao;
     private float custo;
 
-    public Trecho(String inicio, String fim, Duracao duracao){
+    public Trecho(String inicio, String fim, Duracao duracao, float custo){
         this.setInicio(inicio);
         this.setFim(fim);
         this.setDuracao(duracao);
+        this.setCusto(custo);
     }
 
     public String getInicio() {

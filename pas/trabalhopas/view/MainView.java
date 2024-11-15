@@ -1,67 +1,154 @@
 package trabalhopas.view;
 
-import trabalhopas.controller.ViagemController;
+import trabalhopas.controller.*;
 import trabalhopas.model.*;
 
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class MainView{
+public class MainView {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        Onibus onibus = new Onibus("ABC-1234", 40, Onibus.classeOnibus.EXECUTIVA, 2000.0f);
-        Motorista motorista = new Motorista("12345678900", "João", 40, 200.0f); // Implementar classe Motorista
+        OnibusController onibusController = new OnibusController("ABC-1234", 40, Onibus.classeOnibus.EXECUTIVA, 2000.0f);
+        MotoristaController motoristaController = new MotoristaController("12345678900", "João", 40, 200.0f);
         ArrayList<Trecho> trechos = new ArrayList<>();
-        trechos.add(new Trecho("Cidade A", "Cidade B", new Duracao(2, 30)));
-        Rota rota = new Rota("Cidade A", "Cidade B", trechos);
-        Data dataInicio = new Data(1, 1, 2023, 8, 0);
+        TrechoController trechoController = new TrechoController("Cidade A", "Cidade B", new Duracao(2, 30), 300.0f);
+        trechos.add(trechoController.getTrecho());
+        RotaController rotaController = new RotaController("Cidade A", "Cidade B", trechos);
+        ViagemController viagemController = new ViagemController(onibusController.getOnibus(), motoristaController.getMotorista(), rotaController.getRota(), new Data(1, 1, 2023, 8, 0));
 
-        ViagemController viagemController = new ViagemController(onibus, motorista, rota, dataInicio);
-
-        // Menu de opções
         while (true) {
-            System.out.println("\n=== Menu de Viagem ===");
-            System.out.println("1. Adicionar Passageiro");
-            System.out.println("2. Remover Passageiro");
-            System.out.println("3. Calcular Custo da Viagem");
-            System.out.println("4. Sair");
+            System.out.println("\n=== Menu Principal ===");
+            System.out.println("1. Gerenciar Ônibus");
+            System.out.println("2. Gerenciar Motorista");
+            System.out.println("3. Gerenciar Rota");
+            System.out.println("4. Gerenciar Trecho");
+            System.out.println("5. Gerenciar Passageiros");
+            System.out.println("6. Exibir Custo Total da Viagem");
+            System.out.println("7. Sair");
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
             switch (opcao) {
                 case 1:
-                    System.out.print("Informe o número do assento: ");
-                    int numeroAssento = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Informe o CPF do passageiro: ");
-                    String cpf = scanner.nextLine();
-                    System.out.print("Informe o nome do passageiro: ");
-                    String nome = scanner.nextLine();
-                    System.out.print("Informe a idade do passageiro: ");
-                    int idade = scanner.nextInt();
-                    scanner.nextLine();
-                    System.out.print("Informe o email do passageiro: ");
-                    String email = scanner.nextLine();
-                    Passageiro passageiro = new Passageiro(cpf, nome, idade, email);
-                    viagemController.adicionarPassageiro(numeroAssento, passageiro);
+                    gerenciarOnibus(onibusController, scanner);
                     break;
-
                 case 2:
-                    System.out.printf("Custo total da viagem: R$ %.2f\n", viagemController.calcularCusto());
+                    gerenciarMotorista(motoristaController, scanner);
                     break;
-
                 case 3:
+                    gerenciarRota(rotaController, scanner);
+                    break;
+                case 4:
+                    gerenciarTrecho(trechoController, rotaController, scanner);
+                    break;
+                case 5:
+                    gerenciarPassageiros(viagemController, scanner);
+                    break;
+                case 6:
+                    System.out.printf("Custo Total da Viagem: R$ %.2f\n", viagemController.calcularCusto());
+                    break;
+                case 7:
                     System.out.println("Saindo do sistema...");
                     scanner.close();
                     return;
-
                 default:
                     System.out.println("Opção inválida. Tente novamente.");
                     break;
             }
+        }
+    }
+
+    private static void gerenciarOnibus(OnibusController onibusController, Scanner scanner) {
+        System.out.println("\n=== Gerenciar Ônibus ===");
+        onibusController.exibirInformacoes();
+        System.out.print("Deseja atualizar o custo do ônibus? (s/n): ");
+        String resposta = scanner.nextLine();
+        if (resposta.equalsIgnoreCase("s")) {
+            System.out.print("Informe o novo custo: ");
+            float novoCusto = scanner.nextFloat();
+            scanner.nextLine();
+            onibusController.atualizarCusto(novoCusto);
+        }
+    }
+
+    private static void gerenciarMotorista(MotoristaController motoristaController, Scanner scanner) {
+        System.out.println("\n=== Gerenciar Motorista ===");
+        motoristaController.exibirInformacoes();
+        System.out.print("Deseja atualizar o valor da diária? (s/n): ");
+        String resposta = scanner.nextLine();
+        if (resposta.equalsIgnoreCase("s")) {
+            System.out.print("Informe o novo valor da diária: ");
+            float novoValorDiaria = scanner.nextFloat();
+            scanner.nextLine();
+            motoristaController.atualizarValorDiaria(novoValorDiaria);
+        }
+    }
+
+    private static void gerenciarRota(RotaController rotaController, Scanner scanner) {
+        System.out.println("\n=== Gerenciar Rota ===");
+        rotaController.exibirInformacoes();
+    }
+
+    private static void gerenciarTrecho(TrechoController trechoController, RotaController rotaController, Scanner scanner) {
+        System.out.println("\n=== Gerenciar Trecho ===");
+        trechoController.exibirInformacoes();
+        
+        System.out.print("Deseja atualizar a duração do trecho? (s/n): ");
+        String respostaDuracao = scanner.nextLine();
+        if (respostaDuracao.equalsIgnoreCase("s")) {
+            System.out.print("Informe a nova duração em horas: ");
+            float horas = scanner.nextFloat();
+            System.out.print("Informe a nova duração em minutos: ");
+            float minutos = scanner.nextFloat();
+            scanner.nextLine();
+            trechoController.atualizarDuracao(horas, minutos);
+        }
+
+        System.out.print("Deseja atualizar o custo do trecho? (s/n): ");
+        String respostaCusto = scanner.nextLine();
+        if (respostaCusto.equalsIgnoreCase("s")) {
+            System.out.print("Informe o novo custo: ");
+            float novoCusto = scanner.nextFloat();
+            scanner.nextLine();
+            trechoController.atualizarCusto(novoCusto);
+        }
+
+        rotaController.adicionarTrecho(trechoController.getTrecho());
+    }
+
+    private static void gerenciarPassageiros(ViagemController viagemController, Scanner scanner) {
+        System.out.println("\n=== Gerenciar Passageiros ===");
+        System.out.println("1. Adicionar Passageiro");
+        System.out.println("2. Remover Passageiro");
+        System.out.println("3. Listar Passageiros");
+        System.out.print("Escolha uma opção: ");
+        int opcao = scanner.nextInt();
+        scanner.nextLine();
+
+        if (opcao == 1) {
+            System.out.print("Informe o número do assento: ");
+            int numeroAssento = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Informe o CPF do passageiro: ");
+            String cpf = scanner.nextLine();
+            System.out.print("Informe o nome do passageiro: ");
+            String nome = scanner.nextLine();
+            System.out.print("Informe o e-mail do passageiro: ");
+            String email = scanner.nextLine();
+            PassageiroController passageiroController = new PassageiroController(cpf, nome, email);
+            viagemController.adicionarPassageiro(numeroAssento, passageiroController.getPassageiro());
+        } else if (opcao == 2) {
+            System.out.print("Informe o CPF do passageiro para remover: ");
+            String cpfParaRemover = scanner.nextLine();
+            viagemController.removerPassageiro(cpfParaRemover);
+        } else if (opcao == 3){
+            viagemController.listarPassageiros();
+        } else{
+            System.out.println("Opção inválida.");
         }
     }
 }
