@@ -14,6 +14,12 @@ a.out
 # open vim files
 *.swp
 
+# enviroment files
 .env
 env
+
+# python cache
 __pycache__
+
+# java binaries
+.class
