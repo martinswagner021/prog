@@ -7,9 +7,9 @@ public class Viagem {
     private Motorista motorista;
     private Rota rota;
     private Data data_inicio;
-    private HashMap<Passageiro, Integer> lugares_ocupados = new HashMap<>();
+    private HashMap<Integer, Passageiro> lugares_ocupados = new HashMap<>();
     
-    public Viagem(Onibus onibus, Motorista motorista, Rota rota, Data data_inicio, HashMap<Passageiro, Integer> lugares_ocupados){
+    public Viagem(Onibus onibus, Motorista motorista, Rota rota, Data data_inicio, HashMap<Integer, Passageiro> lugares_ocupados){
         this.setData_inicio(data_inicio);
         this.setMotorista(motorista);
         this.setOnibus(onibus);
@@ -38,7 +38,7 @@ public class Viagem {
     public Data getData_inicio() {
         return data_inicio;
     }
-    public HashMap<Passageiro, Integer> getLugares_ocupados() {
+    public HashMap<Integer, Passageiro> getLugares_ocupados() {
         return lugares_ocupados;
     }
 
@@ -55,10 +55,10 @@ public class Viagem {
         this.rota = rota;
     }
 
-    public void addPassageiro(Passageiro passageiro, int lugar){
-        this.lugares_ocupados.put(passageiro, lugar);
+    public void addPassageiro(int lugar, Passageiro passageiro){
+        this.lugares_ocupados.put(lugar, passageiro);
     }
-    public void removePassageiro(Passageiro passageiro){
-        this.lugares_ocupados.remove(passageiro);
+    public void removePassageiro(int lugar){
+        this.lugares_ocupados.remove(lugar);
     }
 }

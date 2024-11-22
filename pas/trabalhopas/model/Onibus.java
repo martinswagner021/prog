@@ -15,16 +15,16 @@ public class Onibus {
     }
 
     public classeOnibus getClasse() {
-        return classe;
+        return this.classe;
     }
     public int getLugares() {
-        return lugares;
+        return this.lugares;
     }
     public String getPlaca() {
-        return placa;
+        return this.placa;
     }
     public float getCusto() {
-        return custo;
+        return this.custo;
     }
 
     public void setCusto(float custo) {

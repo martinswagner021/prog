@@ -1,66 +1,62 @@
 package trabalhopas.controller;
 
-import trabalhopas.model.*;
-import trabalhopas.model.exceptions.PassageiroNotFoundException;
+import trabalhopas.model.Viagem;
+import trabalhopas.model.exceptions.NotFoundException;
+import trabalhopas.model.exceptions.AlreadyExistsException;
+import trabalhopas.model.exceptions.LugarVazioException;
+import trabalhopas.model.Passageiro;
 
 import java.util.HashMap;
-import java.util.Set;
+import java.util.Map;
 
-public class ViagemController{
-    private Viagem viagem;
+public class ViagemController {
+    private Map<Integer, Viagem> viagemMap = new HashMap<>();
+    private int idCounter = 1;
 
-    public ViagemController(Onibus onibus, Motorista motorista, Rota rota, Data dataInicio) {
-        this.viagem = new Viagem(onibus, motorista, rota, dataInicio);
+    public void adicionarViagem(Viagem viagem) {
+        viagemMap.put(idCounter++, viagem);
     }
 
-    public Passageiro findPassageiro(String cpf) throws PassageiroNotFoundException{
-        for(Passageiro p : this.viagem.getLugares_ocupados().keySet()){
-            if(p.getCpf().equals(cpf)) return p;
+    public Map<Integer, Viagem> listarViagens() {
+        return viagemMap;
+    }
+
+    public void removerViagem(int id) throws NotFoundException {
+        if (!viagemMap.containsKey(id)) {
+            throw new NotFoundException(Integer.toString(id));
         }
-        throw new PassageiroNotFoundException(cpf);
+        viagemMap.remove(id);
     }
 
-    public void adicionarPassageiro(int numeroAssento, Passageiro passageiro) {
-        HashMap<Passageiro, Integer> lugaresOcupados = viagem.getLugares_ocupados();
-        if (lugaresOcupados.containsValue(numeroAssento)) {
-            System.out.println("Assento " + numeroAssento + " já está ocupado.");
-        } else if (numeroAssento > viagem.getOnibus().getLugares() || numeroAssento < 1) {
-            System.out.println("Número de assento inválido.");
-        } else {
-            lugaresOcupados.put(passageiro, numeroAssento);
-            System.out.println("Passageiro adicionado ao assento " + numeroAssento);
+    public void adicionarPassageiro(int viagemId, int lugar, Passageiro passageiro) throws NotFoundException, AlreadyExistsException {
+        Viagem viagem = viagemMap.get(viagemId);
+        if (viagem == null) {
+            throw new NotFoundException(Integer.toString(viagemId));
         }
-    }
 
-    public void removerPassageiro(String cpfParaRemover) {
-        try{
-            Passageiro passageiroParaRemover = this.findPassageiro(cpfParaRemover);
-            this.viagem.removePassageiro(passageiroParaRemover);
-            System.out.println("Passageiro removido com sucesso.");
+        if (viagem.getLugares_ocupados().containsKey(lugar)) {
+            throw new AlreadyExistsException(Integer.toString(lugar));
         }
-        catch(PassageiroNotFoundException e){
-            System.out.println("Não foi possível remover o passageiro, pois:\n\t" + e.getMessage());
+
+        viagem.addPassageiro(lugar, passageiro);
+    }
+
+    public void removerPassageiro(int viagemId, int lugar) throws NotFoundException, LugarVazioException {
+        Viagem viagem = viagemMap.get(viagemId);
+        if (viagem == null) {
+            throw new NotFoundException(Integer.toString(viagemId));
         }
-    }
-
-    public void listarPassageiros() {
-        Set<Passageiro> passageiros = this.viagem.getLugares_ocupados().keySet();
-
-        if (passageiros.isEmpty()) {
-            System.out.println("Não há passageiros na viagem.");
-        } else {
-            System.out.println("Lista de Passageiros:");
-            for (Passageiro passageiro : passageiros) {
-                new PassageiroController(passageiro.getCpf(), passageiro.getNome(), passageiro.getEmail()).exibirInformacoes();
-            }
+        if (!viagem.getLugares_ocupados().containsKey(lugar)) {
+            throw new LugarVazioException(lugar);
         }
+        viagem.getLugares_ocupados().remove(lugar);
     }
 
-    public float calcularCusto() {
-        return viagem.getCusto();
-    }
-
-    public Viagem getViagem() {
-        return viagem;
+    public Map<Integer, Passageiro> listarPassageiros(int viagemId) throws NotFoundException {
+        Viagem viagem = viagemMap.get(viagemId);
+        if (viagem == null) {
+            throw new NotFoundException(Integer.toString(viagemId));
+        }
+        return viagem.getLugares_ocupados();
     }
 }

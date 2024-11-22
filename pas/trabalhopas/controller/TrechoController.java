@@ -1,35 +1,27 @@
 package trabalhopas.controller;
 
 import trabalhopas.model.Trecho;
-import trabalhopas.model.Duracao;
+import trabalhopas.model.exceptions.NotFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrechoController {
-    private Trecho trecho;
+    private Map<Integer, Trecho> trechoMap = new HashMap<>();
+    private int idCounter = 1;
 
-    public TrechoController(String inicio, String fim, Duracao duracao, float custo) {
-        this.trecho = new Trecho(inicio, fim, duracao, custo);
+    public void adicionarTrecho(Trecho trecho) {
+        trechoMap.put(idCounter++, trecho);
     }
 
-    public void exibirInformacoes() {
-        System.out.println("Informações do Trecho:");
-        System.out.println("Início: " + trecho.getInicio());
-        System.out.println("Fim: " + trecho.getFim());
-        System.out.printf("Duração: %.2f horas\n", trecho.getDuracao().getTempoHoras());
-        System.out.printf("Custo: R$ %.2f\n", trecho.getCusto());
+    public Map<Integer, Trecho> listarTrechos() {
+        return trechoMap;
     }
 
-    public void atualizarDuracao(float horas, float minutos) {
-        Duracao novaDuracao = new Duracao(horas, minutos);
-        trecho.setDuracao(novaDuracao);
-        System.out.printf("Duração do trecho atualizada para: %.2f horas\n", novaDuracao.getTempoHoras());
-    }
-
-    public void atualizarCusto(float novoCusto) {
-        trecho.setCusto(novoCusto);
-        System.out.printf("Custo do trecho atualizado para: R$ %.2f\n", novoCusto);
-    }
-
-    public Trecho getTrecho() {
-        return trecho;
+    public void removerTrecho(int id) throws NotFoundException {
+        if (!trechoMap.containsKey(id)) {
+            throw new NotFoundException(Integer.toString(id));
+        }
+        trechoMap.remove(id);
     }
 }

@@ -1,28 +1,48 @@
 package trabalhopas.controller;
 
 import trabalhopas.model.Motorista;
+import trabalhopas.model.exceptions.AlreadyExistsException;
+import trabalhopas.model.exceptions.NotFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MotoristaController {
-    private Motorista motorista;
+    private Map<String, Motorista> motoristaMap = new HashMap<>();
 
-    public MotoristaController(String cpf, String nome, int idade, float valorDiaria) {
-        this.motorista = new Motorista(cpf, nome, idade, valorDiaria);
+    public void adicionarMotorista(Motorista motorista) throws AlreadyExistsException {
+        if (motoristaMap.containsKey(motorista.getCpf())) {
+            throw new AlreadyExistsException(motorista.getCpf());
+        }
+        motoristaMap.put(motorista.getCpf(), motorista);
     }
 
-    public void exibirInformacoes() {
-        System.out.println("Informações do Motorista:");
-        System.out.println("Nome: " + motorista.getNome());
-        System.out.println("CPF: " + motorista.getCpf());
-        System.out.println("Idade: " + motorista.getIdade());
-        System.out.printf("Valor da Diária: R$ %.2f\n", motorista.getValorDiaria());
+    public Map<String, Motorista> listarMotoristas() {
+        return motoristaMap;
     }
 
-    public void atualizarValorDiaria(float novoValorDiaria) {
-        motorista.setValorDiaria(novoValorDiaria);
-        System.out.printf("Valor da diária atualizado para: R$ %.2f\n", novoValorDiaria);
-    }
-
-    public Motorista getMotorista() {
+    public Motorista getMotoristaPorCpf(String cpf) throws NotFoundException {
+        Motorista motorista = motoristaMap.get(cpf);
+        if (motorista == null) {
+            throw new NotFoundException(cpf);
+        }
         return motorista;
+    }
+
+    public void atualizarMotorista(String cpf, String nome, int idade, float valorDiaria) throws NotFoundException {
+        Motorista motorista = motoristaMap.get(cpf);
+        if (motorista == null) {
+            throw new NotFoundException(cpf);
+        }
+        motorista.setNome(nome);
+        motorista.setIdade(idade);
+        motorista.setValorDiaria(valorDiaria);
+    }
+
+    public void removerMotorista(String cpf) throws NotFoundException {
+        if (!motoristaMap.containsKey(cpf)) {
+            throw new NotFoundException(cpf);
+        }
+        motoristaMap.remove(cpf);
     }
 }

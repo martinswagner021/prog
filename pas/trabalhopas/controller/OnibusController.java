@@ -1,38 +1,48 @@
 package trabalhopas.controller;
 
 import trabalhopas.model.Onibus;
+import trabalhopas.model.exceptions.AlreadyExistsException;
+import trabalhopas.model.exceptions.NotFoundException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class OnibusController {
-    private Onibus onibus;
+    private Map<String, Onibus> onibusMap = new HashMap<>();
 
-    public OnibusController(String placa, int lugares, Onibus.classeOnibus classe, float custo) {
-        this.onibus = new Onibus(placa, lugares, classe, custo);
+    public void adicionarOnibus(Onibus onibus) throws AlreadyExistsException {
+        if (onibusMap.containsKey(onibus.getPlaca())) {
+            throw new AlreadyExistsException(onibus.getPlaca().toString());
+        }
+        onibusMap.put(onibus.getPlaca(), onibus);
     }
 
-    public void exibirInformacoes() {
-        System.out.println("Informações do Ônibus:");
-        System.out.println("Placa: " + onibus.getPlaca());
-        System.out.println("Lugares: " + onibus.getLugares());
-        System.out.println("Classe: " + onibus.getClasse());
-        System.out.printf("Custo: R$ %.2f\n", onibus.getCusto());
+    public Map<String, Onibus> listarOnibus() {
+        return onibusMap;
     }
 
-    public void atualizarClasse(Onibus.classeOnibus novaClasse) {
-        onibus.setClasse(novaClasse);
-        System.out.println("Classe do ônibus atualizada para: " + novaClasse);
-    }
-
-    public void atualizarLugares(int novosLugares) {
-        onibus.setLugares(novosLugares);
-        System.out.println("Número de lugares atualizado para: " + novosLugares);
-    }
-
-    public void atualizarCusto(float novoCusto) {
-        onibus.setCusto(novoCusto);
-        System.out.printf("Custo do ônibus atualizado para: R$ %.2f\n", novoCusto);
-    }
-
-    public Onibus getOnibus() {
+    public Onibus getOnibusPorPlaca(String placa) throws NotFoundException {
+        Onibus onibus = onibusMap.get(placa);
+        if (onibus == null) {
+            throw new NotFoundException(placa);
+        }
         return onibus;
+    }
+
+    public void atualizarOnibus(String placa, int lugares, Onibus.classeOnibus classe, float custo) throws NotFoundException {
+        Onibus onibus = onibusMap.get(placa);
+        if (onibus == null) {
+            throw new NotFoundException(placa);
+        }
+        onibus.setLugares(lugares);
+        onibus.setClasse(classe);
+        onibus.setCusto(custo);
+    }
+
+    public void removerOnibus(String placa) {
+        if (!onibusMap.containsKey(placa)) {
+            throw new RuntimeException("Ônibus com a placa " + placa + " não encontrado.");
+        }
+        onibusMap.remove(placa);
     }
 }
