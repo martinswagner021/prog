@@ -103,7 +103,4 @@ while True:
     tok = lexer.token()
     if not tok: 
         break
-    analisados.append(Token(tok))
-
-for i in analisados:
-    print("Tipo:", i.tipo, "Valor:", i.valor, "Linha:", i.linha)
+    analisados.append(tok)

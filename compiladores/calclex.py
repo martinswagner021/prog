@@ -57,16 +57,20 @@ data = open(file_name, 'r').read()
 # Give the lexer some input
 lexer.input(data)
 
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break      # No more input
-    print(tok)
+# Define uma classe para armazenar os tokens
+class Token():
+    def __init__(self, token):
+        self.tipo = tok.type
+        self.valor = tok.value
+        self.linha = tok.lineno
+analisados = list()
 
-# Tokenize
+# Analisa os tokens do arquivo
 while True:
     tok = lexer.token()
     if not tok: 
-        break      # No more input
-    print(tok.type, tok.value, tok.lineno, tok.lexpos)
+        break
+    analisados.append(Token(tok))
+
+for i in analisados:
+    print("Tipo:", i.tipo, "Valor:", i.valor, "Linha:", i.linha)
