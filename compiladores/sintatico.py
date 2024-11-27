@@ -1,227 +1,298 @@
 import ply.yacc as yacc
-from lexico import tokens, analisados
 import sys
+from lexico import tokens  # Importe os tokens definidos no lexer
 
-# Definição das regras gramaticais
+# Regras da gramática
+
 def p_programa(p):
-    'programa : declaracoes bloco'
+    "PROGRAMA : DECLARACOES BLOCO"
+    p[0] = ('programa', p[1], p[2])
 
 def p_bloco(p):
-    'bloco : BEGIN comando lista_com END'
+    "BLOCO : BEGIN COMANDO LISTA_COM END"
+    p[0] = ('bloco', p[2], p[3])
 
-def p_declaracoes(p):
-    'declaracoes : def_const def_tipos def_var def_rotina'
-
-def p_def_const(p):
-    '''
-    def_const : constante def_const
-              | empty
-    '''
-
-def p_const_valor(p):
-    '''
-    const_valor : PALAVRA
-                | exp_mat
-    '''
-
-
-def p_def_tipos(p):
-    '''
-    def_tipos : tipo def_tipos
-              | empty
-    '''
-
-def p_def_var(p):
-    '''
-    def_var : variavel def_var
-            | empty
-    '''
-
-def p_def_rotina(p):
-    '''
-    def_rotina : rotina def_rotina
-               | empty
-    '''
-
-def p_constante(p):
-    "constante : CONST ID '=' const_valor ';'"
-
-def p_tipo(p):
-    "tipo : TYPE ID '=' tipo_dado ';'"
-
-def p_variavel(p):
-    "variavel : VAR campo ';'"
-
-def p_campo(p):
-    "campo : ID lista_id ':' tipo_dado"
-
-def p_rotina(p):
-    '''
-    rotina : FUNCTION ID param_rotina ':' tipo_dado bloco_rotina
-           | PROCEDURE ID param_rotina bloco_rotina
-    '''
-
-def p_param_rotina(p):
-    '''
-    param_rotina : '(' campos ')'
-                 | empty
-    '''
-
-def p_bloco_rotina(p):
-    'bloco_rotina : def_var bloco'
+def p_lista_com_vazia(p):
+    "LISTA_COM : "
+    p[0] = []
 
 def p_lista_com(p):
-    '''
-    lista_com : ';' comando lista_com
-              | empty
-    '''
+    "LISTA_COM : ';' COMANDO LISTA_COM"
+    p[0] = [p[2]] + p[3]
 
-def p_comando(p):
-    '''
-    comando : ID nome atribuicao
-            | WHILE exp_logica DO bloco_com
-            | IF exp_logica THEN bloco_com else
-            | FOR for DO bloco_com
-            | WRITE const_valor
-            | READ ID nome
-    '''
+def p_declaracoes(p):
+    "DECLARACOES : DEF_CONST DEF_TIPOS DEF_VAR DEF_ROTINA"
+    p[0] = ('declaracoes', p[1], p[2], p[3], p[4])
 
-def p_atribuicao(p):
-    '''
-    atribuicao : ATRIBUICAO exp
-               | empty
-    '''
+def p_def_const_vazio(p):
+    "DEF_CONST : "
+    p[0] = []
 
-def p_exp(p):
-    '''
-    exp : exp_mat
-        | exp_logica
-    '''
+def p_def_const(p):
+    "DEF_CONST : CONSTANTE DEF_CONST"
+    p[0] = [p[1]] + p[2]
 
-def p_exp_logica(p):
-    '''
-    exp_logica : param_logico op_logico exp_logica
-               | '(' param_logico op_logico exp_logica ')'
-               | param_logico
-    '''
+# Exemplo para constantes
+def p_constante(p):
+    "CONSTANTE : CONST ID '=' CONST_VALOR ';'"
+    p[0] = ('constante', p[2], p[4])
 
-def p_param_logico(p):
-    '''
-    param_logico : parametro op_comp parametro
-                 | parametro
-    '''
+def p_const_valor(p):
+    """CONST_VALOR : PALAVRA
+                   | EXP_MAT"""
+    p[0] = ('const_valor', p[1])
 
-def p_exp_mat(p):
-    '''
-    exp_mat : parametro op_mat exp_mat
-            | '(' parametro op_mat exp_mat ')'
-            | parametro
-    '''
+# Regras adicionais
 
-def p_parametro(p):
-    '''
-    parametro : ID nome
-              | NUMERO
-              | FALSE
-              | TRUE
-    '''
 
-def p_nome(p):
-    '''
-    nome : '.' ID nome
-         | '[' parametro ']'
-         | '(' lista_param ')'
-         | empty
-    '''
+# Definição de tipos
+def p_def_tipos_vazio(p):
+    "DEF_TIPOS : "
+    p[0] = []
 
-def p_lista_param(p):
-    '''
-    lista_param : parametro ',' lista_param
-                | parametro
-                | empty
-    '''
+def p_def_tipos(p):
+    "DEF_TIPOS : TIPO DEF_TIPOS"
+    p[0] = [p[1]] + p[2]
 
-def p_lista_id(p):
-    '''
-    lista_id : ',' ID lista_id
-             | empty
-    '''
-
-def p_campos(p):
-    'campos : campo lista_campos'
-
-def p_lista_campos(p):
-    '''
-    lista_campos : ';' campo lista_campos
-                 | empty
-    '''
+def p_tipo(p):
+    "TIPO : TYPE ID '=' TIPO_DADO ';'"
+    p[0] = ('tipo', p[2], p[4])
 
 def p_tipo_dado(p):
-    '''
-    tipo_dado : INTEGER
-              | REAL
-              | CHAR
-              | BOOLEAN
-              | ARRAY '[' NUMERO ']' OF tipo_dado
-              | RECORD campos END
-              | ID
-    '''
+    """TIPO_DADO : INTEGER
+                 | REAL
+                 | CHAR
+                 | BOOLEAN
+                 | ARRAY '[' NUMERO ']' OF TIPO_DADO
+                 | RECORD CAMPOS END
+                 | ID"""
+    if len(p) == 2:
+        p[0] = ('tipo_dado', p[1])
+    elif p[1] == 'array':
+        p[0] = ('array', p[3], p[6])
+    elif p[1] == 'record':
+        p[0] = ('record', p[2])
+    else:
+        p[0] = ('tipo_simples', p[1])
 
-def p_for(p):
-    "for : ID ATRIBUICAO parametro TO parametro"
+# Declaração de variáveis
+def p_def_var_vazio(p):
+    "DEF_VAR : "
+    p[0] = []
 
-def p_else(p):
-    '''
-    else : ELSE bloco_com
-         | empty
-    '''
+def p_def_var(p):
+    "DEF_VAR : VARIAVEL DEF_VAR"
+    p[0] = [p[1]] + p[2]
+
+def p_variavel(p):
+    "VARIAVEL : VAR CAMPOS ';'"
+    p[0] = ('variavel', p[2])
+
+def p_campos(p):
+    "CAMPOS : CAMPO LISTA_CAMPOS"
+    p[0] = [p[1]] + p[2]
+
+def p_lista_campos_vazio(p):
+    "LISTA_CAMPOS : "
+    p[0] = []
+
+def p_lista_campos(p):
+    "LISTA_CAMPOS : ';' CAMPO LISTA_CAMPOS"
+    p[0] = [p[2]] + p[3]
+
+def p_campo(p):
+    "CAMPO : ID LISTA_ID ':' TIPO_DADO"
+    p[0] = ('campo', [p[1]] + p[2], p[4])
+
+def p_lista_id_vazio(p):
+    "LISTA_ID : "
+    p[0] = []
+
+def p_lista_id(p):
+    "LISTA_ID : ',' ID LISTA_ID"
+    p[0] = [p[2]] + p[3]
+
+# Rotinas (funções e procedimentos)
+def p_def_rotina_vazio(p):
+    "DEF_ROTINA : "
+    p[0] = []
+
+def p_def_rotina(p):
+    "DEF_ROTINA : ROTINA DEF_ROTINA"
+    p[0] = [p[1]] + p[2]
+
+def p_rotina(p):
+    """ROTINA : FUNCTION ID PARAM_ROTINA ':' TIPO_DADO BLOCO_ROTINA
+              | PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA"""
+    if p[1] == 'function':
+        p[0] = ('function', p[2], p[3], p[5], p[6])
+    else:
+        p[0] = ('procedure', p[2], p[3], p[4])
+
+def p_param_rotina_vazio(p):
+    "PARAM_ROTINA : "
+    p[0] = []
+
+def p_param_rotina(p):
+    "PARAM_ROTINA : '(' CAMPOS ')'"
+    p[0] = ('parametros', p[2])
+
+def p_bloco_rotina(p):
+    "BLOCO_ROTINA : DEF_VAR BLOCO"
+    p[0] = ('bloco_rotina', p[1], p[2])
+
+# Comandos
+def p_comando(p):
+    """COMANDO : ID NOME atribuicao
+               | WHILE EXP_LOGICA DO bloco_com
+               | IF EXP_LOGICA THEN bloco_com alternativa_else
+               | FOR FOR_PARAMS DO bloco_com
+               | WRITE CONST_VALOR
+               | READ ID NOME"""
+    if len(p) == 4 and p[2] == 'atribuicao':
+        p[0] = ('atribuicao', p[1], p[3])
+    elif p[1] == 'while':
+        p[0] = ('while', p[2], p[4])
+    elif p[1] == 'if':
+        p[0] = ('if', p[2], p[4], p[5])
+    elif p[1] == 'for':
+        p[0] = ('for', p[2], p[4])
+    elif p[1] == 'write':
+        p[0] = ('write', p[2])
+    elif p[1] == 'read':
+        p[0] = ('read', p[2])
 
 def p_bloco_com(p):
-    '''
-    bloco_com : bloco
-              | comando
-    '''
+    """bloco_com : BLOCO
+               | COMANDO"""
 
+
+# Ajuste para atribuição
+def p_atribuicao(p):
+    "atribuicao : ATRIBUICAO EXP"
+    p[0] = ('atribuicao', p[2])
+
+# Ajuste para alternativa do ELSE
+def p_alternativa_else(p):
+    """alternativa_else : ELSE bloco_com
+                        | """
+    if len(p) > 1:
+        p[0] = ('else', p[2])
+    else:
+        p[0] = None
+
+def p_for_params(p):
+    "FOR_PARAMS : ID ATRIBUICAO PARAMETRO TO PARAMETRO"
+    p[0] = ('for_params', p[1], p[3], p[5])
+
+# Expressões
+def p_exp(p):
+    """EXP : EXP_MAT
+           | EXP_LOGICA"""
+    p[0] = p[1]
+
+def p_exp_logica(p):
+    """EXP_LOGICA : PARAM_LOGICO OP_LOGICO EXP_LOGICA
+                  | '(' PARAM_LOGICO OP_LOGICO EXP_LOGICA ')'
+                  | PARAM_LOGICO"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('logica', p[1], p[2], p[3])
+
+def p_param_logico(p):
+    """PARAM_LOGICO : PARAMETRO OP_COMP PARAMETRO
+                    | PARAMETRO"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('comparacao', p[1], p[2], p[3])
+
+def p_exp_mat(p):
+    """EXP_MAT : PARAMETRO OP_MAT EXP_MAT
+               | '(' PARAMETRO OP_MAT EXP_MAT ')'
+               | PARAMETRO"""
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('matematica', p[1], p[2], p[3])
+
+# Operadores e parâmetros
 def p_op_logico(p):
-    '''
-    op_logico : AND
-              | OR
-    '''
+    """OP_LOGICO : AND
+                 | OR"""
+    p[0] = p[1]
 
 def p_op_comp(p):
-    '''
-    op_comp : '>'
-            | '<'
-            | COMPARACAO
-    '''
+    """OP_COMP : '>'
+               | '<'
+               | COMPARACAO"""
+    p[0] = p[1]
 
 def p_op_mat(p):
-    '''
-    op_mat : '+'
-           | '-'
-           | '*'
-           | '/'
-    '''
+    """OP_MAT : '+'
+              | '-'
+              | '*'
+              | '/'"""
+    p[0] = p[1]
 
-def p_empty(p):
-    'empty :'
-    pass
+def p_parametro(p):
+    """PARAMETRO : ID
+                 | NOME
+                 | NUMERO
+                 | FALSE
+                 | TRUE"""
+    p[0] = p[1]
+
+# Nome e lista de parâmetros
+def p_nome(p):
+    """NOME : '.' ID NOME
+            | '[' PARAMETRO ']'
+            | '(' LISTA_PARAM ')'
+            | """
+    if len(p) == 1:
+        p[0] = None
+    else:
+        p[0] = ('nome', p[1], p[2])
+
+def p_lista_param(p):
+    """LISTA_PARAM : PARAMETRO ',' LISTA_PARAM
+                   | PARAMETRO"""
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1]] + p[3]
+
 
 # Tratamento de erros
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe em '{p.value}', linha {p.lineno}")
+        print(f"Erro de sintaxe próximo a '{p.value}' na linha {p.lineno}. Token inesperado: {p.type}")
+        # Recovery: Skip to the next token
     else:
         print("Erro de sintaxe no final do arquivo.")
+
 
 # Construção do parser
 parser = yacc.yacc()
 
-while True:
-   try:
-       s = input('calc > ')
-   except EOFError:
-       break
-   if not s: continue
-   result = parser.parse(s)
-   print(result)
+try:
+    with open(sys.argv[1], 'r') as file:
+        data = file.read()
+    result = parser.parse(data)
+except FileNotFoundError:
+    print(f"Erro: Arquivo '{sys.argv[1]}' não encontrado!")
+except Exception as e:
+    print(f"Erro ao analisar o arquivo: {e}")
+
+# Exemplo de uso
+# if __name__ == "__main__":
+#     while True:
+#         try:
+#             s = input("Digite o código: ")
+#         except EOFError:
+#             break
+#         if not s:
+#             continue
+#         result = parser.parse(s)
+#         print(result)

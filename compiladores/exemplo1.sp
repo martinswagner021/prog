@@ -2,8 +2,8 @@ const TAM = 10;
 type vetor = array [15] of integer;
 type aluno = record
 	nota1 : real;
-	nota2 : real
-end; 
+	nota2 : real;
+end;
 var A, B, C, D : integer;
 var E : vetor;
 var F : aluno;
