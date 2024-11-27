@@ -68,7 +68,7 @@ def p_tipo_dado(p):
                  | ID"""
     if len(p) == 2:
         p[0] = ('tipo_dado', p[1])
-    elif p[1] == 'array':
+    elif p[1] == 'array':   
         p[0] = ('array', p[3], p[6])
     elif p[1] == 'record':
         p[0] = ('record', p[2])
@@ -149,7 +149,7 @@ def p_comando(p):
                | FOR FOR_PARAMS DO bloco_com
                | WRITE CONST_VALOR
                | READ ID NOME"""
-    if len(p) == 4 and p[2] == 'atribuicao':
+    if len(p) == 4 and p[2] == 'ATRIBUICAO':
         p[0] = ('atribuicao', p[1], p[3])
     elif p[1] == 'while':
         p[0] = ('while', p[2], p[4])
@@ -201,8 +201,8 @@ def p_exp_logica(p):
         p[0] = ('logica', p[1], p[2], p[3])
 
 def p_param_logico(p):
-    """PARAM_LOGICO : PARAMETRO OP_COMP PARAMETRO
-                    | PARAMETRO"""
+    """PARAM_LOGICO : OP_COMP PARAMETRO
+                    | """
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -237,8 +237,7 @@ def p_op_mat(p):
     p[0] = p[1]
 
 def p_parametro(p):
-    """PARAMETRO : ID
-                 | NOME
+    """PARAMETRO : ID NOME
                  | NUMERO
                  | FALSE
                  | TRUE"""

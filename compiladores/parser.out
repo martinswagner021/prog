@@ -56,8 +56,8 @@ Rule 50    EXP -> EXP_LOGICA
 Rule 51    EXP_LOGICA -> PARAM_LOGICO OP_LOGICO EXP_LOGICA
 Rule 52    EXP_LOGICA -> ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
 Rule 53    EXP_LOGICA -> PARAM_LOGICO
-Rule 54    PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO
-Rule 55    PARAM_LOGICO -> PARAMETRO
+Rule 54    PARAM_LOGICO -> OP_COMP PARAMETRO
+Rule 55    PARAM_LOGICO -> <empty>
 Rule 56    EXP_MAT -> PARAMETRO OP_MAT EXP_MAT
 Rule 57    EXP_MAT -> ( PARAMETRO OP_MAT EXP_MAT )
 Rule 58    EXP_MAT -> PARAMETRO
@@ -70,27 +70,26 @@ Rule 64    OP_MAT -> +
 Rule 65    OP_MAT -> -
 Rule 66    OP_MAT -> *
 Rule 67    OP_MAT -> /
-Rule 68    PARAMETRO -> ID
-Rule 69    PARAMETRO -> NOME
-Rule 70    PARAMETRO -> NUMERO
-Rule 71    PARAMETRO -> FALSE
-Rule 72    PARAMETRO -> TRUE
-Rule 73    NOME -> . ID NOME
-Rule 74    NOME -> [ PARAMETRO ]
-Rule 75    NOME -> ( LISTA_PARAM )
-Rule 76    NOME -> <empty>
-Rule 77    LISTA_PARAM -> PARAMETRO , LISTA_PARAM
-Rule 78    LISTA_PARAM -> PARAMETRO
+Rule 68    PARAMETRO -> ID NOME
+Rule 69    PARAMETRO -> NUMERO
+Rule 70    PARAMETRO -> FALSE
+Rule 71    PARAMETRO -> TRUE
+Rule 72    NOME -> . ID NOME
+Rule 73    NOME -> [ PARAMETRO ]
+Rule 74    NOME -> ( LISTA_PARAM )
+Rule 75    NOME -> <empty>
+Rule 76    LISTA_PARAM -> PARAMETRO , LISTA_PARAM
+Rule 77    LISTA_PARAM -> PARAMETRO
 
 Terminals, with rules where they appear
 
-(                    : 35 52 57 75
-)                    : 35 52 57 75
+(                    : 35 52 57 74
+)                    : 35 52 57 74
 *                    : 66
 +                    : 64
-,                    : 29 77
+,                    : 29 76
 -                    : 65
-.                    : 73
+.                    : 72
 /                    : 67
 :                    : 27 32
 ;                    : 4 8 13 23 26
@@ -108,13 +107,13 @@ CONST                : 8
 DO                   : 38 40
 ELSE                 : 46
 END                  : 2 19
-FALSE                : 71
+FALSE                : 70
 FOR                  : 40
 FUNCTION             : 32
-ID                   : 8 13 20 27 29 32 33 37 42 48 68 73
+ID                   : 8 13 20 27 29 32 33 37 42 48 68 72
 IF                   : 39
 INTEGER              : 14
-NUMERO               : 18 70
+NUMERO               : 18 69
 OF                   : 18
 OR                   : 60
 PALAVRA              : 9
@@ -124,13 +123,13 @@ REAL                 : 15
 RECORD               : 19
 THEN                 : 39
 TO                   : 48
-TRUE                 : 72
+TRUE                 : 71
 TYPE                 : 13
 VAR                  : 23
 WHILE                : 38
 WRITE                : 41
-[                    : 18 74
-]                    : 18 74
+[                    : 18 73
+]                    : 18 73
 error                : 
 
 Nonterminals, with rules where they appear
@@ -154,12 +153,12 @@ FOR_PARAMS           : 40
 LISTA_CAMPOS         : 24 26
 LISTA_COM            : 2 4
 LISTA_ID             : 27 29
-LISTA_PARAM          : 75 77
-NOME                 : 37 42 69 73
+LISTA_PARAM          : 74 76
+NOME                 : 37 42 68 72
 OP_COMP              : 54
 OP_LOGICO            : 51 52
 OP_MAT               : 56 57
-PARAMETRO            : 48 48 54 54 55 56 57 58 74 77 78
+PARAMETRO            : 48 48 54 56 57 58 73 76 77
 PARAM_LOGICO         : 51 52 53
 PARAM_ROTINA         : 32 33
 PROGRAMA             : 0
@@ -345,15 +344,15 @@ state 13
 state 14
 
     (37) COMANDO -> ID . NOME atribuicao
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (72) NOME -> . . ID NOME
+    (73) NOME -> . [ PARAMETRO ]
+    (74) NOME -> . ( LISTA_PARAM )
+    (75) NOME -> .
 
     .               shift and go to state 29
     [               shift and go to state 30
     (               shift and go to state 31
-    ATRIBUICAO      reduce using rule 76 (NOME -> .)
+    ATRIBUICAO      reduce using rule 75 (NOME -> .)
 
     NOME                           shift and go to state 28
 
@@ -363,36 +362,23 @@ state 15
     (51) EXP_LOGICA -> . PARAM_LOGICO OP_LOGICO EXP_LOGICA
     (52) EXP_LOGICA -> . ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
     (53) EXP_LOGICA -> . PARAM_LOGICO
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
+    (61) OP_COMP -> . >
+    (62) OP_COMP -> . <
+    (63) OP_COMP -> . COMPARACAO
 
     (               shift and go to state 34
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    DO              reduce using rule 76 (NOME -> .)
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    DO              reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
     EXP_LOGICA                     shift and go to state 32
     PARAM_LOGICO                   shift and go to state 33
-    PARAMETRO                      shift and go to state 35
-    NOME                           shift and go to state 37
+    OP_COMP                        shift and go to state 35
 
 state 16
 
@@ -400,45 +386,32 @@ state 16
     (51) EXP_LOGICA -> . PARAM_LOGICO OP_LOGICO EXP_LOGICA
     (52) EXP_LOGICA -> . ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
     (53) EXP_LOGICA -> . PARAM_LOGICO
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
+    (61) OP_COMP -> . >
+    (62) OP_COMP -> . <
+    (63) OP_COMP -> . COMPARACAO
 
     (               shift and go to state 34
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    THEN            reduce using rule 76 (NOME -> .)
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    THEN            reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
-    EXP_LOGICA                     shift and go to state 41
+    EXP_LOGICA                     shift and go to state 39
     PARAM_LOGICO                   shift and go to state 33
-    PARAMETRO                      shift and go to state 35
-    NOME                           shift and go to state 37
+    OP_COMP                        shift and go to state 35
 
 state 17
 
     (40) COMANDO -> FOR . FOR_PARAMS DO bloco_com
     (48) FOR_PARAMS -> . ID ATRIBUICAO PARAMETRO TO PARAMETRO
 
-    ID              shift and go to state 43
+    ID              shift and go to state 41
 
-    FOR_PARAMS                     shift and go to state 42
+    FOR_PARAMS                     shift and go to state 40
 
 state 18
 
@@ -448,42 +421,27 @@ state 18
     (56) EXP_MAT -> . PARAMETRO OP_MAT EXP_MAT
     (57) EXP_MAT -> . ( PARAMETRO OP_MAT EXP_MAT )
     (58) EXP_MAT -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    PALAVRA         shift and go to state 45
-    (               shift and go to state 48
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
+    PALAVRA         shift and go to state 43
+    (               shift and go to state 46
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    CONST_VALOR                    shift and go to state 44
-    EXP_MAT                        shift and go to state 46
-    PARAMETRO                      shift and go to state 47
-    NOME                           shift and go to state 37
+    CONST_VALOR                    shift and go to state 42
+    EXP_MAT                        shift and go to state 44
+    PARAMETRO                      shift and go to state 45
 
 state 19
 
     (42) COMANDO -> READ . ID NOME
 
-    ID              shift and go to state 49
+    ID              shift and go to state 51
 
 
 state 20
@@ -495,11 +453,11 @@ state 20
     (33) ROTINA -> . PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA
 
     BEGIN           reduce using rule 30 (DEF_ROTINA -> .)
-    FUNCTION        shift and go to state 52
-    PROCEDURE       shift and go to state 53
+    FUNCTION        shift and go to state 54
+    PROCEDURE       shift and go to state 55
 
-    DEF_ROTINA                     shift and go to state 50
-    ROTINA                         shift and go to state 51
+    DEF_ROTINA                     shift and go to state 52
+    ROTINA                         shift and go to state 53
 
 state 21
 
@@ -514,7 +472,7 @@ state 21
     VAR             shift and go to state 22
 
     VARIAVEL                       shift and go to state 21
-    DEF_VAR                        shift and go to state 54
+    DEF_VAR                        shift and go to state 56
 
 state 22
 
@@ -522,10 +480,10 @@ state 22
     (24) CAMPOS -> . CAMPO LISTA_CAMPOS
     (27) CAMPO -> . ID LISTA_ID : TIPO_DADO
 
-    ID              shift and go to state 57
+    ID              shift and go to state 59
 
-    CAMPOS                         shift and go to state 55
-    CAMPO                          shift and go to state 56
+    CAMPOS                         shift and go to state 57
+    CAMPO                          shift and go to state 58
 
 state 23
 
@@ -541,7 +499,7 @@ state 24
 
     (13) TIPO -> TYPE ID . = TIPO_DADO ;
 
-    =               shift and go to state 58
+    =               shift and go to state 60
 
 
 state 25
@@ -552,40 +510,27 @@ state 25
     (56) EXP_MAT -> . PARAMETRO OP_MAT EXP_MAT
     (57) EXP_MAT -> . ( PARAMETRO OP_MAT EXP_MAT )
     (58) EXP_MAT -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    PALAVRA         shift and go to state 45
-    (               shift and go to state 48
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
+    PALAVRA         shift and go to state 43
+    (               shift and go to state 46
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    CONST_VALOR                    shift and go to state 59
-    EXP_MAT                        shift and go to state 46
-    PARAMETRO                      shift and go to state 47
-    NOME                           shift and go to state 37
+    CONST_VALOR                    shift and go to state 61
+    EXP_MAT                        shift and go to state 44
+    PARAMETRO                      shift and go to state 45
 
 state 26
 
     (2) BLOCO -> BEGIN COMANDO LISTA_COM . END
 
-    END             shift and go to state 60
+    END             shift and go to state 62
 
 
 state 27
@@ -605,83 +550,62 @@ state 27
     WRITE           shift and go to state 18
     READ            shift and go to state 19
 
-    COMANDO                        shift and go to state 61
+    COMANDO                        shift and go to state 63
 
 state 28
 
     (37) COMANDO -> ID NOME . atribuicao
     (45) atribuicao -> . ATRIBUICAO EXP
 
-    ATRIBUICAO      shift and go to state 63
+    ATRIBUICAO      shift and go to state 65
 
-    atribuicao                     shift and go to state 62
+    atribuicao                     shift and go to state 64
 
 state 29
 
-    (73) NOME -> . . ID NOME
+    (72) NOME -> . . ID NOME
 
-    ID              shift and go to state 64
+    ID              shift and go to state 66
 
 
 state 30
 
-    (74) NOME -> [ . PARAMETRO ]
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (73) NOME -> [ . PARAMETRO ]
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ]               reduce using rule 76 (NOME -> .)
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    PARAMETRO                      shift and go to state 65
-    NOME                           shift and go to state 37
+    PARAMETRO                      shift and go to state 67
 
 state 31
 
-    (75) NOME -> ( . LISTA_PARAM )
-    (77) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
-    (78) LISTA_PARAM -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (74) NOME -> ( . LISTA_PARAM )
+    (76) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
+    (77) LISTA_PARAM -> . PARAMETRO
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ,               reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    LISTA_PARAM                    shift and go to state 66
-    PARAMETRO                      shift and go to state 67
-    NOME                           shift and go to state 37
+    LISTA_PARAM                    shift and go to state 68
+    PARAMETRO                      shift and go to state 69
 
 state 32
 
     (38) COMANDO -> WHILE EXP_LOGICA . DO bloco_com
 
-    DO              shift and go to state 68
+    DO              shift and go to state 70
 
 
 state 33
@@ -697,213 +621,96 @@ state 33
     END             reduce using rule 53 (EXP_LOGICA -> PARAM_LOGICO .)
     ELSE            reduce using rule 53 (EXP_LOGICA -> PARAM_LOGICO .)
     )               reduce using rule 53 (EXP_LOGICA -> PARAM_LOGICO .)
-    AND             shift and go to state 70
-    OR              shift and go to state 71
+    AND             shift and go to state 72
+    OR              shift and go to state 73
 
-    OP_LOGICO                      shift and go to state 69
+    OP_LOGICO                      shift and go to state 71
 
 state 34
 
     (52) EXP_LOGICA -> ( . PARAM_LOGICO OP_LOGICO EXP_LOGICA )
-    (75) NOME -> ( . LISTA_PARAM )
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (77) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
-    (78) LISTA_PARAM -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
-
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ,               reduce using rule 76 (NOME -> .)
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
-
-    PARAM_LOGICO                   shift and go to state 72
-    LISTA_PARAM                    shift and go to state 66
-    PARAMETRO                      shift and go to state 73
-    NOME                           shift and go to state 37
-
-state 35
-
-    (54) PARAM_LOGICO -> PARAMETRO . OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> PARAMETRO .
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
     (61) OP_COMP -> . >
     (62) OP_COMP -> . <
     (63) OP_COMP -> . COMPARACAO
 
-    AND             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    OR              reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    DO              reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    THEN            reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ;               reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    END             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ELSE            reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    )               reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    >               shift and go to state 75
-    <               shift and go to state 76
-    COMPARACAO      shift and go to state 77
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
-    OP_COMP                        shift and go to state 74
+    PARAM_LOGICO                   shift and go to state 74
+    OP_COMP                        shift and go to state 35
+
+state 35
+
+    (54) PARAM_LOGICO -> OP_COMP . PARAMETRO
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
+
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
+
+    PARAMETRO                      shift and go to state 75
 
 state 36
 
-    (68) PARAMETRO -> ID .
+    (61) OP_COMP -> > .
 
-    >               reduce using rule 68 (PARAMETRO -> ID .)
-    <               reduce using rule 68 (PARAMETRO -> ID .)
-    COMPARACAO      reduce using rule 68 (PARAMETRO -> ID .)
-    AND             reduce using rule 68 (PARAMETRO -> ID .)
-    OR              reduce using rule 68 (PARAMETRO -> ID .)
-    DO              reduce using rule 68 (PARAMETRO -> ID .)
-    THEN            reduce using rule 68 (PARAMETRO -> ID .)
-    +               reduce using rule 68 (PARAMETRO -> ID .)
-    -               reduce using rule 68 (PARAMETRO -> ID .)
-    *               reduce using rule 68 (PARAMETRO -> ID .)
-    /               reduce using rule 68 (PARAMETRO -> ID .)
-    ;               reduce using rule 68 (PARAMETRO -> ID .)
-    END             reduce using rule 68 (PARAMETRO -> ID .)
-    ELSE            reduce using rule 68 (PARAMETRO -> ID .)
-    ]               reduce using rule 68 (PARAMETRO -> ID .)
-    ,               reduce using rule 68 (PARAMETRO -> ID .)
-    )               reduce using rule 68 (PARAMETRO -> ID .)
-    TO              reduce using rule 68 (PARAMETRO -> ID .)
+    ID              reduce using rule 61 (OP_COMP -> > .)
+    NUMERO          reduce using rule 61 (OP_COMP -> > .)
+    FALSE           reduce using rule 61 (OP_COMP -> > .)
+    TRUE            reduce using rule 61 (OP_COMP -> > .)
 
 
 state 37
 
-    (69) PARAMETRO -> NOME .
+    (62) OP_COMP -> < .
 
-    >               reduce using rule 69 (PARAMETRO -> NOME .)
-    <               reduce using rule 69 (PARAMETRO -> NOME .)
-    COMPARACAO      reduce using rule 69 (PARAMETRO -> NOME .)
-    AND             reduce using rule 69 (PARAMETRO -> NOME .)
-    OR              reduce using rule 69 (PARAMETRO -> NOME .)
-    DO              reduce using rule 69 (PARAMETRO -> NOME .)
-    THEN            reduce using rule 69 (PARAMETRO -> NOME .)
-    +               reduce using rule 69 (PARAMETRO -> NOME .)
-    -               reduce using rule 69 (PARAMETRO -> NOME .)
-    *               reduce using rule 69 (PARAMETRO -> NOME .)
-    /               reduce using rule 69 (PARAMETRO -> NOME .)
-    ;               reduce using rule 69 (PARAMETRO -> NOME .)
-    END             reduce using rule 69 (PARAMETRO -> NOME .)
-    ELSE            reduce using rule 69 (PARAMETRO -> NOME .)
-    ]               reduce using rule 69 (PARAMETRO -> NOME .)
-    ,               reduce using rule 69 (PARAMETRO -> NOME .)
-    )               reduce using rule 69 (PARAMETRO -> NOME .)
-    TO              reduce using rule 69 (PARAMETRO -> NOME .)
+    ID              reduce using rule 62 (OP_COMP -> < .)
+    NUMERO          reduce using rule 62 (OP_COMP -> < .)
+    FALSE           reduce using rule 62 (OP_COMP -> < .)
+    TRUE            reduce using rule 62 (OP_COMP -> < .)
 
 
 state 38
 
-    (70) PARAMETRO -> NUMERO .
+    (63) OP_COMP -> COMPARACAO .
 
-    >               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    <               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    COMPARACAO      reduce using rule 70 (PARAMETRO -> NUMERO .)
-    AND             reduce using rule 70 (PARAMETRO -> NUMERO .)
-    OR              reduce using rule 70 (PARAMETRO -> NUMERO .)
-    DO              reduce using rule 70 (PARAMETRO -> NUMERO .)
-    THEN            reduce using rule 70 (PARAMETRO -> NUMERO .)
-    +               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    -               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    *               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    /               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    ;               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    END             reduce using rule 70 (PARAMETRO -> NUMERO .)
-    ELSE            reduce using rule 70 (PARAMETRO -> NUMERO .)
-    ]               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    ,               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    )               reduce using rule 70 (PARAMETRO -> NUMERO .)
-    TO              reduce using rule 70 (PARAMETRO -> NUMERO .)
+    ID              reduce using rule 63 (OP_COMP -> COMPARACAO .)
+    NUMERO          reduce using rule 63 (OP_COMP -> COMPARACAO .)
+    FALSE           reduce using rule 63 (OP_COMP -> COMPARACAO .)
+    TRUE            reduce using rule 63 (OP_COMP -> COMPARACAO .)
 
 
 state 39
 
-    (71) PARAMETRO -> FALSE .
+    (39) COMANDO -> IF EXP_LOGICA . THEN bloco_com alternativa_else
 
-    >               reduce using rule 71 (PARAMETRO -> FALSE .)
-    <               reduce using rule 71 (PARAMETRO -> FALSE .)
-    COMPARACAO      reduce using rule 71 (PARAMETRO -> FALSE .)
-    AND             reduce using rule 71 (PARAMETRO -> FALSE .)
-    OR              reduce using rule 71 (PARAMETRO -> FALSE .)
-    DO              reduce using rule 71 (PARAMETRO -> FALSE .)
-    THEN            reduce using rule 71 (PARAMETRO -> FALSE .)
-    +               reduce using rule 71 (PARAMETRO -> FALSE .)
-    -               reduce using rule 71 (PARAMETRO -> FALSE .)
-    *               reduce using rule 71 (PARAMETRO -> FALSE .)
-    /               reduce using rule 71 (PARAMETRO -> FALSE .)
-    ;               reduce using rule 71 (PARAMETRO -> FALSE .)
-    END             reduce using rule 71 (PARAMETRO -> FALSE .)
-    ELSE            reduce using rule 71 (PARAMETRO -> FALSE .)
-    ]               reduce using rule 71 (PARAMETRO -> FALSE .)
-    ,               reduce using rule 71 (PARAMETRO -> FALSE .)
-    )               reduce using rule 71 (PARAMETRO -> FALSE .)
-    TO              reduce using rule 71 (PARAMETRO -> FALSE .)
+    THEN            shift and go to state 76
 
 
 state 40
 
-    (72) PARAMETRO -> TRUE .
+    (40) COMANDO -> FOR FOR_PARAMS . DO bloco_com
 
-    >               reduce using rule 72 (PARAMETRO -> TRUE .)
-    <               reduce using rule 72 (PARAMETRO -> TRUE .)
-    COMPARACAO      reduce using rule 72 (PARAMETRO -> TRUE .)
-    AND             reduce using rule 72 (PARAMETRO -> TRUE .)
-    OR              reduce using rule 72 (PARAMETRO -> TRUE .)
-    DO              reduce using rule 72 (PARAMETRO -> TRUE .)
-    THEN            reduce using rule 72 (PARAMETRO -> TRUE .)
-    +               reduce using rule 72 (PARAMETRO -> TRUE .)
-    -               reduce using rule 72 (PARAMETRO -> TRUE .)
-    *               reduce using rule 72 (PARAMETRO -> TRUE .)
-    /               reduce using rule 72 (PARAMETRO -> TRUE .)
-    ;               reduce using rule 72 (PARAMETRO -> TRUE .)
-    END             reduce using rule 72 (PARAMETRO -> TRUE .)
-    ELSE            reduce using rule 72 (PARAMETRO -> TRUE .)
-    ]               reduce using rule 72 (PARAMETRO -> TRUE .)
-    ,               reduce using rule 72 (PARAMETRO -> TRUE .)
-    )               reduce using rule 72 (PARAMETRO -> TRUE .)
-    TO              reduce using rule 72 (PARAMETRO -> TRUE .)
+    DO              shift and go to state 77
 
 
 state 41
 
-    (39) COMANDO -> IF EXP_LOGICA . THEN bloco_com alternativa_else
+    (48) FOR_PARAMS -> ID . ATRIBUICAO PARAMETRO TO PARAMETRO
 
-    THEN            shift and go to state 78
+    ATRIBUICAO      shift and go to state 78
 
 
 state 42
-
-    (40) COMANDO -> FOR FOR_PARAMS . DO bloco_com
-
-    DO              shift and go to state 79
-
-
-state 43
-
-    (48) FOR_PARAMS -> ID . ATRIBUICAO PARAMETRO TO PARAMETRO
-
-    ATRIBUICAO      shift and go to state 80
-
-
-state 44
 
     (41) COMANDO -> WRITE CONST_VALOR .
 
@@ -912,7 +719,7 @@ state 44
     ELSE            reduce using rule 41 (COMANDO -> WRITE CONST_VALOR .)
 
 
-state 45
+state 43
 
     (9) CONST_VALOR -> PALAVRA .
 
@@ -921,7 +728,7 @@ state 45
     ELSE            reduce using rule 9 (CONST_VALOR -> PALAVRA .)
 
 
-state 46
+state 44
 
     (10) CONST_VALOR -> EXP_MAT .
 
@@ -930,7 +737,7 @@ state 46
     ELSE            reduce using rule 10 (CONST_VALOR -> EXP_MAT .)
 
 
-state 47
+state 45
 
     (56) EXP_MAT -> PARAMETRO . OP_MAT EXP_MAT
     (58) EXP_MAT -> PARAMETRO .
@@ -943,72 +750,145 @@ state 47
     END             reduce using rule 58 (EXP_MAT -> PARAMETRO .)
     ELSE            reduce using rule 58 (EXP_MAT -> PARAMETRO .)
     )               reduce using rule 58 (EXP_MAT -> PARAMETRO .)
-    +               shift and go to state 82
-    -               shift and go to state 83
-    *               shift and go to state 84
-    /               shift and go to state 85
+    +               shift and go to state 80
+    -               shift and go to state 81
+    *               shift and go to state 82
+    /               shift and go to state 83
 
-    OP_MAT                         shift and go to state 81
+    OP_MAT                         shift and go to state 79
+
+state 46
+
+    (57) EXP_MAT -> ( . PARAMETRO OP_MAT EXP_MAT )
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
+
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
+
+    PARAMETRO                      shift and go to state 84
+
+state 47
+
+    (68) PARAMETRO -> ID . NOME
+    (72) NOME -> . . ID NOME
+    (73) NOME -> . [ PARAMETRO ]
+    (74) NOME -> . ( LISTA_PARAM )
+    (75) NOME -> .
+
+    .               shift and go to state 29
+    [               shift and go to state 30
+    (               shift and go to state 31
+    +               reduce using rule 75 (NOME -> .)
+    -               reduce using rule 75 (NOME -> .)
+    *               reduce using rule 75 (NOME -> .)
+    /               reduce using rule 75 (NOME -> .)
+    ;               reduce using rule 75 (NOME -> .)
+    END             reduce using rule 75 (NOME -> .)
+    ELSE            reduce using rule 75 (NOME -> .)
+    ]               reduce using rule 75 (NOME -> .)
+    ,               reduce using rule 75 (NOME -> .)
+    )               reduce using rule 75 (NOME -> .)
+    AND             reduce using rule 75 (NOME -> .)
+    OR              reduce using rule 75 (NOME -> .)
+    DO              reduce using rule 75 (NOME -> .)
+    THEN            reduce using rule 75 (NOME -> .)
+    TO              reduce using rule 75 (NOME -> .)
+
+    NOME                           shift and go to state 85
 
 state 48
 
-    (57) EXP_MAT -> ( . PARAMETRO OP_MAT EXP_MAT )
-    (75) NOME -> ( . LISTA_PARAM )
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (77) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
-    (78) LISTA_PARAM -> . PARAMETRO
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (69) PARAMETRO -> NUMERO .
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ,               reduce using rule 76 (NOME -> .)
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    +               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    -               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    *               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    /               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    ;               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    END             reduce using rule 69 (PARAMETRO -> NUMERO .)
+    ELSE            reduce using rule 69 (PARAMETRO -> NUMERO .)
+    ]               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    ,               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    )               reduce using rule 69 (PARAMETRO -> NUMERO .)
+    AND             reduce using rule 69 (PARAMETRO -> NUMERO .)
+    OR              reduce using rule 69 (PARAMETRO -> NUMERO .)
+    DO              reduce using rule 69 (PARAMETRO -> NUMERO .)
+    THEN            reduce using rule 69 (PARAMETRO -> NUMERO .)
+    TO              reduce using rule 69 (PARAMETRO -> NUMERO .)
 
-    PARAMETRO                      shift and go to state 86
-    LISTA_PARAM                    shift and go to state 66
-    NOME                           shift and go to state 37
 
 state 49
 
+    (70) PARAMETRO -> FALSE .
+
+    +               reduce using rule 70 (PARAMETRO -> FALSE .)
+    -               reduce using rule 70 (PARAMETRO -> FALSE .)
+    *               reduce using rule 70 (PARAMETRO -> FALSE .)
+    /               reduce using rule 70 (PARAMETRO -> FALSE .)
+    ;               reduce using rule 70 (PARAMETRO -> FALSE .)
+    END             reduce using rule 70 (PARAMETRO -> FALSE .)
+    ELSE            reduce using rule 70 (PARAMETRO -> FALSE .)
+    ]               reduce using rule 70 (PARAMETRO -> FALSE .)
+    ,               reduce using rule 70 (PARAMETRO -> FALSE .)
+    )               reduce using rule 70 (PARAMETRO -> FALSE .)
+    AND             reduce using rule 70 (PARAMETRO -> FALSE .)
+    OR              reduce using rule 70 (PARAMETRO -> FALSE .)
+    DO              reduce using rule 70 (PARAMETRO -> FALSE .)
+    THEN            reduce using rule 70 (PARAMETRO -> FALSE .)
+    TO              reduce using rule 70 (PARAMETRO -> FALSE .)
+
+
+state 50
+
+    (71) PARAMETRO -> TRUE .
+
+    +               reduce using rule 71 (PARAMETRO -> TRUE .)
+    -               reduce using rule 71 (PARAMETRO -> TRUE .)
+    *               reduce using rule 71 (PARAMETRO -> TRUE .)
+    /               reduce using rule 71 (PARAMETRO -> TRUE .)
+    ;               reduce using rule 71 (PARAMETRO -> TRUE .)
+    END             reduce using rule 71 (PARAMETRO -> TRUE .)
+    ELSE            reduce using rule 71 (PARAMETRO -> TRUE .)
+    ]               reduce using rule 71 (PARAMETRO -> TRUE .)
+    ,               reduce using rule 71 (PARAMETRO -> TRUE .)
+    )               reduce using rule 71 (PARAMETRO -> TRUE .)
+    AND             reduce using rule 71 (PARAMETRO -> TRUE .)
+    OR              reduce using rule 71 (PARAMETRO -> TRUE .)
+    DO              reduce using rule 71 (PARAMETRO -> TRUE .)
+    THEN            reduce using rule 71 (PARAMETRO -> TRUE .)
+    TO              reduce using rule 71 (PARAMETRO -> TRUE .)
+
+
+state 51
+
     (42) COMANDO -> READ ID . NOME
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (72) NOME -> . . ID NOME
+    (73) NOME -> . [ PARAMETRO ]
+    (74) NOME -> . ( LISTA_PARAM )
+    (75) NOME -> .
 
     .               shift and go to state 29
     [               shift and go to state 30
     (               shift and go to state 31
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
+    ;               reduce using rule 75 (NOME -> .)
+    END             reduce using rule 75 (NOME -> .)
+    ELSE            reduce using rule 75 (NOME -> .)
 
-    NOME                           shift and go to state 87
+    NOME                           shift and go to state 86
 
-state 50
+state 52
 
     (5) DECLARACOES -> DEF_CONST DEF_TIPOS DEF_VAR DEF_ROTINA .
 
     BEGIN           reduce using rule 5 (DECLARACOES -> DEF_CONST DEF_TIPOS DEF_VAR DEF_ROTINA .)
 
 
-state 51
+state 53
 
     (31) DEF_ROTINA -> ROTINA . DEF_ROTINA
     (30) DEF_ROTINA -> .
@@ -1017,27 +897,27 @@ state 51
     (33) ROTINA -> . PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA
 
     BEGIN           reduce using rule 30 (DEF_ROTINA -> .)
-    FUNCTION        shift and go to state 52
-    PROCEDURE       shift and go to state 53
+    FUNCTION        shift and go to state 54
+    PROCEDURE       shift and go to state 55
 
-    ROTINA                         shift and go to state 51
-    DEF_ROTINA                     shift and go to state 88
+    ROTINA                         shift and go to state 53
+    DEF_ROTINA                     shift and go to state 87
 
-state 52
+state 54
 
     (32) ROTINA -> FUNCTION . ID PARAM_ROTINA : TIPO_DADO BLOCO_ROTINA
+
+    ID              shift and go to state 88
+
+
+state 55
+
+    (33) ROTINA -> PROCEDURE . ID PARAM_ROTINA BLOCO_ROTINA
 
     ID              shift and go to state 89
 
 
-state 53
-
-    (33) ROTINA -> PROCEDURE . ID PARAM_ROTINA BLOCO_ROTINA
-
-    ID              shift and go to state 90
-
-
-state 54
+state 56
 
     (22) DEF_VAR -> VARIAVEL DEF_VAR .
 
@@ -1046,14 +926,14 @@ state 54
     BEGIN           reduce using rule 22 (DEF_VAR -> VARIAVEL DEF_VAR .)
 
 
-state 55
+state 57
 
     (23) VARIAVEL -> VAR CAMPOS . ;
 
-    ;               shift and go to state 91
+    ;               shift and go to state 90
 
 
-state 56
+state 58
 
     (24) CAMPOS -> CAMPO . LISTA_CAMPOS
     (25) LISTA_CAMPOS -> .
@@ -1062,24 +942,24 @@ state 56
   ! shift/reduce conflict for ; resolved as shift
     END             reduce using rule 25 (LISTA_CAMPOS -> .)
     )               reduce using rule 25 (LISTA_CAMPOS -> .)
-    ;               shift and go to state 93
+    ;               shift and go to state 92
 
   ! ;               [ reduce using rule 25 (LISTA_CAMPOS -> .) ]
 
-    LISTA_CAMPOS                   shift and go to state 92
+    LISTA_CAMPOS                   shift and go to state 91
 
-state 57
+state 59
 
     (27) CAMPO -> ID . LISTA_ID : TIPO_DADO
     (28) LISTA_ID -> .
     (29) LISTA_ID -> . , ID LISTA_ID
 
     :               reduce using rule 28 (LISTA_ID -> .)
-    ,               shift and go to state 95
+    ,               shift and go to state 94
 
-    LISTA_ID                       shift and go to state 94
+    LISTA_ID                       shift and go to state 93
 
-state 58
+state 60
 
     (13) TIPO -> TYPE ID = . TIPO_DADO ;
     (14) TIPO_DADO -> . INTEGER
@@ -1090,24 +970,24 @@ state 58
     (19) TIPO_DADO -> . RECORD CAMPOS END
     (20) TIPO_DADO -> . ID
 
-    INTEGER         shift and go to state 98
-    REAL            shift and go to state 99
-    CHAR            shift and go to state 100
-    BOOLEAN         shift and go to state 101
-    ARRAY           shift and go to state 102
-    RECORD          shift and go to state 103
-    ID              shift and go to state 96
+    INTEGER         shift and go to state 97
+    REAL            shift and go to state 98
+    CHAR            shift and go to state 99
+    BOOLEAN         shift and go to state 100
+    ARRAY           shift and go to state 101
+    RECORD          shift and go to state 102
+    ID              shift and go to state 95
 
-    TIPO_DADO                      shift and go to state 97
+    TIPO_DADO                      shift and go to state 96
 
-state 59
+state 61
 
     (8) CONSTANTE -> CONST ID = CONST_VALOR . ;
 
-    ;               shift and go to state 104
+    ;               shift and go to state 103
 
 
-state 60
+state 62
 
     (2) BLOCO -> BEGIN COMANDO LISTA_COM END .
 
@@ -1120,7 +1000,7 @@ state 60
     BEGIN           reduce using rule 2 (BLOCO -> BEGIN COMANDO LISTA_COM END .)
 
 
-state 61
+state 63
 
     (4) LISTA_COM -> ; COMANDO . LISTA_COM
     (3) LISTA_COM -> .
@@ -1129,9 +1009,9 @@ state 61
     END             reduce using rule 3 (LISTA_COM -> .)
     ;               shift and go to state 27
 
-    LISTA_COM                      shift and go to state 105
+    LISTA_COM                      shift and go to state 104
 
-state 62
+state 64
 
     (37) COMANDO -> ID NOME atribuicao .
 
@@ -1140,7 +1020,7 @@ state 62
     ELSE            reduce using rule 37 (COMANDO -> ID NOME atribuicao .)
 
 
-state 63
+state 65
 
     (45) atribuicao -> ATRIBUICAO . EXP
     (49) EXP -> . EXP_MAT
@@ -1151,102 +1031,91 @@ state 63
     (51) EXP_LOGICA -> . PARAM_LOGICO OP_LOGICO EXP_LOGICA
     (52) EXP_LOGICA -> . ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
     (53) EXP_LOGICA -> . PARAM_LOGICO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
+    (61) OP_COMP -> . >
+    (62) OP_COMP -> . <
+    (63) OP_COMP -> . COMPARACAO
 
-    (               shift and go to state 110
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
+    (               shift and go to state 108
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    ;               reduce using rule 55 (PARAM_LOGICO -> .)
+    END             reduce using rule 55 (PARAM_LOGICO -> .)
+    ELSE            reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
-    EXP                            shift and go to state 106
-    EXP_MAT                        shift and go to state 107
-    EXP_LOGICA                     shift and go to state 108
-    PARAMETRO                      shift and go to state 109
+    EXP                            shift and go to state 105
+    EXP_MAT                        shift and go to state 106
+    EXP_LOGICA                     shift and go to state 107
+    PARAMETRO                      shift and go to state 45
     PARAM_LOGICO                   shift and go to state 33
-    NOME                           shift and go to state 37
+    OP_COMP                        shift and go to state 35
 
-state 64
+state 66
 
-    (73) NOME -> . ID . NOME
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (72) NOME -> . ID . NOME
+    (72) NOME -> . . ID NOME
+    (73) NOME -> . [ PARAMETRO ]
+    (74) NOME -> . ( LISTA_PARAM )
+    (75) NOME -> .
 
     .               shift and go to state 29
     [               shift and go to state 30
     (               shift and go to state 31
-    ATRIBUICAO      reduce using rule 76 (NOME -> .)
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    DO              reduce using rule 76 (NOME -> .)
-    THEN            reduce using rule 76 (NOME -> .)
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
-    ]               reduce using rule 76 (NOME -> .)
-    ,               reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
-    TO              reduce using rule 76 (NOME -> .)
+    ATRIBUICAO      reduce using rule 75 (NOME -> .)
+    +               reduce using rule 75 (NOME -> .)
+    -               reduce using rule 75 (NOME -> .)
+    *               reduce using rule 75 (NOME -> .)
+    /               reduce using rule 75 (NOME -> .)
+    ;               reduce using rule 75 (NOME -> .)
+    END             reduce using rule 75 (NOME -> .)
+    ELSE            reduce using rule 75 (NOME -> .)
+    ]               reduce using rule 75 (NOME -> .)
+    ,               reduce using rule 75 (NOME -> .)
+    )               reduce using rule 75 (NOME -> .)
+    AND             reduce using rule 75 (NOME -> .)
+    OR              reduce using rule 75 (NOME -> .)
+    DO              reduce using rule 75 (NOME -> .)
+    THEN            reduce using rule 75 (NOME -> .)
+    TO              reduce using rule 75 (NOME -> .)
 
-    NOME                           shift and go to state 111
-
-state 65
-
-    (74) NOME -> [ PARAMETRO . ]
-
-    ]               shift and go to state 112
-
-
-state 66
-
-    (75) NOME -> ( LISTA_PARAM . )
-
-    )               shift and go to state 113
-
+    NOME                           shift and go to state 109
 
 state 67
 
-    (77) LISTA_PARAM -> PARAMETRO . , LISTA_PARAM
-    (78) LISTA_PARAM -> PARAMETRO .
+    (73) NOME -> [ PARAMETRO . ]
 
-    ,               shift and go to state 114
-    )               reduce using rule 78 (LISTA_PARAM -> PARAMETRO .)
+    ]               shift and go to state 110
 
 
 state 68
+
+    (74) NOME -> ( LISTA_PARAM . )
+
+    )               shift and go to state 111
+
+
+state 69
+
+    (76) LISTA_PARAM -> PARAMETRO . , LISTA_PARAM
+    (77) LISTA_PARAM -> PARAMETRO .
+
+    ,               shift and go to state 112
+    )               reduce using rule 77 (LISTA_PARAM -> PARAMETRO .)
+
+
+state 70
 
     (38) COMANDO -> WHILE EXP_LOGICA DO . bloco_com
     (43) bloco_com -> . BLOCO
@@ -1267,68 +1136,49 @@ state 68
     WRITE           shift and go to state 18
     READ            shift and go to state 19
 
-    bloco_com                      shift and go to state 115
-    BLOCO                          shift and go to state 116
-    COMANDO                        shift and go to state 117
+    bloco_com                      shift and go to state 113
+    BLOCO                          shift and go to state 114
+    COMANDO                        shift and go to state 115
 
-state 69
+state 71
 
     (51) EXP_LOGICA -> PARAM_LOGICO OP_LOGICO . EXP_LOGICA
     (51) EXP_LOGICA -> . PARAM_LOGICO OP_LOGICO EXP_LOGICA
     (52) EXP_LOGICA -> . ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
     (53) EXP_LOGICA -> . PARAM_LOGICO
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
+    (61) OP_COMP -> . >
+    (62) OP_COMP -> . <
+    (63) OP_COMP -> . COMPARACAO
 
     (               shift and go to state 34
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    DO              reduce using rule 76 (NOME -> .)
-    THEN            reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    DO              reduce using rule 55 (PARAM_LOGICO -> .)
+    THEN            reduce using rule 55 (PARAM_LOGICO -> .)
+    ;               reduce using rule 55 (PARAM_LOGICO -> .)
+    END             reduce using rule 55 (PARAM_LOGICO -> .)
+    ELSE            reduce using rule 55 (PARAM_LOGICO -> .)
+    )               reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
     PARAM_LOGICO                   shift and go to state 33
-    EXP_LOGICA                     shift and go to state 118
-    PARAMETRO                      shift and go to state 35
-    NOME                           shift and go to state 37
+    EXP_LOGICA                     shift and go to state 116
+    OP_COMP                        shift and go to state 35
 
-state 70
+state 72
 
     (59) OP_LOGICO -> AND .
 
     (               reduce using rule 59 (OP_LOGICO -> AND .)
-    ID              reduce using rule 59 (OP_LOGICO -> AND .)
-    NUMERO          reduce using rule 59 (OP_LOGICO -> AND .)
-    FALSE           reduce using rule 59 (OP_LOGICO -> AND .)
-    TRUE            reduce using rule 59 (OP_LOGICO -> AND .)
-    .               reduce using rule 59 (OP_LOGICO -> AND .)
-    [               reduce using rule 59 (OP_LOGICO -> AND .)
-    AND             reduce using rule 59 (OP_LOGICO -> AND .)
-    OR              reduce using rule 59 (OP_LOGICO -> AND .)
     >               reduce using rule 59 (OP_LOGICO -> AND .)
     <               reduce using rule 59 (OP_LOGICO -> AND .)
     COMPARACAO      reduce using rule 59 (OP_LOGICO -> AND .)
+    AND             reduce using rule 59 (OP_LOGICO -> AND .)
+    OR              reduce using rule 59 (OP_LOGICO -> AND .)
     DO              reduce using rule 59 (OP_LOGICO -> AND .)
     THEN            reduce using rule 59 (OP_LOGICO -> AND .)
     ;               reduce using rule 59 (OP_LOGICO -> AND .)
@@ -1337,22 +1187,16 @@ state 70
     )               reduce using rule 59 (OP_LOGICO -> AND .)
 
 
-state 71
+state 73
 
     (60) OP_LOGICO -> OR .
 
     (               reduce using rule 60 (OP_LOGICO -> OR .)
-    ID              reduce using rule 60 (OP_LOGICO -> OR .)
-    NUMERO          reduce using rule 60 (OP_LOGICO -> OR .)
-    FALSE           reduce using rule 60 (OP_LOGICO -> OR .)
-    TRUE            reduce using rule 60 (OP_LOGICO -> OR .)
-    .               reduce using rule 60 (OP_LOGICO -> OR .)
-    [               reduce using rule 60 (OP_LOGICO -> OR .)
-    AND             reduce using rule 60 (OP_LOGICO -> OR .)
-    OR              reduce using rule 60 (OP_LOGICO -> OR .)
     >               reduce using rule 60 (OP_LOGICO -> OR .)
     <               reduce using rule 60 (OP_LOGICO -> OR .)
     COMPARACAO      reduce using rule 60 (OP_LOGICO -> OR .)
+    AND             reduce using rule 60 (OP_LOGICO -> OR .)
+    OR              reduce using rule 60 (OP_LOGICO -> OR .)
     DO              reduce using rule 60 (OP_LOGICO -> OR .)
     THEN            reduce using rule 60 (OP_LOGICO -> OR .)
     ;               reduce using rule 60 (OP_LOGICO -> OR .)
@@ -1361,133 +1205,32 @@ state 71
     )               reduce using rule 60 (OP_LOGICO -> OR .)
 
 
-state 72
+state 74
 
     (52) EXP_LOGICA -> ( PARAM_LOGICO . OP_LOGICO EXP_LOGICA )
     (59) OP_LOGICO -> . AND
     (60) OP_LOGICO -> . OR
 
-    AND             shift and go to state 70
-    OR              shift and go to state 71
+    AND             shift and go to state 72
+    OR              shift and go to state 73
 
-    OP_LOGICO                      shift and go to state 119
-
-state 73
-
-    (54) PARAM_LOGICO -> PARAMETRO . OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> PARAMETRO .
-    (77) LISTA_PARAM -> PARAMETRO . , LISTA_PARAM
-    (78) LISTA_PARAM -> PARAMETRO .
-    (61) OP_COMP -> . >
-    (62) OP_COMP -> . <
-    (63) OP_COMP -> . COMPARACAO
-
-    AND             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    OR              reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ,               shift and go to state 114
-    )               reduce using rule 78 (LISTA_PARAM -> PARAMETRO .)
-    >               shift and go to state 75
-    <               shift and go to state 76
-    COMPARACAO      shift and go to state 77
-
-    OP_COMP                        shift and go to state 74
-
-state 74
-
-    (54) PARAM_LOGICO -> PARAMETRO OP_COMP . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
-
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    DO              reduce using rule 76 (NOME -> .)
-    THEN            reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
-
-    PARAMETRO                      shift and go to state 120
-    NOME                           shift and go to state 37
+    OP_LOGICO                      shift and go to state 117
 
 state 75
 
-    (61) OP_COMP -> > .
+    (54) PARAM_LOGICO -> OP_COMP PARAMETRO .
 
-    ID              reduce using rule 61 (OP_COMP -> > .)
-    NUMERO          reduce using rule 61 (OP_COMP -> > .)
-    FALSE           reduce using rule 61 (OP_COMP -> > .)
-    TRUE            reduce using rule 61 (OP_COMP -> > .)
-    .               reduce using rule 61 (OP_COMP -> > .)
-    [               reduce using rule 61 (OP_COMP -> > .)
-    (               reduce using rule 61 (OP_COMP -> > .)
-    AND             reduce using rule 61 (OP_COMP -> > .)
-    OR              reduce using rule 61 (OP_COMP -> > .)
-    DO              reduce using rule 61 (OP_COMP -> > .)
-    THEN            reduce using rule 61 (OP_COMP -> > .)
-    ;               reduce using rule 61 (OP_COMP -> > .)
-    END             reduce using rule 61 (OP_COMP -> > .)
-    ELSE            reduce using rule 61 (OP_COMP -> > .)
-    )               reduce using rule 61 (OP_COMP -> > .)
+    AND             reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    OR              reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    DO              reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    THEN            reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    ;               reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    END             reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    ELSE            reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
+    )               reduce using rule 54 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
 
 
 state 76
-
-    (62) OP_COMP -> < .
-
-    ID              reduce using rule 62 (OP_COMP -> < .)
-    NUMERO          reduce using rule 62 (OP_COMP -> < .)
-    FALSE           reduce using rule 62 (OP_COMP -> < .)
-    TRUE            reduce using rule 62 (OP_COMP -> < .)
-    .               reduce using rule 62 (OP_COMP -> < .)
-    [               reduce using rule 62 (OP_COMP -> < .)
-    (               reduce using rule 62 (OP_COMP -> < .)
-    AND             reduce using rule 62 (OP_COMP -> < .)
-    OR              reduce using rule 62 (OP_COMP -> < .)
-    DO              reduce using rule 62 (OP_COMP -> < .)
-    THEN            reduce using rule 62 (OP_COMP -> < .)
-    ;               reduce using rule 62 (OP_COMP -> < .)
-    END             reduce using rule 62 (OP_COMP -> < .)
-    ELSE            reduce using rule 62 (OP_COMP -> < .)
-    )               reduce using rule 62 (OP_COMP -> < .)
-
-
-state 77
-
-    (63) OP_COMP -> COMPARACAO .
-
-    ID              reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    NUMERO          reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    FALSE           reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    TRUE            reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    .               reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    [               reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    (               reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    AND             reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    OR              reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    DO              reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    THEN            reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    ;               reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    END             reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    ELSE            reduce using rule 63 (OP_COMP -> COMPARACAO .)
-    )               reduce using rule 63 (OP_COMP -> COMPARACAO .)
-
-
-state 78
 
     (39) COMANDO -> IF EXP_LOGICA THEN . bloco_com alternativa_else
     (43) bloco_com -> . BLOCO
@@ -1508,11 +1251,11 @@ state 78
     WRITE           shift and go to state 18
     READ            shift and go to state 19
 
-    bloco_com                      shift and go to state 121
-    BLOCO                          shift and go to state 116
-    COMANDO                        shift and go to state 117
+    bloco_com                      shift and go to state 118
+    BLOCO                          shift and go to state 114
+    COMANDO                        shift and go to state 115
 
-state 79
+state 77
 
     (40) COMANDO -> FOR FOR_PARAMS DO . bloco_com
     (43) bloco_com -> . BLOCO
@@ -1533,72 +1276,46 @@ state 79
     WRITE           shift and go to state 18
     READ            shift and go to state 19
 
-    bloco_com                      shift and go to state 122
-    BLOCO                          shift and go to state 116
-    COMANDO                        shift and go to state 117
+    bloco_com                      shift and go to state 119
+    BLOCO                          shift and go to state 114
+    COMANDO                        shift and go to state 115
 
-state 80
+state 78
 
     (48) FOR_PARAMS -> ID ATRIBUICAO . PARAMETRO TO PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    TO              reduce using rule 76 (NOME -> .)
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    PARAMETRO                      shift and go to state 123
-    NOME                           shift and go to state 37
+    PARAMETRO                      shift and go to state 120
 
-state 81
+state 79
 
     (56) EXP_MAT -> PARAMETRO OP_MAT . EXP_MAT
     (56) EXP_MAT -> . PARAMETRO OP_MAT EXP_MAT
     (57) EXP_MAT -> . ( PARAMETRO OP_MAT EXP_MAT )
     (58) EXP_MAT -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    (               shift and go to state 48
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    ;               reduce using rule 76 (NOME -> .)
-    END             reduce using rule 76 (NOME -> .)
-    ELSE            reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    (               shift and go to state 46
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    PARAMETRO                      shift and go to state 47
-    EXP_MAT                        shift and go to state 124
-    NOME                           shift and go to state 37
+    PARAMETRO                      shift and go to state 45
+    EXP_MAT                        shift and go to state 121
 
-state 82
+state 80
 
     (64) OP_MAT -> + .
 
@@ -1607,19 +1324,9 @@ state 82
     NUMERO          reduce using rule 64 (OP_MAT -> + .)
     FALSE           reduce using rule 64 (OP_MAT -> + .)
     TRUE            reduce using rule 64 (OP_MAT -> + .)
-    .               reduce using rule 64 (OP_MAT -> + .)
-    [               reduce using rule 64 (OP_MAT -> + .)
-    +               reduce using rule 64 (OP_MAT -> + .)
-    -               reduce using rule 64 (OP_MAT -> + .)
-    *               reduce using rule 64 (OP_MAT -> + .)
-    /               reduce using rule 64 (OP_MAT -> + .)
-    ;               reduce using rule 64 (OP_MAT -> + .)
-    END             reduce using rule 64 (OP_MAT -> + .)
-    ELSE            reduce using rule 64 (OP_MAT -> + .)
-    )               reduce using rule 64 (OP_MAT -> + .)
 
 
-state 83
+state 81
 
     (65) OP_MAT -> - .
 
@@ -1628,19 +1335,9 @@ state 83
     NUMERO          reduce using rule 65 (OP_MAT -> - .)
     FALSE           reduce using rule 65 (OP_MAT -> - .)
     TRUE            reduce using rule 65 (OP_MAT -> - .)
-    .               reduce using rule 65 (OP_MAT -> - .)
-    [               reduce using rule 65 (OP_MAT -> - .)
-    +               reduce using rule 65 (OP_MAT -> - .)
-    -               reduce using rule 65 (OP_MAT -> - .)
-    *               reduce using rule 65 (OP_MAT -> - .)
-    /               reduce using rule 65 (OP_MAT -> - .)
-    ;               reduce using rule 65 (OP_MAT -> - .)
-    END             reduce using rule 65 (OP_MAT -> - .)
-    ELSE            reduce using rule 65 (OP_MAT -> - .)
-    )               reduce using rule 65 (OP_MAT -> - .)
 
 
-state 84
+state 82
 
     (66) OP_MAT -> * .
 
@@ -1649,19 +1346,9 @@ state 84
     NUMERO          reduce using rule 66 (OP_MAT -> * .)
     FALSE           reduce using rule 66 (OP_MAT -> * .)
     TRUE            reduce using rule 66 (OP_MAT -> * .)
-    .               reduce using rule 66 (OP_MAT -> * .)
-    [               reduce using rule 66 (OP_MAT -> * .)
-    +               reduce using rule 66 (OP_MAT -> * .)
-    -               reduce using rule 66 (OP_MAT -> * .)
-    *               reduce using rule 66 (OP_MAT -> * .)
-    /               reduce using rule 66 (OP_MAT -> * .)
-    ;               reduce using rule 66 (OP_MAT -> * .)
-    END             reduce using rule 66 (OP_MAT -> * .)
-    ELSE            reduce using rule 66 (OP_MAT -> * .)
-    )               reduce using rule 66 (OP_MAT -> * .)
 
 
-state 85
+state 83
 
     (67) OP_MAT -> / .
 
@@ -1670,38 +1357,45 @@ state 85
     NUMERO          reduce using rule 67 (OP_MAT -> / .)
     FALSE           reduce using rule 67 (OP_MAT -> / .)
     TRUE            reduce using rule 67 (OP_MAT -> / .)
-    .               reduce using rule 67 (OP_MAT -> / .)
-    [               reduce using rule 67 (OP_MAT -> / .)
-    +               reduce using rule 67 (OP_MAT -> / .)
-    -               reduce using rule 67 (OP_MAT -> / .)
-    *               reduce using rule 67 (OP_MAT -> / .)
-    /               reduce using rule 67 (OP_MAT -> / .)
-    ;               reduce using rule 67 (OP_MAT -> / .)
-    END             reduce using rule 67 (OP_MAT -> / .)
-    ELSE            reduce using rule 67 (OP_MAT -> / .)
-    )               reduce using rule 67 (OP_MAT -> / .)
 
 
-state 86
+state 84
 
     (57) EXP_MAT -> ( PARAMETRO . OP_MAT EXP_MAT )
-    (77) LISTA_PARAM -> PARAMETRO . , LISTA_PARAM
-    (78) LISTA_PARAM -> PARAMETRO .
     (64) OP_MAT -> . +
     (65) OP_MAT -> . -
     (66) OP_MAT -> . *
     (67) OP_MAT -> . /
 
-    ,               shift and go to state 114
-    )               reduce using rule 78 (LISTA_PARAM -> PARAMETRO .)
-    +               shift and go to state 82
-    -               shift and go to state 83
-    *               shift and go to state 84
-    /               shift and go to state 85
+    +               shift and go to state 80
+    -               shift and go to state 81
+    *               shift and go to state 82
+    /               shift and go to state 83
 
-    OP_MAT                         shift and go to state 125
+    OP_MAT                         shift and go to state 122
 
-state 87
+state 85
+
+    (68) PARAMETRO -> ID NOME .
+
+    +               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    -               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    *               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    /               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    ;               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    END             reduce using rule 68 (PARAMETRO -> ID NOME .)
+    ELSE            reduce using rule 68 (PARAMETRO -> ID NOME .)
+    ]               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    ,               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    )               reduce using rule 68 (PARAMETRO -> ID NOME .)
+    AND             reduce using rule 68 (PARAMETRO -> ID NOME .)
+    OR              reduce using rule 68 (PARAMETRO -> ID NOME .)
+    DO              reduce using rule 68 (PARAMETRO -> ID NOME .)
+    THEN            reduce using rule 68 (PARAMETRO -> ID NOME .)
+    TO              reduce using rule 68 (PARAMETRO -> ID NOME .)
+
+
+state 86
 
     (42) COMANDO -> READ ID NOME .
 
@@ -1710,25 +1404,25 @@ state 87
     ELSE            reduce using rule 42 (COMANDO -> READ ID NOME .)
 
 
-state 88
+state 87
 
     (31) DEF_ROTINA -> ROTINA DEF_ROTINA .
 
     BEGIN           reduce using rule 31 (DEF_ROTINA -> ROTINA DEF_ROTINA .)
 
 
-state 89
+state 88
 
     (32) ROTINA -> FUNCTION ID . PARAM_ROTINA : TIPO_DADO BLOCO_ROTINA
     (34) PARAM_ROTINA -> .
     (35) PARAM_ROTINA -> . ( CAMPOS )
 
     :               reduce using rule 34 (PARAM_ROTINA -> .)
-    (               shift and go to state 127
+    (               shift and go to state 124
 
-    PARAM_ROTINA                   shift and go to state 126
+    PARAM_ROTINA                   shift and go to state 123
 
-state 90
+state 89
 
     (33) ROTINA -> PROCEDURE ID . PARAM_ROTINA BLOCO_ROTINA
     (34) PARAM_ROTINA -> .
@@ -1736,11 +1430,11 @@ state 90
 
     VAR             reduce using rule 34 (PARAM_ROTINA -> .)
     BEGIN           reduce using rule 34 (PARAM_ROTINA -> .)
-    (               shift and go to state 127
+    (               shift and go to state 124
 
-    PARAM_ROTINA                   shift and go to state 128
+    PARAM_ROTINA                   shift and go to state 125
 
-state 91
+state 90
 
     (23) VARIAVEL -> VAR CAMPOS ; .
 
@@ -1750,7 +1444,7 @@ state 91
     BEGIN           reduce using rule 23 (VARIAVEL -> VAR CAMPOS ; .)
 
 
-state 92
+state 91
 
     (24) CAMPOS -> CAMPO LISTA_CAMPOS .
 
@@ -1759,30 +1453,30 @@ state 92
     )               reduce using rule 24 (CAMPOS -> CAMPO LISTA_CAMPOS .)
 
 
-state 93
+state 92
 
     (26) LISTA_CAMPOS -> ; . CAMPO LISTA_CAMPOS
     (27) CAMPO -> . ID LISTA_ID : TIPO_DADO
 
-    ID              shift and go to state 57
+    ID              shift and go to state 59
 
-    CAMPO                          shift and go to state 129
+    CAMPO                          shift and go to state 126
 
-state 94
+state 93
 
     (27) CAMPO -> ID LISTA_ID . : TIPO_DADO
 
-    :               shift and go to state 130
+    :               shift and go to state 127
 
 
-state 95
+state 94
 
     (29) LISTA_ID -> , . ID LISTA_ID
 
-    ID              shift and go to state 131
+    ID              shift and go to state 128
 
 
-state 96
+state 95
 
     (20) TIPO_DADO -> ID .
 
@@ -1793,14 +1487,14 @@ state 96
     BEGIN           reduce using rule 20 (TIPO_DADO -> ID .)
 
 
-state 97
+state 96
 
     (13) TIPO -> TYPE ID = TIPO_DADO . ;
 
-    ;               shift and go to state 132
+    ;               shift and go to state 129
 
 
-state 98
+state 97
 
     (14) TIPO_DADO -> INTEGER .
 
@@ -1811,7 +1505,7 @@ state 98
     BEGIN           reduce using rule 14 (TIPO_DADO -> INTEGER .)
 
 
-state 99
+state 98
 
     (15) TIPO_DADO -> REAL .
 
@@ -1822,7 +1516,7 @@ state 99
     BEGIN           reduce using rule 15 (TIPO_DADO -> REAL .)
 
 
-state 100
+state 99
 
     (16) TIPO_DADO -> CHAR .
 
@@ -1833,7 +1527,7 @@ state 100
     BEGIN           reduce using rule 16 (TIPO_DADO -> CHAR .)
 
 
-state 101
+state 100
 
     (17) TIPO_DADO -> BOOLEAN .
 
@@ -1844,25 +1538,25 @@ state 101
     BEGIN           reduce using rule 17 (TIPO_DADO -> BOOLEAN .)
 
 
-state 102
+state 101
 
     (18) TIPO_DADO -> ARRAY . [ NUMERO ] OF TIPO_DADO
 
-    [               shift and go to state 133
+    [               shift and go to state 130
 
 
-state 103
+state 102
 
     (19) TIPO_DADO -> RECORD . CAMPOS END
     (24) CAMPOS -> . CAMPO LISTA_CAMPOS
     (27) CAMPO -> . ID LISTA_ID : TIPO_DADO
 
-    ID              shift and go to state 57
+    ID              shift and go to state 59
 
-    CAMPOS                         shift and go to state 134
-    CAMPO                          shift and go to state 56
+    CAMPOS                         shift and go to state 131
+    CAMPO                          shift and go to state 58
 
-state 104
+state 103
 
     (8) CONSTANTE -> CONST ID = CONST_VALOR ; .
 
@@ -1874,14 +1568,14 @@ state 104
     BEGIN           reduce using rule 8 (CONSTANTE -> CONST ID = CONST_VALOR ; .)
 
 
-state 105
+state 104
 
     (4) LISTA_COM -> ; COMANDO LISTA_COM .
 
     END             reduce using rule 4 (LISTA_COM -> ; COMANDO LISTA_COM .)
 
 
-state 106
+state 105
 
     (45) atribuicao -> ATRIBUICAO EXP .
 
@@ -1890,7 +1584,7 @@ state 106
     ELSE            reduce using rule 45 (atribuicao -> ATRIBUICAO EXP .)
 
 
-state 107
+state 106
 
     (49) EXP -> EXP_MAT .
 
@@ -1899,7 +1593,7 @@ state 107
     ELSE            reduce using rule 49 (EXP -> EXP_MAT .)
 
 
-state 108
+state 107
 
     (50) EXP -> EXP_LOGICA .
 
@@ -1908,191 +1602,119 @@ state 108
     ELSE            reduce using rule 50 (EXP -> EXP_LOGICA .)
 
 
-state 109
+state 108
 
-    (56) EXP_MAT -> PARAMETRO . OP_MAT EXP_MAT
-    (58) EXP_MAT -> PARAMETRO .
-    (54) PARAM_LOGICO -> PARAMETRO . OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> PARAMETRO .
-    (64) OP_MAT -> . +
-    (65) OP_MAT -> . -
-    (66) OP_MAT -> . *
-    (67) OP_MAT -> . /
+    (57) EXP_MAT -> ( . PARAMETRO OP_MAT EXP_MAT )
+    (52) EXP_LOGICA -> ( . PARAM_LOGICO OP_LOGICO EXP_LOGICA )
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
     (61) OP_COMP -> . >
     (62) OP_COMP -> . <
     (63) OP_COMP -> . COMPARACAO
 
-  ! reduce/reduce conflict for ; resolved using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-  ! reduce/reduce conflict for END resolved using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-  ! reduce/reduce conflict for ELSE resolved using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    AND             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    OR              reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ;               reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    END             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ELSE            reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    +               shift and go to state 82
-    -               shift and go to state 83
-    *               shift and go to state 84
-    /               shift and go to state 85
-    >               shift and go to state 75
-    <               shift and go to state 76
-    COMPARACAO      shift and go to state 77
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
-  ! ;               [ reduce using rule 58 (EXP_MAT -> PARAMETRO .) ]
-  ! END             [ reduce using rule 58 (EXP_MAT -> PARAMETRO .) ]
-  ! ELSE            [ reduce using rule 58 (EXP_MAT -> PARAMETRO .) ]
+    PARAMETRO                      shift and go to state 84
+    PARAM_LOGICO                   shift and go to state 74
+    OP_COMP                        shift and go to state 35
 
-    OP_MAT                         shift and go to state 81
-    OP_COMP                        shift and go to state 74
+state 109
+
+    (72) NOME -> . ID NOME .
+
+    ATRIBUICAO      reduce using rule 72 (NOME -> . ID NOME .)
+    +               reduce using rule 72 (NOME -> . ID NOME .)
+    -               reduce using rule 72 (NOME -> . ID NOME .)
+    *               reduce using rule 72 (NOME -> . ID NOME .)
+    /               reduce using rule 72 (NOME -> . ID NOME .)
+    ;               reduce using rule 72 (NOME -> . ID NOME .)
+    END             reduce using rule 72 (NOME -> . ID NOME .)
+    ELSE            reduce using rule 72 (NOME -> . ID NOME .)
+    ]               reduce using rule 72 (NOME -> . ID NOME .)
+    ,               reduce using rule 72 (NOME -> . ID NOME .)
+    )               reduce using rule 72 (NOME -> . ID NOME .)
+    AND             reduce using rule 72 (NOME -> . ID NOME .)
+    OR              reduce using rule 72 (NOME -> . ID NOME .)
+    DO              reduce using rule 72 (NOME -> . ID NOME .)
+    THEN            reduce using rule 72 (NOME -> . ID NOME .)
+    TO              reduce using rule 72 (NOME -> . ID NOME .)
+
 
 state 110
 
-    (57) EXP_MAT -> ( . PARAMETRO OP_MAT EXP_MAT )
-    (52) EXP_LOGICA -> ( . PARAM_LOGICO OP_LOGICO EXP_LOGICA )
-    (75) NOME -> ( . LISTA_PARAM )
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (77) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
-    (78) LISTA_PARAM -> . PARAMETRO
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (73) NOME -> [ PARAMETRO ] .
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ,               reduce using rule 76 (NOME -> .)
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    ATRIBUICAO      reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    +               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    -               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    *               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    /               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    ;               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    END             reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    ELSE            reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    ]               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    ,               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    )               reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    AND             reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    OR              reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    DO              reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    THEN            reduce using rule 73 (NOME -> [ PARAMETRO ] .)
+    TO              reduce using rule 73 (NOME -> [ PARAMETRO ] .)
 
-    PARAMETRO                      shift and go to state 135
-    PARAM_LOGICO                   shift and go to state 72
-    LISTA_PARAM                    shift and go to state 66
-    NOME                           shift and go to state 37
 
 state 111
 
-    (73) NOME -> . ID NOME .
+    (74) NOME -> ( LISTA_PARAM ) .
 
-    ATRIBUICAO      reduce using rule 73 (NOME -> . ID NOME .)
-    >               reduce using rule 73 (NOME -> . ID NOME .)
-    <               reduce using rule 73 (NOME -> . ID NOME .)
-    COMPARACAO      reduce using rule 73 (NOME -> . ID NOME .)
-    AND             reduce using rule 73 (NOME -> . ID NOME .)
-    OR              reduce using rule 73 (NOME -> . ID NOME .)
-    DO              reduce using rule 73 (NOME -> . ID NOME .)
-    THEN            reduce using rule 73 (NOME -> . ID NOME .)
-    +               reduce using rule 73 (NOME -> . ID NOME .)
-    -               reduce using rule 73 (NOME -> . ID NOME .)
-    *               reduce using rule 73 (NOME -> . ID NOME .)
-    /               reduce using rule 73 (NOME -> . ID NOME .)
-    ;               reduce using rule 73 (NOME -> . ID NOME .)
-    END             reduce using rule 73 (NOME -> . ID NOME .)
-    ELSE            reduce using rule 73 (NOME -> . ID NOME .)
-    ]               reduce using rule 73 (NOME -> . ID NOME .)
-    ,               reduce using rule 73 (NOME -> . ID NOME .)
-    )               reduce using rule 73 (NOME -> . ID NOME .)
-    TO              reduce using rule 73 (NOME -> . ID NOME .)
+    ATRIBUICAO      reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    +               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    -               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    *               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    /               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    ;               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    END             reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    ELSE            reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    ]               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    ,               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    )               reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    AND             reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    OR              reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    DO              reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    THEN            reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
+    TO              reduce using rule 74 (NOME -> ( LISTA_PARAM ) .)
 
 
 state 112
 
-    (74) NOME -> [ PARAMETRO ] .
+    (76) LISTA_PARAM -> PARAMETRO , . LISTA_PARAM
+    (76) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
+    (77) LISTA_PARAM -> . PARAMETRO
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    ATRIBUICAO      reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    >               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    <               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    COMPARACAO      reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    AND             reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    OR              reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    DO              reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    THEN            reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    +               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    -               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    *               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    /               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    ;               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    END             reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    ELSE            reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    ]               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    ,               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    )               reduce using rule 74 (NOME -> [ PARAMETRO ] .)
-    TO              reduce using rule 74 (NOME -> [ PARAMETRO ] .)
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
+    PARAMETRO                      shift and go to state 69
+    LISTA_PARAM                    shift and go to state 132
 
 state 113
-
-    (75) NOME -> ( LISTA_PARAM ) .
-
-    ATRIBUICAO      reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    >               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    <               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    COMPARACAO      reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    AND             reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    OR              reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    DO              reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    THEN            reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    +               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    -               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    *               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    /               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    ;               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    END             reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    ELSE            reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    ]               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    ,               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    )               reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-    TO              reduce using rule 75 (NOME -> ( LISTA_PARAM ) .)
-
-
-state 114
-
-    (77) LISTA_PARAM -> PARAMETRO , . LISTA_PARAM
-    (77) LISTA_PARAM -> . PARAMETRO , LISTA_PARAM
-    (78) LISTA_PARAM -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
-
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    ,               reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
-
-    PARAMETRO                      shift and go to state 67
-    LISTA_PARAM                    shift and go to state 136
-    NOME                           shift and go to state 37
-
-state 115
 
     (38) COMANDO -> WHILE EXP_LOGICA DO bloco_com .
 
@@ -2101,7 +1723,7 @@ state 115
     ELSE            reduce using rule 38 (COMANDO -> WHILE EXP_LOGICA DO bloco_com .)
 
 
-state 116
+state 114
 
     (43) bloco_com -> BLOCO .
 
@@ -2110,7 +1732,7 @@ state 116
     ELSE            reduce using rule 43 (bloco_com -> BLOCO .)
 
 
-state 117
+state 115
 
     (44) bloco_com -> COMANDO .
 
@@ -2119,7 +1741,7 @@ state 117
     ELSE            reduce using rule 44 (bloco_com -> COMANDO .)
 
 
-state 118
+state 116
 
     (51) EXP_LOGICA -> PARAM_LOGICO OP_LOGICO EXP_LOGICA .
 
@@ -2131,73 +1753,46 @@ state 118
     )               reduce using rule 51 (EXP_LOGICA -> PARAM_LOGICO OP_LOGICO EXP_LOGICA .)
 
 
-state 119
+state 117
 
     (52) EXP_LOGICA -> ( PARAM_LOGICO OP_LOGICO . EXP_LOGICA )
     (51) EXP_LOGICA -> . PARAM_LOGICO OP_LOGICO EXP_LOGICA
     (52) EXP_LOGICA -> . ( PARAM_LOGICO OP_LOGICO EXP_LOGICA )
     (53) EXP_LOGICA -> . PARAM_LOGICO
-    (54) PARAM_LOGICO -> . PARAMETRO OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (54) PARAM_LOGICO -> . OP_COMP PARAMETRO
+    (55) PARAM_LOGICO -> .
+    (61) OP_COMP -> . >
+    (62) OP_COMP -> . <
+    (63) OP_COMP -> . COMPARACAO
 
     (               shift and go to state 34
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    >               reduce using rule 76 (NOME -> .)
-    <               reduce using rule 76 (NOME -> .)
-    COMPARACAO      reduce using rule 76 (NOME -> .)
-    AND             reduce using rule 76 (NOME -> .)
-    OR              reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    AND             reduce using rule 55 (PARAM_LOGICO -> .)
+    OR              reduce using rule 55 (PARAM_LOGICO -> .)
+    )               reduce using rule 55 (PARAM_LOGICO -> .)
+    >               shift and go to state 36
+    <               shift and go to state 37
+    COMPARACAO      shift and go to state 38
 
     PARAM_LOGICO                   shift and go to state 33
-    EXP_LOGICA                     shift and go to state 137
-    PARAMETRO                      shift and go to state 35
-    NOME                           shift and go to state 37
+    EXP_LOGICA                     shift and go to state 133
+    OP_COMP                        shift and go to state 35
 
-state 120
-
-    (54) PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .
-
-    AND             reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    OR              reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    DO              reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    THEN            reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    ;               reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    END             reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    ELSE            reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-    )               reduce using rule 54 (PARAM_LOGICO -> PARAMETRO OP_COMP PARAMETRO .)
-
-
-state 121
+state 118
 
     (39) COMANDO -> IF EXP_LOGICA THEN bloco_com . alternativa_else
     (46) alternativa_else -> . ELSE bloco_com
     (47) alternativa_else -> .
 
   ! shift/reduce conflict for ELSE resolved as shift
-    ELSE            shift and go to state 139
+    ELSE            shift and go to state 135
     ;               reduce using rule 47 (alternativa_else -> .)
     END             reduce using rule 47 (alternativa_else -> .)
 
   ! ELSE            [ reduce using rule 47 (alternativa_else -> .) ]
 
-    alternativa_else               shift and go to state 138
+    alternativa_else               shift and go to state 134
 
-state 122
+state 119
 
     (40) COMANDO -> FOR FOR_PARAMS DO bloco_com .
 
@@ -2206,14 +1801,14 @@ state 122
     ELSE            reduce using rule 40 (COMANDO -> FOR FOR_PARAMS DO bloco_com .)
 
 
-state 123
+state 120
 
     (48) FOR_PARAMS -> ID ATRIBUICAO PARAMETRO . TO PARAMETRO
 
-    TO              shift and go to state 140
+    TO              shift and go to state 136
 
 
-state 124
+state 121
 
     (56) EXP_MAT -> PARAMETRO OP_MAT EXP_MAT .
 
@@ -2223,58 +1818,45 @@ state 124
     )               reduce using rule 56 (EXP_MAT -> PARAMETRO OP_MAT EXP_MAT .)
 
 
-state 125
+state 122
 
     (57) EXP_MAT -> ( PARAMETRO OP_MAT . EXP_MAT )
     (56) EXP_MAT -> . PARAMETRO OP_MAT EXP_MAT
     (57) EXP_MAT -> . ( PARAMETRO OP_MAT EXP_MAT )
     (58) EXP_MAT -> . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    (               shift and go to state 48
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    +               reduce using rule 76 (NOME -> .)
-    -               reduce using rule 76 (NOME -> .)
-    *               reduce using rule 76 (NOME -> .)
-    /               reduce using rule 76 (NOME -> .)
-    )               reduce using rule 76 (NOME -> .)
+    (               shift and go to state 46
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    PARAMETRO                      shift and go to state 47
-    EXP_MAT                        shift and go to state 141
-    NOME                           shift and go to state 37
+    PARAMETRO                      shift and go to state 45
+    EXP_MAT                        shift and go to state 137
 
-state 126
+state 123
 
     (32) ROTINA -> FUNCTION ID PARAM_ROTINA . : TIPO_DADO BLOCO_ROTINA
 
-    :               shift and go to state 142
+    :               shift and go to state 138
 
 
-state 127
+state 124
 
     (35) PARAM_ROTINA -> ( . CAMPOS )
     (24) CAMPOS -> . CAMPO LISTA_CAMPOS
     (27) CAMPO -> . ID LISTA_ID : TIPO_DADO
 
-    ID              shift and go to state 57
+    ID              shift and go to state 59
 
-    CAMPOS                         shift and go to state 143
-    CAMPO                          shift and go to state 56
+    CAMPOS                         shift and go to state 139
+    CAMPO                          shift and go to state 58
 
-state 128
+state 125
 
     (33) ROTINA -> PROCEDURE ID PARAM_ROTINA . BLOCO_ROTINA
     (36) BLOCO_ROTINA -> . DEF_VAR BLOCO
@@ -2285,11 +1867,11 @@ state 128
     BEGIN           reduce using rule 21 (DEF_VAR -> .)
     VAR             shift and go to state 22
 
-    BLOCO_ROTINA                   shift and go to state 144
-    DEF_VAR                        shift and go to state 145
+    BLOCO_ROTINA                   shift and go to state 140
+    DEF_VAR                        shift and go to state 141
     VARIAVEL                       shift and go to state 21
 
-state 129
+state 126
 
     (26) LISTA_CAMPOS -> ; CAMPO . LISTA_CAMPOS
     (25) LISTA_CAMPOS -> .
@@ -2298,13 +1880,13 @@ state 129
   ! shift/reduce conflict for ; resolved as shift
     END             reduce using rule 25 (LISTA_CAMPOS -> .)
     )               reduce using rule 25 (LISTA_CAMPOS -> .)
-    ;               shift and go to state 93
+    ;               shift and go to state 92
 
   ! ;               [ reduce using rule 25 (LISTA_CAMPOS -> .) ]
 
-    LISTA_CAMPOS                   shift and go to state 146
+    LISTA_CAMPOS                   shift and go to state 142
 
-state 130
+state 127
 
     (27) CAMPO -> ID LISTA_ID : . TIPO_DADO
     (14) TIPO_DADO -> . INTEGER
@@ -2315,28 +1897,28 @@ state 130
     (19) TIPO_DADO -> . RECORD CAMPOS END
     (20) TIPO_DADO -> . ID
 
-    INTEGER         shift and go to state 98
-    REAL            shift and go to state 99
-    CHAR            shift and go to state 100
-    BOOLEAN         shift and go to state 101
-    ARRAY           shift and go to state 102
-    RECORD          shift and go to state 103
-    ID              shift and go to state 96
+    INTEGER         shift and go to state 97
+    REAL            shift and go to state 98
+    CHAR            shift and go to state 99
+    BOOLEAN         shift and go to state 100
+    ARRAY           shift and go to state 101
+    RECORD          shift and go to state 102
+    ID              shift and go to state 95
 
-    TIPO_DADO                      shift and go to state 147
+    TIPO_DADO                      shift and go to state 143
 
-state 131
+state 128
 
     (29) LISTA_ID -> , ID . LISTA_ID
     (28) LISTA_ID -> .
     (29) LISTA_ID -> . , ID LISTA_ID
 
     :               reduce using rule 28 (LISTA_ID -> .)
-    ,               shift and go to state 95
+    ,               shift and go to state 94
 
-    LISTA_ID                       shift and go to state 148
+    LISTA_ID                       shift and go to state 144
 
-state 132
+state 129
 
     (13) TIPO -> TYPE ID = TIPO_DADO ; .
 
@@ -2347,65 +1929,35 @@ state 132
     BEGIN           reduce using rule 13 (TIPO -> TYPE ID = TIPO_DADO ; .)
 
 
-state 133
+state 130
 
     (18) TIPO_DADO -> ARRAY [ . NUMERO ] OF TIPO_DADO
 
-    NUMERO          shift and go to state 149
+    NUMERO          shift and go to state 145
 
 
-state 134
+state 131
 
     (19) TIPO_DADO -> RECORD CAMPOS . END
 
-    END             shift and go to state 150
+    END             shift and go to state 146
 
 
-state 135
+state 132
 
-    (57) EXP_MAT -> ( PARAMETRO . OP_MAT EXP_MAT )
-    (54) PARAM_LOGICO -> PARAMETRO . OP_COMP PARAMETRO
-    (55) PARAM_LOGICO -> PARAMETRO .
-    (77) LISTA_PARAM -> PARAMETRO . , LISTA_PARAM
-    (78) LISTA_PARAM -> PARAMETRO .
-    (64) OP_MAT -> . +
-    (65) OP_MAT -> . -
-    (66) OP_MAT -> . *
-    (67) OP_MAT -> . /
-    (61) OP_COMP -> . >
-    (62) OP_COMP -> . <
-    (63) OP_COMP -> . COMPARACAO
+    (76) LISTA_PARAM -> PARAMETRO , LISTA_PARAM .
 
-    AND             reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    OR              reduce using rule 55 (PARAM_LOGICO -> PARAMETRO .)
-    ,               shift and go to state 114
-    )               reduce using rule 78 (LISTA_PARAM -> PARAMETRO .)
-    +               shift and go to state 82
-    -               shift and go to state 83
-    *               shift and go to state 84
-    /               shift and go to state 85
-    >               shift and go to state 75
-    <               shift and go to state 76
-    COMPARACAO      shift and go to state 77
-
-    OP_MAT                         shift and go to state 125
-    OP_COMP                        shift and go to state 74
-
-state 136
-
-    (77) LISTA_PARAM -> PARAMETRO , LISTA_PARAM .
-
-    )               reduce using rule 77 (LISTA_PARAM -> PARAMETRO , LISTA_PARAM .)
+    )               reduce using rule 76 (LISTA_PARAM -> PARAMETRO , LISTA_PARAM .)
 
 
-state 137
+state 133
 
     (52) EXP_LOGICA -> ( PARAM_LOGICO OP_LOGICO EXP_LOGICA . )
 
-    )               shift and go to state 151
+    )               shift and go to state 147
 
 
-state 138
+state 134
 
     (39) COMANDO -> IF EXP_LOGICA THEN bloco_com alternativa_else .
 
@@ -2414,7 +1966,7 @@ state 138
     ELSE            reduce using rule 39 (COMANDO -> IF EXP_LOGICA THEN bloco_com alternativa_else .)
 
 
-state 139
+state 135
 
     (46) alternativa_else -> ELSE . bloco_com
     (43) bloco_com -> . BLOCO
@@ -2435,43 +1987,33 @@ state 139
     WRITE           shift and go to state 18
     READ            shift and go to state 19
 
-    bloco_com                      shift and go to state 152
-    BLOCO                          shift and go to state 116
-    COMANDO                        shift and go to state 117
+    bloco_com                      shift and go to state 148
+    BLOCO                          shift and go to state 114
+    COMANDO                        shift and go to state 115
 
-state 140
+state 136
 
     (48) FOR_PARAMS -> ID ATRIBUICAO PARAMETRO TO . PARAMETRO
-    (68) PARAMETRO -> . ID
-    (69) PARAMETRO -> . NOME
-    (70) PARAMETRO -> . NUMERO
-    (71) PARAMETRO -> . FALSE
-    (72) PARAMETRO -> . TRUE
-    (73) NOME -> . . ID NOME
-    (74) NOME -> . [ PARAMETRO ]
-    (75) NOME -> . ( LISTA_PARAM )
-    (76) NOME -> .
+    (68) PARAMETRO -> . ID NOME
+    (69) PARAMETRO -> . NUMERO
+    (70) PARAMETRO -> . FALSE
+    (71) PARAMETRO -> . TRUE
 
-    ID              shift and go to state 36
-    NUMERO          shift and go to state 38
-    FALSE           shift and go to state 39
-    TRUE            shift and go to state 40
-    .               shift and go to state 29
-    [               shift and go to state 30
-    (               shift and go to state 31
-    DO              reduce using rule 76 (NOME -> .)
+    ID              shift and go to state 47
+    NUMERO          shift and go to state 48
+    FALSE           shift and go to state 49
+    TRUE            shift and go to state 50
 
-    PARAMETRO                      shift and go to state 153
-    NOME                           shift and go to state 37
+    PARAMETRO                      shift and go to state 149
 
-state 141
+state 137
 
     (57) EXP_MAT -> ( PARAMETRO OP_MAT EXP_MAT . )
 
-    )               shift and go to state 154
+    )               shift and go to state 150
 
 
-state 142
+state 138
 
     (32) ROTINA -> FUNCTION ID PARAM_ROTINA : . TIPO_DADO BLOCO_ROTINA
     (14) TIPO_DADO -> . INTEGER
@@ -2482,24 +2024,24 @@ state 142
     (19) TIPO_DADO -> . RECORD CAMPOS END
     (20) TIPO_DADO -> . ID
 
-    INTEGER         shift and go to state 98
-    REAL            shift and go to state 99
-    CHAR            shift and go to state 100
-    BOOLEAN         shift and go to state 101
-    ARRAY           shift and go to state 102
-    RECORD          shift and go to state 103
-    ID              shift and go to state 96
+    INTEGER         shift and go to state 97
+    REAL            shift and go to state 98
+    CHAR            shift and go to state 99
+    BOOLEAN         shift and go to state 100
+    ARRAY           shift and go to state 101
+    RECORD          shift and go to state 102
+    ID              shift and go to state 95
 
-    TIPO_DADO                      shift and go to state 155
+    TIPO_DADO                      shift and go to state 151
 
-state 143
+state 139
 
     (35) PARAM_ROTINA -> ( CAMPOS . )
 
-    )               shift and go to state 156
+    )               shift and go to state 152
 
 
-state 144
+state 140
 
     (33) ROTINA -> PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA .
 
@@ -2508,16 +2050,16 @@ state 144
     BEGIN           reduce using rule 33 (ROTINA -> PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA .)
 
 
-state 145
+state 141
 
     (36) BLOCO_ROTINA -> DEF_VAR . BLOCO
     (2) BLOCO -> . BEGIN COMANDO LISTA_COM END
 
     BEGIN           shift and go to state 7
 
-    BLOCO                          shift and go to state 157
+    BLOCO                          shift and go to state 153
 
-state 146
+state 142
 
     (26) LISTA_CAMPOS -> ; CAMPO LISTA_CAMPOS .
 
@@ -2526,7 +2068,7 @@ state 146
     )               reduce using rule 26 (LISTA_CAMPOS -> ; CAMPO LISTA_CAMPOS .)
 
 
-state 147
+state 143
 
     (27) CAMPO -> ID LISTA_ID : TIPO_DADO .
 
@@ -2535,21 +2077,21 @@ state 147
     )               reduce using rule 27 (CAMPO -> ID LISTA_ID : TIPO_DADO .)
 
 
-state 148
+state 144
 
     (29) LISTA_ID -> , ID LISTA_ID .
 
     :               reduce using rule 29 (LISTA_ID -> , ID LISTA_ID .)
 
 
-state 149
+state 145
 
     (18) TIPO_DADO -> ARRAY [ NUMERO . ] OF TIPO_DADO
 
-    ]               shift and go to state 158
+    ]               shift and go to state 154
 
 
-state 150
+state 146
 
     (19) TIPO_DADO -> RECORD CAMPOS END .
 
@@ -2560,7 +2102,7 @@ state 150
     BEGIN           reduce using rule 19 (TIPO_DADO -> RECORD CAMPOS END .)
 
 
-state 151
+state 147
 
     (52) EXP_LOGICA -> ( PARAM_LOGICO OP_LOGICO EXP_LOGICA ) .
 
@@ -2572,7 +2114,7 @@ state 151
     )               reduce using rule 52 (EXP_LOGICA -> ( PARAM_LOGICO OP_LOGICO EXP_LOGICA ) .)
 
 
-state 152
+state 148
 
     (46) alternativa_else -> ELSE bloco_com .
 
@@ -2581,14 +2123,14 @@ state 152
     ELSE            reduce using rule 46 (alternativa_else -> ELSE bloco_com .)
 
 
-state 153
+state 149
 
     (48) FOR_PARAMS -> ID ATRIBUICAO PARAMETRO TO PARAMETRO .
 
     DO              reduce using rule 48 (FOR_PARAMS -> ID ATRIBUICAO PARAMETRO TO PARAMETRO .)
 
 
-state 154
+state 150
 
     (57) EXP_MAT -> ( PARAMETRO OP_MAT EXP_MAT ) .
 
@@ -2598,7 +2140,7 @@ state 154
     )               reduce using rule 57 (EXP_MAT -> ( PARAMETRO OP_MAT EXP_MAT ) .)
 
 
-state 155
+state 151
 
     (32) ROTINA -> FUNCTION ID PARAM_ROTINA : TIPO_DADO . BLOCO_ROTINA
     (36) BLOCO_ROTINA -> . DEF_VAR BLOCO
@@ -2609,11 +2151,11 @@ state 155
     BEGIN           reduce using rule 21 (DEF_VAR -> .)
     VAR             shift and go to state 22
 
-    BLOCO_ROTINA                   shift and go to state 159
-    DEF_VAR                        shift and go to state 145
+    BLOCO_ROTINA                   shift and go to state 155
+    DEF_VAR                        shift and go to state 141
     VARIAVEL                       shift and go to state 21
 
-state 156
+state 152
 
     (35) PARAM_ROTINA -> ( CAMPOS ) .
 
@@ -2622,7 +2164,7 @@ state 156
     BEGIN           reduce using rule 35 (PARAM_ROTINA -> ( CAMPOS ) .)
 
 
-state 157
+state 153
 
     (36) BLOCO_ROTINA -> DEF_VAR BLOCO .
 
@@ -2631,14 +2173,14 @@ state 157
     BEGIN           reduce using rule 36 (BLOCO_ROTINA -> DEF_VAR BLOCO .)
 
 
-state 158
+state 154
 
     (18) TIPO_DADO -> ARRAY [ NUMERO ] . OF TIPO_DADO
 
-    OF              shift and go to state 160
+    OF              shift and go to state 156
 
 
-state 159
+state 155
 
     (32) ROTINA -> FUNCTION ID PARAM_ROTINA : TIPO_DADO BLOCO_ROTINA .
 
@@ -2647,7 +2189,7 @@ state 159
     BEGIN           reduce using rule 32 (ROTINA -> FUNCTION ID PARAM_ROTINA : TIPO_DADO BLOCO_ROTINA .)
 
 
-state 160
+state 156
 
     (18) TIPO_DADO -> ARRAY [ NUMERO ] OF . TIPO_DADO
     (14) TIPO_DADO -> . INTEGER
@@ -2658,17 +2200,17 @@ state 160
     (19) TIPO_DADO -> . RECORD CAMPOS END
     (20) TIPO_DADO -> . ID
 
-    INTEGER         shift and go to state 98
-    REAL            shift and go to state 99
-    CHAR            shift and go to state 100
-    BOOLEAN         shift and go to state 101
-    ARRAY           shift and go to state 102
-    RECORD          shift and go to state 103
-    ID              shift and go to state 96
+    INTEGER         shift and go to state 97
+    REAL            shift and go to state 98
+    CHAR            shift and go to state 99
+    BOOLEAN         shift and go to state 100
+    ARRAY           shift and go to state 101
+    RECORD          shift and go to state 102
+    ID              shift and go to state 95
 
-    TIPO_DADO                      shift and go to state 161
+    TIPO_DADO                      shift and go to state 157
 
-state 161
+state 157
 
     (18) TIPO_DADO -> ARRAY [ NUMERO ] OF TIPO_DADO .
 
@@ -2681,8 +2223,6 @@ state 161
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ; in state 56 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 121 resolved as shift
-WARNING: shift/reduce conflict for ; in state 129 resolved as shift
-WARNING: reduce/reduce conflict in state 109 resolved using rule (PARAM_LOGICO -> PARAMETRO)
-WARNING: rejected rule (EXP_MAT -> PARAMETRO) in state 109
+WARNING: shift/reduce conflict for ; in state 58 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 118 resolved as shift
+WARNING: shift/reduce conflict for ; in state 126 resolved as shift
