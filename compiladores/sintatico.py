@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 import sys
-from lexico import tokens
+from lexico import tokens, lexer
 
 # Regras da gramática
 def p_programa(p):
@@ -19,33 +19,37 @@ def p_def_const(p):
     """DEF_CONST : CONSTANTE DEF_CONST
                  | """
     if len(p) > 1:
-        p[0] = [p[1]] + p[2]
+        p[0] = ('def_const', p[1], p[2])
     else:
-        p[0] = []
+        p[0] = ('def_const', None)
+
 
 def p_def_tipos(p):
     """DEF_TIPOS : TIPO DEF_TIPOS
                  | """
     if len(p) > 1:
-        p[0] = [p[1]] + p[2]
+        p[0] = ('def_tipos', p[1], p[2])
     else:
-        p[0] = []
+        p[0] = ('def_tipos', None)
+
 
 def p_def_var(p):
     """DEF_VAR : VARIAVEL DEF_VAR
                | """
-    if len(p)>1:
-        p[0] = [p[1]] + p[2]
-    else:
-        p[0] = []
+    if len(p) > 1:
+        p[0] = ('def_var', p[1], p[2])
+    else:  # Empty rule
+        p[0] = ('def_var', None)
+
 
 def p_def_rotina(p):
     """DEF_ROTINA : ROTINA DEF_ROTINA
-               | """
-    if len(p)>1:
-        p[0] = [p[1]] + p[2]
-    else:
-        p[0] = []
+                  | """
+    if len(p) > 1:
+        p[0] = ('def_rotina', p[1], p[2])
+    else:  # Empty rule
+        p[0] = ('def_rotina', None)
+
 
 def p_constante(p):
     "CONSTANTE : CONST ID '=' CONST_VALOR ';'"
@@ -74,7 +78,8 @@ def p_lista_id(p):
 
 def p_campos(p):
     "CAMPOS : CAMPO LISTA_CAMPOS"
-    p[0] = [p[1]] + p[2]
+    p[0] = ('campos', [p[1]] + p[2])
+
 
 def p_campo(p):
     "CAMPO : ID LISTA_ID ':' TIPO_DADO"
@@ -82,11 +87,12 @@ def p_campo(p):
 
 def p_lista_campos(p):
     """LISTA_CAMPOS : ';' CAMPO LISTA_CAMPOS
-                | """
+                    | """
     if len(p) > 1:
         p[0] = [p[2]] + p[3]
     else:
         p[0] = []
+
 
 def p_tipo_dado(p):
     """TIPO_DADO : INTEGER
@@ -144,6 +150,7 @@ def p_comando(p):
                | FOR FOR_COMANDO DO BLOCO_COM
                | WRITE CONST_VALOR
                | READ ID NOME"""
+    print(p[1])
     if len(p) == 4 and p[2] == 'ATRIBUICAO_SIMBOLO':
         p[0] = ('ATRIBUICAO', p[1], p[3])
     elif p[1] == 'while':
@@ -271,7 +278,11 @@ def p_parametro(p):
                  | NUMERO
                  | FALSE
                  | TRUE"""
-    p[0] = p[1]
+    if len(p) == 3:
+        p[0] = ('parametro', 'id', p[1], p[2])
+    else:
+        p[0] = ('parametro', 'literal', p[1])
+
 
 def p_op_logico(p):
     """OP_LOGICO : AND
@@ -316,7 +327,10 @@ parser = yacc.yacc()
 try:
     with open(sys.argv[1], 'r') as file:
         data = file.read()
+    lexer.lineno = 1
     result = parser.parse(data)
+    for i in result:
+        print(i)
 except FileNotFoundError:
     print(f"Erro: Arquivo '{sys.argv[1]}' não encontrado!")
 except Exception as e:

@@ -104,3 +104,4 @@ while True:
     if not tok: 
         break
     analisados.append(tok)
+    # print(tok)
