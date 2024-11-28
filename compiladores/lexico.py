@@ -44,12 +44,12 @@ tokens = [
     'ID',
     'NUMERO',
     'PALAVRA',
-    'ATRIBUICAO',
+    'ATRIBUICAO_SIMBOLO',
     'COMPARACAO'
 ] + list(reservados.values())
 
 # Expressoes regulares dos tokens simples
-t_ATRIBUICAO = ':='
+t_ATRIBUICAO_SIMBOLO = ':='
 t_COMPARACAO = r'<=|>=|==|!=|<|>'
 
 def t_NUMERO(t):
