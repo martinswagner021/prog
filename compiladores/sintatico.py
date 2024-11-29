@@ -50,7 +50,6 @@ def p_def_rotina(p):
     else:  # Empty rule
         p[0] = ('def_rotina', None)
 
-
 def p_constante(p):
     "CONSTANTE : CONST ID '=' CONST_VALOR ';'"
     p[0] = ('constante', p[2], p[4])
@@ -142,6 +141,7 @@ def p_lista_com(p):
 def p_bloco_com(p):
     """BLOCO_COM : BLOCO
                | COMANDO"""
+    p[0] = ('bloco_com', p[1])
 
 def p_comando(p):
     """COMANDO : ID NOME ATRIBUICAO
@@ -150,10 +150,7 @@ def p_comando(p):
                | FOR FOR_COMANDO DO BLOCO_COM
                | WRITE CONST_VALOR
                | READ ID NOME"""
-    print(p[1])
-    if len(p) == 4 and p[2] == 'ATRIBUICAO_SIMBOLO':
-        p[0] = ('ATRIBUICAO', p[1], p[3])
-    elif p[1] == 'while':
+    if p[1] == 'while':
         p[0] = ('while', p[2], p[4])
     elif p[1] == 'if':
         p[0] = ('if', p[2], p[4], p[5])
@@ -163,6 +160,8 @@ def p_comando(p):
         p[0] = ('write', p[2])
     elif p[1] == 'read':
         p[0] = ('read', p[2])
+    else:
+        p[0] = ('ATRIBUICAO', p[1], p[3])
 
 def p_for_comando(p):
     "FOR_COMANDO : ID ATRIBUICAO PARAMETRO TO PARAMETRO"
@@ -172,9 +171,10 @@ def p_alternativa_else(p):
     """ALTERNATIVA_ELSE : ELSE BLOCO_COM
                         | """
     if len(p) > 1:
-        p[0] = ('else', p[2])
+        p[0] = ('alternativa_else', p[2])
     else:
         p[0] = None
+
 
 def p_atribuicao(p):
     "ATRIBUICAO : ATRIBUICAO_SIMBOLO EXP"
@@ -208,11 +208,8 @@ def p_exp_l1(p):
     if len(p) == 1:
         p[0] = None
     elif len(p) == 3:
-        if p[1] in ['+', '-', '*', '/']:
-            p[0] = ('op_mat', p[1], p[2])
-        else:
-            p[0] = ('param_logico', p[1], p[2])
-    pass
+        p[0] = ('exp_l1', p[1], p[2])
+
 
 def p_exp_logica(p):
     """EXP_LOGICA : OP_LOGICO EXP
@@ -229,8 +226,8 @@ def p_param_logico(p):
     if len(p) == 1:
         p[0] = None
     else:
-        p[0] = ('op_comp', p[1], p[2])
-    pass
+        p[0] = ('param_logico', p[1], p[2])
+
 
 def p_exp_l2(p):
     """EXP_L2 : OP_MAT EXP ')'
