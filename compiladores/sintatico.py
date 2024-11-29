@@ -1,8 +1,12 @@
+# ---------------------------------------
+# Aluno: Wagner Martins
+# Analisador sintatico para simplepascal criado nas aulas
+# ---------------------------------------
 import ply.yacc as yacc
 import sys
 from lexico import tokens, lexer
 
-# Regras da gramática
+# Definicao das regras da gramatica
 def p_programa(p):
     "PROGRAMA : DECLARACOES BLOCO"
     p[0] = ('programa', p[1], p[2])
@@ -23,7 +27,6 @@ def p_def_const(p):
     else:
         p[0] = ('def_const', None)
 
-
 def p_def_tipos(p):
     """DEF_TIPOS : TIPO DEF_TIPOS
                  | """
@@ -32,7 +35,6 @@ def p_def_tipos(p):
     else:
         p[0] = ('def_tipos', None)
 
-
 def p_def_var(p):
     """DEF_VAR : VARIAVEL DEF_VAR
                | """
@@ -40,7 +42,6 @@ def p_def_var(p):
         p[0] = ('def_var', p[1], p[2])
     else:  # Empty rule
         p[0] = ('def_var', None)
-
 
 def p_def_rotina(p):
     """DEF_ROTINA : ROTINA DEF_ROTINA
@@ -79,7 +80,6 @@ def p_campos(p):
     "CAMPOS : CAMPO LISTA_CAMPOS"
     p[0] = ('campos', [p[1]] + p[2])
 
-
 def p_campo(p):
     "CAMPO : ID LISTA_ID ':' TIPO_DADO"
     p[0] = ('campo', [p[1]] + p[2], p[4])
@@ -91,7 +91,6 @@ def p_lista_campos(p):
         p[0] = [p[2]] + p[3]
     else:
         p[0] = []
-
 
 def p_tipo_dado(p):
     """TIPO_DADO : INTEGER
@@ -175,7 +174,6 @@ def p_alternativa_else(p):
     else:
         p[0] = None
 
-
 def p_atribuicao(p):
     "ATRIBUICAO : ATRIBUICAO_SIMBOLO EXP"
     p[0] = ('ATRIBUICAO', p[2])
@@ -194,12 +192,10 @@ def p_lista_param(p):
 def p_exp(p):
     """EXP : PARAMETRO EXP_L1
            | '(' PARAMETRO EXP_L2"""
-    if len(p) == 3:  # PARAMETRO EXP_L1
+    if len(p) == 3:
         p[0] = ('exp', p[1], p[2])
-    elif len(p) == 4:  # '(' PARAMETRO EXP_L2
+    elif len(p) == 4:
         p[0] = ('exp_group', p[2], p[3])
-    pass
-
 
 def p_exp_l1(p):
     """EXP_L1 : OP_MAT EXP
@@ -210,7 +206,6 @@ def p_exp_l1(p):
     elif len(p) == 3:
         p[0] = ('exp_l1', p[1], p[2])
 
-
 def p_exp_logica(p):
     """EXP_LOGICA : OP_LOGICO EXP
                   | """
@@ -218,7 +213,6 @@ def p_exp_logica(p):
         p[0] = None
     else:
         p[0] = ('op_logico', p[1], p[2])
-    pass
 
 def p_param_logico(p):
     """PARAM_LOGICO : OP_COMP PARAMETRO
@@ -228,7 +222,6 @@ def p_param_logico(p):
     else:
         p[0] = ('param_logico', p[1], p[2])
 
-
 def p_exp_l2(p):
     """EXP_L2 : OP_MAT EXP ')'
               | PARAM_LOGICO OP_LOGICO EXP ')'"""
@@ -236,7 +229,6 @@ def p_exp_l2(p):
         p[0] = ('exp_mat_group', p[1], p[2], p[3])
     elif len(p) == 5:
         p[0] = ('exp_logic_group', p[1], p[2], p[3])
-    pass
 
 def p_exp_const(p):
     """EXP_CONST : PARAMETRO EXP_CONST_L
@@ -280,7 +272,6 @@ def p_parametro(p):
     else:
         p[0] = ('parametro', 'literal', p[1])
 
-
 def p_op_logico(p):
     """OP_LOGICO : AND
                  | OR"""
@@ -309,38 +300,12 @@ def p_nome(p):
     else:
         p[0] = ('nome', p[1], p[2])
 
-# Tratamento de erros
+# Tratamento de erro sintatico
 def p_error(p):
     if p:
-        print(f"Erro de sintaxe próximo a '{p.value}' na linha {p.lineno}. Token inesperado: {p.type}")
-        # Recovery: Skip to the next token
+        print(f"Erro de sintaxe próximo a '{p.value}' na linha {p.lineno}.")
     else:
-        print("Erro de sintaxe no final do arquivo.")
+        print("Erro de sintaxe na estrutura, ou no final do código.")
 
-
-# Construção do parser
+# Compila o parser
 parser = yacc.yacc()
-
-try:
-    with open(sys.argv[1], 'r') as file:
-        data = file.read()
-    lexer.lineno = 1
-    result = parser.parse(data)
-    for i in result:
-        print(i)
-except FileNotFoundError:
-    print(f"Erro: Arquivo '{sys.argv[1]}' não encontrado!")
-except Exception as e:
-    print(f"Erro ao analisar o arquivo: {e}")
-
-# Exemplo de uso
-# if __name__ == "__main__":
-#     while True:
-#         try:
-#             s = input("Digite o código: ")
-#         except EOFError:
-#             break
-#         if not s:
-#             continue
-#         result = parser.parse(s)
-#         print(result)
