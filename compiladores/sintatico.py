@@ -163,7 +163,7 @@ def p_comando(p):
         p[0] = ('ATRIBUICAO', p[1], p[3])
 
 def p_for_comando(p):
-    "FOR_COMANDO : ID ATRIBUICAO PARAMETRO TO PARAMETRO"
+    "FOR_COMANDO : ID ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO"
     p[0] = ('FOR_COMANDO', p[1], p[3], p[5])
 
 def p_alternativa_else(p):
@@ -176,7 +176,7 @@ def p_alternativa_else(p):
 
 def p_atribuicao(p):
     "ATRIBUICAO : ATRIBUICAO_SIMBOLO EXP"
-    p[0] = ('ATRIBUICAO', p[2])
+    p[0] = p[2]
 
 def p_lista_param(p):
     """LISTA_PARAM : PARAMETRO ',' LISTA_PARAM
@@ -184,7 +184,7 @@ def p_lista_param(p):
                    | """
     if len(p) == 2:
         p[0] = [p[1]]
-    elif len(p) == 3:
+    elif len(p) == 4:
         p[0] = [p[1]] + p[3]
     else:
         p[0] = []
@@ -309,3 +309,11 @@ def p_error(p):
 
 # Compila o parser
 parser = yacc.yacc()
+
+
+if __name__ == '__main__':
+    with open(sys.argv[1], 'r') as file:
+        data = file.read()
+
+    result = parser.parse(data, lexer=lexer)
+    print(result)

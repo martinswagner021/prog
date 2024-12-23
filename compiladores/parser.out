@@ -47,7 +47,7 @@ Rule 41    COMANDO -> IF EXP_COM THEN BLOCO_COM ALTERNATIVA_ELSE
 Rule 42    COMANDO -> FOR FOR_COMANDO DO BLOCO_COM
 Rule 43    COMANDO -> WRITE CONST_VALOR
 Rule 44    COMANDO -> READ ID NOME
-Rule 45    FOR_COMANDO -> ID ATRIBUICAO PARAMETRO TO PARAMETRO
+Rule 45    FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO
 Rule 46    ALTERNATIVA_ELSE -> ELSE BLOCO_COM
 Rule 47    ALTERNATIVA_ELSE -> <empty>
 Rule 48    ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP
@@ -108,7 +108,7 @@ Terminals, with rules where they appear
 >                    : 77
 AND                  : 75
 ARRAY                : 27
-ATRIBUICAO_SIMBOLO   : 48
+ATRIBUICAO_SIMBOLO   : 45 48
 BEGIN                : 2
 BOOLEAN              : 26
 CHAR                 : 25
@@ -145,7 +145,7 @@ error                :
 Nonterminals, with rules where they appear
 
 ALTERNATIVA_ELSE     : 41
-ATRIBUICAO           : 39 45
+ATRIBUICAO           : 39
 BLOCO                : 1 34 37
 BLOCO_COM            : 40 41 42 46
 BLOCO_ROTINA         : 30 31
@@ -412,7 +412,7 @@ state 16
 state 17
 
     (42) COMANDO -> FOR . FOR_COMANDO DO BLOCO_COM
-    (45) FOR_COMANDO -> . ID ATRIBUICAO PARAMETRO TO PARAMETRO
+    (45) FOR_COMANDO -> . ID ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO
 
     ID              shift and go to state 41
 
@@ -675,10 +675,6 @@ state 35
     ]               reduce using rule 87 (NOME -> .)
     ,               reduce using rule 87 (NOME -> .)
     )               reduce using rule 87 (NOME -> .)
-    ID              reduce using rule 87 (NOME -> .)
-    NUMERO          reduce using rule 87 (NOME -> .)
-    FALSE           reduce using rule 87 (NOME -> .)
-    TRUE            reduce using rule 87 (NOME -> .)
     TO              reduce using rule 87 (NOME -> .)
 
     NOME                           shift and go to state 72
@@ -704,10 +700,6 @@ state 36
     ]               reduce using rule 72 (PARAMETRO -> NUMERO .)
     ,               reduce using rule 72 (PARAMETRO -> NUMERO .)
     )               reduce using rule 72 (PARAMETRO -> NUMERO .)
-    ID              reduce using rule 72 (PARAMETRO -> NUMERO .)
-    NUMERO          reduce using rule 72 (PARAMETRO -> NUMERO .)
-    FALSE           reduce using rule 72 (PARAMETRO -> NUMERO .)
-    TRUE            reduce using rule 72 (PARAMETRO -> NUMERO .)
     TO              reduce using rule 72 (PARAMETRO -> NUMERO .)
 
 
@@ -732,10 +724,6 @@ state 37
     ]               reduce using rule 73 (PARAMETRO -> FALSE .)
     ,               reduce using rule 73 (PARAMETRO -> FALSE .)
     )               reduce using rule 73 (PARAMETRO -> FALSE .)
-    ID              reduce using rule 73 (PARAMETRO -> FALSE .)
-    NUMERO          reduce using rule 73 (PARAMETRO -> FALSE .)
-    FALSE           reduce using rule 73 (PARAMETRO -> FALSE .)
-    TRUE            reduce using rule 73 (PARAMETRO -> FALSE .)
     TO              reduce using rule 73 (PARAMETRO -> FALSE .)
 
 
@@ -760,10 +748,6 @@ state 38
     ]               reduce using rule 74 (PARAMETRO -> TRUE .)
     ,               reduce using rule 74 (PARAMETRO -> TRUE .)
     )               reduce using rule 74 (PARAMETRO -> TRUE .)
-    ID              reduce using rule 74 (PARAMETRO -> TRUE .)
-    NUMERO          reduce using rule 74 (PARAMETRO -> TRUE .)
-    FALSE           reduce using rule 74 (PARAMETRO -> TRUE .)
-    TRUE            reduce using rule 74 (PARAMETRO -> TRUE .)
     TO              reduce using rule 74 (PARAMETRO -> TRUE .)
 
 
@@ -783,12 +767,10 @@ state 40
 
 state 41
 
-    (45) FOR_COMANDO -> ID . ATRIBUICAO PARAMETRO TO PARAMETRO
-    (48) ATRIBUICAO -> . ATRIBUICAO_SIMBOLO EXP
+    (45) FOR_COMANDO -> ID . ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO
 
-    ATRIBUICAO_SIMBOLO shift and go to state 60
+    ATRIBUICAO_SIMBOLO shift and go to state 75
 
-    ATRIBUICAO                     shift and go to state 75
 
 state 42
 
@@ -1043,10 +1025,6 @@ state 61
     ]               reduce using rule 87 (NOME -> .)
     ,               reduce using rule 87 (NOME -> .)
     )               reduce using rule 87 (NOME -> .)
-    ID              reduce using rule 87 (NOME -> .)
-    NUMERO          reduce using rule 87 (NOME -> .)
-    FALSE           reduce using rule 87 (NOME -> .)
-    TRUE            reduce using rule 87 (NOME -> .)
     TO              reduce using rule 87 (NOME -> .)
 
     NOME                           shift and go to state 103
@@ -1200,10 +1178,6 @@ state 72
     ]               reduce using rule 71 (PARAMETRO -> ID NOME .)
     ,               reduce using rule 71 (PARAMETRO -> ID NOME .)
     )               reduce using rule 71 (PARAMETRO -> ID NOME .)
-    ID              reduce using rule 71 (PARAMETRO -> ID NOME .)
-    NUMERO          reduce using rule 71 (PARAMETRO -> ID NOME .)
-    FALSE           reduce using rule 71 (PARAMETRO -> ID NOME .)
-    TRUE            reduce using rule 71 (PARAMETRO -> ID NOME .)
     TO              reduce using rule 71 (PARAMETRO -> ID NOME .)
 
 
@@ -1259,7 +1233,7 @@ state 74
 
 state 75
 
-    (45) FOR_COMANDO -> ID ATRIBUICAO . PARAMETRO TO PARAMETRO
+    (45) FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO . PARAMETRO TO PARAMETRO
     (71) PARAMETRO -> . ID NOME
     (72) PARAMETRO -> . NUMERO
     (73) PARAMETRO -> . FALSE
@@ -1529,10 +1503,6 @@ state 100
     ;               reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
     END             reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
     ELSE            reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
-    ID              reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
-    NUMERO          reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
-    FALSE           reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
-    TRUE            reduce using rule 48 (ATRIBUICAO -> ATRIBUICAO_SIMBOLO EXP .)
 
 
 state 101
@@ -1554,18 +1524,10 @@ state 101
   ! reduce/reduce conflict for ; resolved using rule 56 (EXP_L1 -> .)
   ! reduce/reduce conflict for END resolved using rule 56 (EXP_L1 -> .)
   ! reduce/reduce conflict for ELSE resolved using rule 56 (EXP_L1 -> .)
-  ! reduce/reduce conflict for ID resolved using rule 56 (EXP_L1 -> .)
-  ! reduce/reduce conflict for NUMERO resolved using rule 56 (EXP_L1 -> .)
-  ! reduce/reduce conflict for FALSE resolved using rule 56 (EXP_L1 -> .)
-  ! reduce/reduce conflict for TRUE resolved using rule 56 (EXP_L1 -> .)
   ! reduce/reduce conflict for ) resolved using rule 56 (EXP_L1 -> .)
     ;               reduce using rule 56 (EXP_L1 -> .)
     END             reduce using rule 56 (EXP_L1 -> .)
     ELSE            reduce using rule 56 (EXP_L1 -> .)
-    ID              reduce using rule 56 (EXP_L1 -> .)
-    NUMERO          reduce using rule 56 (EXP_L1 -> .)
-    FALSE           reduce using rule 56 (EXP_L1 -> .)
-    TRUE            reduce using rule 56 (EXP_L1 -> .)
     )               reduce using rule 56 (EXP_L1 -> .)
     +               shift and go to state 78
     -               shift and go to state 79
@@ -1580,10 +1542,6 @@ state 101
   ! ;               [ reduce using rule 60 (PARAM_LOGICO -> .) ]
   ! END             [ reduce using rule 60 (PARAM_LOGICO -> .) ]
   ! ELSE            [ reduce using rule 60 (PARAM_LOGICO -> .) ]
-  ! ID              [ reduce using rule 60 (PARAM_LOGICO -> .) ]
-  ! NUMERO          [ reduce using rule 60 (PARAM_LOGICO -> .) ]
-  ! FALSE           [ reduce using rule 60 (PARAM_LOGICO -> .) ]
-  ! TRUE            [ reduce using rule 60 (PARAM_LOGICO -> .) ]
   ! )               [ reduce using rule 60 (PARAM_LOGICO -> .) ]
 
     EXP_L1                         shift and go to state 130
@@ -1628,10 +1586,6 @@ state 103
     ]               reduce using rule 84 (NOME -> . ID NOME .)
     ,               reduce using rule 84 (NOME -> . ID NOME .)
     )               reduce using rule 84 (NOME -> . ID NOME .)
-    ID              reduce using rule 84 (NOME -> . ID NOME .)
-    NUMERO          reduce using rule 84 (NOME -> . ID NOME .)
-    FALSE           reduce using rule 84 (NOME -> . ID NOME .)
-    TRUE            reduce using rule 84 (NOME -> . ID NOME .)
     TO              reduce using rule 84 (NOME -> . ID NOME .)
 
 
@@ -1657,10 +1611,6 @@ state 104
     ]               reduce using rule 85 (NOME -> [ PARAMETRO ] .)
     ,               reduce using rule 85 (NOME -> [ PARAMETRO ] .)
     )               reduce using rule 85 (NOME -> [ PARAMETRO ] .)
-    ID              reduce using rule 85 (NOME -> [ PARAMETRO ] .)
-    NUMERO          reduce using rule 85 (NOME -> [ PARAMETRO ] .)
-    FALSE           reduce using rule 85 (NOME -> [ PARAMETRO ] .)
-    TRUE            reduce using rule 85 (NOME -> [ PARAMETRO ] .)
     TO              reduce using rule 85 (NOME -> [ PARAMETRO ] .)
 
 
@@ -1686,10 +1636,6 @@ state 105
     ]               reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
     ,               reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
     )               reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
-    ID              reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
-    NUMERO          reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
-    FALSE           reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
-    TRUE            reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
     TO              reduce using rule 86 (NOME -> ( LISTA_PARAM ) .)
 
 
@@ -1802,10 +1748,6 @@ state 114
     ;               reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
     END             reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
     ELSE            reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
-    ID              reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
-    NUMERO          reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
-    FALSE           reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
-    TRUE            reduce using rule 59 (PARAM_LOGICO -> OP_COMP PARAMETRO .)
 
 
 state 115
@@ -1845,7 +1787,7 @@ state 117
 
 state 118
 
-    (45) FOR_COMANDO -> ID ATRIBUICAO PARAMETRO . TO PARAMETRO
+    (45) FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO PARAMETRO . TO PARAMETRO
 
     TO              shift and go to state 139
 
@@ -1988,10 +1930,6 @@ state 130
     ;               reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
     END             reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
     ELSE            reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
-    ID              reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
-    NUMERO          reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
-    FALSE           reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
-    TRUE            reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
     )               reduce using rule 52 (EXP -> PARAMETRO EXP_L1 .)
 
 
@@ -2025,10 +1963,6 @@ state 132
     ;               reduce using rule 58 (EXP_LOGICA -> .)
     END             reduce using rule 58 (EXP_LOGICA -> .)
     ELSE            reduce using rule 58 (EXP_LOGICA -> .)
-    ID              reduce using rule 58 (EXP_LOGICA -> .)
-    NUMERO          reduce using rule 58 (EXP_LOGICA -> .)
-    FALSE           reduce using rule 58 (EXP_LOGICA -> .)
-    TRUE            reduce using rule 58 (EXP_LOGICA -> .)
     )               reduce using rule 58 (EXP_LOGICA -> .)
     AND             shift and go to state 112
     OR              shift and go to state 113
@@ -2137,7 +2071,7 @@ state 138
 
 state 139
 
-    (45) FOR_COMANDO -> ID ATRIBUICAO PARAMETRO TO . PARAMETRO
+    (45) FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO PARAMETRO TO . PARAMETRO
     (71) PARAMETRO -> . ID NOME
     (72) PARAMETRO -> . NUMERO
     (73) PARAMETRO -> . FALSE
@@ -2261,10 +2195,6 @@ state 151
     ;               reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
     END             reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
     ELSE            reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
-    ID              reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
-    NUMERO          reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
-    FALSE           reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
-    TRUE            reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
     )               reduce using rule 54 (EXP_L1 -> OP_MAT EXP .)
 
 
@@ -2275,10 +2205,6 @@ state 152
     ;               reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
     END             reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
     ELSE            reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
-    ID              reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
-    NUMERO          reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
-    FALSE           reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
-    TRUE            reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
     )               reduce using rule 55 (EXP_L1 -> PARAM_LOGICO EXP_LOGICA .)
 
 
@@ -2308,10 +2234,6 @@ state 154
     ;               reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
     END             reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
     ELSE            reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
-    ID              reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
-    NUMERO          reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
-    FALSE           reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
-    TRUE            reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
     )               reduce using rule 53 (EXP -> ( PARAMETRO EXP_L2 .)
 
 
@@ -2363,9 +2285,9 @@ state 158
 
 state 159
 
-    (45) FOR_COMANDO -> ID ATRIBUICAO PARAMETRO TO PARAMETRO .
+    (45) FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO .
 
-    DO              reduce using rule 45 (FOR_COMANDO -> ID ATRIBUICAO PARAMETRO TO PARAMETRO .)
+    DO              reduce using rule 45 (FOR_COMANDO -> ID ATRIBUICAO_SIMBOLO PARAMETRO TO PARAMETRO .)
 
 
 state 160
@@ -2437,10 +2359,6 @@ state 166
     ;               reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
     END             reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
     ELSE            reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
-    ID              reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
-    NUMERO          reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
-    FALSE           reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
-    TRUE            reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
     )               reduce using rule 57 (EXP_LOGICA -> OP_LOGICO EXP .)
 
 
@@ -2524,10 +2442,6 @@ state 173
     ;               reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
     END             reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
     ELSE            reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
-    ID              reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
-    NUMERO          reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
-    FALSE           reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
-    TRUE            reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
     )               reduce using rule 61 (EXP_L2 -> OP_MAT EXP ) .)
 
 
@@ -2556,10 +2470,6 @@ state 176
     ;               reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
     END             reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
     ELSE            reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
-    ID              reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
-    NUMERO          reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
-    FALSE           reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
-    TRUE            reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
     )               reduce using rule 62 (EXP_L2 -> PARAM_LOGICO OP_LOGICO EXP ) .)
 
 WARNING: 

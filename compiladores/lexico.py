@@ -105,3 +105,10 @@ while True:
         break
     analisados.append(tok)
     # print(tok)
+
+if __name__ == '__main__':
+    with open(sys.argv[1], 'r') as file:
+        data = file.read()
+
+    result = lexer.input(data)
+    print(analisados)
