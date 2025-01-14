@@ -1,4 +1,5 @@
 import sintatico
+import sys
 
 # ---------------------------------------
 # Aluno: Wagner Martins
