@@ -113,9 +113,9 @@ def p_rotina(p):
     """ROTINA : FUNCTION ID PARAM_ROTINA ':' TIPO_DADO BLOCO_ROTINA
               | PROCEDURE ID PARAM_ROTINA BLOCO_ROTINA"""
     if p[1] == 'function':
-        p[0] = ('function', p[2], p[3], p[5], p[6])
+        p[0] = ('rotina', 'function', p[2], p[3], p[5], p[6])
     else:
-        p[0] = ('procedure', p[2], p[3], p[4])
+        p[0] = ('rotina', 'procedure', p[2], p[3], p[4])
 
 def p_param_rotina(p):
     """PARAM_ROTINA : '(' CAMPOS ')'

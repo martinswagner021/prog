@@ -9,10 +9,9 @@ from sintatico import parser
 # Classe para representar o analisador semântico
 class AnalisadorSemantico:
     def __init__(self):
-        self.tabela_simbolos = [{}]  # Stack of symbol tables for scope handling
+        self.tabela_simbolos = [{}]
 
     def analisar(self, arvore):
-        # print(arvore)
         metodo = f'analisar_{arvore[0].lower()}'
         return getattr(self, metodo, self.generic_analisar)(arvore)
 
@@ -21,7 +20,7 @@ class AnalisadorSemantico:
 
     def analisar_programa(self, arvore):
         _, declaracoes, bloco = arvore
-        self.analisar(declaracoes)
+        self.analisar(declaracoes) 
         self.analisar(bloco)
 
     def analisar_declaracoes(self, arvore):
@@ -112,10 +111,11 @@ class AnalisadorSemantico:
         self.analisar(campos)
 
     def analisar_campos(self, arvore):
+        print(arvore)
         if len(arvore) > 1 and arvore[1] is not None:
-            _, campo, resto = arvore
-            self.analisar(campo)
-            self.analisar(resto)
+            _, campos = arvore
+            for i in campos:
+                self.analisar(i)
 
     def analisar_campo(self, arvore):
         _, ids, tipo_dado = arvore
@@ -127,8 +127,8 @@ class AnalisadorSemantico:
                 print(f"Variável '{id}' adicionada com tipo: {tipo_dado}")
 
     def analisar_rotina(self, arvore):
-        if arvore[0] == 'function':
-            _, id, params, tipo_retorno, bloco = arvore
+        if arvore[1] == 'function':
+            _, _, id, params, tipo_retorno, bloco = arvore
             if id in self.tabela_simbolos[-1]:
                 print(f"Erro: Função '{id}' já declarada.")
             else:
@@ -137,7 +137,7 @@ class AnalisadorSemantico:
             self.analisar(params)
             self.analisar(bloco)
             self.tabela_simbolos.pop()
-        elif arvore[0] == 'procedure':
+        elif arvore[1] == 'procedure':
             _, id, params, bloco = arvore
             if id in self.tabela_simbolos[-1]:
                 print(f"Erro: Procedimento '{id}' já declarado.")
@@ -147,6 +147,11 @@ class AnalisadorSemantico:
             self.analisar(params)
             self.analisar(bloco)
             self.tabela_simbolos.pop()
+
+    def analisar_bloco_rotina(self, arvore):
+        _, var, comando = arvore
+        self.analisar(var)
+        self.analisar(comando)
 
     def analisar_parametros(self, arvore):
         _, campos = arvore
@@ -206,7 +211,7 @@ class AnalisadorSemantico:
         if arvore:
             _, op, exp_const = arvore
             self.analisar(exp_const)
-#
+
     def analisar_exp_com_group(self, arvore):
         _, param, param_logico, op_logico, exp_com = arvore
         self.analisar(param)
@@ -245,7 +250,6 @@ class AnalisadorSemantico:
                 self.analisar(nome)
         else:
             _, _, valor = arvore
-            # Literal values don't need further analysis
 
     def analisar_nome(self, arvore):
         if arvore:
