@@ -9,17 +9,17 @@ entrada.txt
 output.txt
 
 # executable files
-a.out
+*.out
 
 # open vim files
-*.swp
+.swp
 
 # enviroment files
-.env
-env
+*.env
+venv
 
 # python cache
 __pycache__
 
 # java binaries
-.class
+*.class
