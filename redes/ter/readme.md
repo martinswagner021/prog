@@ -49,7 +49,7 @@ len;tipo;...
 - preciso saber se recebi um broadcast?
 
 
-## Protocolo W
+## Protocolo
 
 PS: Sempre começam com 3 caracteres para definir o tamanho da mensagem
 
