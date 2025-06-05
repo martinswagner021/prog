@@ -23,3 +23,6 @@ __pycache__
 
 # java binaries
 *.class
+
+# nodejs
+node_modules

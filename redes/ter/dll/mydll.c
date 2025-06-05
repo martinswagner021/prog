@@ -1,5 +1,5 @@
 #include <stdio.h>
 
-void hello() {
-    printf("Hello, World from mydll!\n");
+void display_msg(char* msg) {
+    printf("%s\n", msg);
 }
