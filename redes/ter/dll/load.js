@@ -11,8 +11,6 @@ let libPath = '';
 // You might need to adjust this if your library is elsewhere.
 libPath = path.join(__dirname, `lib${libBaseName}.so`);
 
-console.log(`Node.js: Attempting to load library from: ${libPath}`);
-
 // --- 2. Load the library and define the function signature ---
 // ffi.Library takes the library path and an object mapping function names
 // to their signatures: [return_type, [arg_type1, arg_type2, ...]]

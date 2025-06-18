@@ -21,7 +21,7 @@ def call_function_from_dll(dll_path, function_name, msg):
 
     # Call the function with the provided arguments
     return func(msg)
-y
+
 if __name__ == "__main__":
     if os.uname().sysname != "Linux":
         print("This script is intended to run on Linux systems only.")
