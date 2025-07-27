@@ -25,4 +25,4 @@ const myLib = ffi.Library(libPath, {
 // --- 3. Prepare the message and call the function ---
 const message = "Hello from Node.js using ffi-napi!";
 
-myLib.display_msg(message); // Call the C function
+myLib.display_msg(message); // Call the C functiond

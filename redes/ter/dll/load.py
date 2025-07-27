@@ -30,4 +30,4 @@ if __name__ == "__main__":
         print("Usage: python calling.py <path_to_dll>")
         exit(1)
     
-    call_function_from_dll(argv[-1], "display_msg", "Hello from Python!".encode('utf-8'))
+    call_function_from_dll(argv[1], "display_msg", "Hello from Python!".encode('utf-8'))
